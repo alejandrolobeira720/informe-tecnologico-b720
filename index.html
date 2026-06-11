@@ -7,16 +7,19 @@
   <title>Informe Tecnológico — b720 Fermín Vázquez Arquitectos</title>
   <style>
     :root {
-      /* b720 Fermín Vázquez Arquitectos */
-      --brand-d:  #4D4948;
-      --brand-l:  #A8A5A2;
-      --bg:       #000000;
-      --bg2:      #0A0A0A;
-      --bg3:      #111111;
-      --card:     #0F0F0F;
-      --border:   #2A2827;
-      --text:     #E8E6E4;
-      --muted:    #8A8684;
+      /* Paleta corporativa b720 — IN-Formación v1.3 (Colores.pdf)
+         Pantone Neutral Black #4B4846 · Gris Medio #9D9894 · Gris Claro #F2F1F0
+         Blanco #FFFFFF · Naranja #D27533 — el negro puro (#000) está prohibido.
+         Texto sobre fondo plano: siempre Blanco (nunca Gris Claro). */
+      --brand-d:  #4B4846;
+      --brand-l:  #9D9894;
+      --bg:       #4B4846;
+      --bg2:      #45423F;
+      --bg3:      #3E3B39;
+      --card:     #413E3C;
+      --border:   #696562;
+      --text:     #FFFFFF;
+      --muted:    rgba(255,255,255,.74);
       --white:    #FFFFFF;
     }
 
@@ -41,7 +44,7 @@
     .topbar {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(0,0,0,.94);
+      background: rgba(75,72,70,.96);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       padding: 0 40px;
@@ -88,7 +91,7 @@
       border-radius: 12px;
       padding: 8px;
       display: none;
-      box-shadow: 0 16px 48px rgba(0,0,0,.6);
+      box-shadow: 0 16px 48px rgba(45,43,42,.6);
     }
     .topbar-nav.open .nav-dropdown { display: block; }
     .nav-dropdown a {
@@ -203,7 +206,7 @@
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: #000;
+      color: var(--brand-d);
       background: var(--white);
       padding: 3px 10px;
       border-radius: 100px;
@@ -252,6 +255,24 @@
       gap: 12px;
     }
     footer span { color: var(--white); font-weight: 500; }
+
+    /* ─── MÓVIL / TABLET ─────────────────────── */
+    html, body { overflow-x: clip; }
+    @media (max-width: 700px) {
+      .topbar { padding: 0 16px; }
+      .topbar-left { gap: 14px; }
+      .topbar-brand img { height: 24px; }
+      .nav-dropdown {
+        position: fixed;
+        top: 64px;
+        left: 12px;
+        right: 12px;
+        min-width: 0;
+      }
+      .hub-header { padding: 120px 20px 36px; }
+      .news-grid { padding: 10px 20px 70px; grid-template-columns: 1fr; }
+      footer { padding: 24px 20px; }
+    }
   </style>
 </head>
 <body>
@@ -272,6 +293,26 @@
           NVIDIA RTX Spark: el superchip que reinventa el PC
         </a>
         <!-- Añadir aquí nuevas noticias (copiar el bloque <a> anterior) -->
+      </div>
+    </div>
+    <div class="topbar-nav">
+      <button class="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+        Juegos <span class="caret">▾</span>
+      </button>
+      <div class="nav-dropdown">
+        <a href="juegos/backs.html" target="_blank" rel="noopener">
+          <span class="nd-date">Cibergame 1</span>
+          El arquitecto atacado — simulador de amenazas
+        </a>
+        <a href="juegos/cibergame2.html" target="_blank" rel="noopener">
+          <span class="nd-date">Cibergame 2</span>
+          Protocolo de seguridad — quiz de ciberseguridad
+        </a>
+        <a href="juegos/cibergame3.html" target="_blank" rel="noopener">
+          <span class="nd-date">Cibergame 3</span>
+          La torre ciberresiliente — contrarreloj por plantas
+        </a>
+        <!-- Añadir aquí nuevos juegos (copiar el bloque <a> anterior) -->
       </div>
     </div>
     <!-- Futuras secciones del menú (Opiniones, Recomendaciones, Extras…):
@@ -347,18 +388,29 @@
 
 <script>
 (function () {
-  var nav = document.getElementById('topbarNav');
-  var toggle = nav.querySelector('.nav-toggle');
-  toggle.addEventListener('click', function (e) {
-    e.stopPropagation();
-    var open = nav.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', open);
+  var navs = Array.prototype.slice.call(document.querySelectorAll('.topbar-nav'));
+  navs.forEach(function (nav) {
+    var toggle = nav.querySelector('.nav-toggle');
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      // Al abrir uno, cerramos los demás
+      navs.forEach(function (otro) {
+        if (otro !== nav) {
+          otro.classList.remove('open');
+          otro.querySelector('.nav-toggle').setAttribute('aria-expanded', 'false');
+        }
+      });
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+    });
   });
   document.addEventListener('click', function (e) {
-    if (!nav.contains(e.target)) {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    }
+    navs.forEach(function (nav) {
+      if (!nav.contains(e.target)) {
+        nav.classList.remove('open');
+        nav.querySelector('.nav-toggle').setAttribute('aria-expanded', 'false');
+      }
+    });
   });
 })();
 </script>

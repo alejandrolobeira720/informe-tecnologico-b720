@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Cibergame 3 — La Torre · b720</title>
+  <link rel="stylesheet" href="cibergame3.css" />
+</head>
+<body>
+
+  <!-- ── TOPBAR ──────────────────────────────── -->
+  <nav class="topbar">
+    <div class="topbar-brand">
+      <img src="assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+    </div>
+    <span class="topbar-meta">Cibergame · Simulación 03</span>
+  </nav>
+
+  <!-- ── PANTALLA DE INICIO ──────────────────── -->
+  <section id="start-screen" class="screen active">
+    <div class="start-inner">
+      <div class="eyebrow">Formación · Ciberseguridad</div>
+      <h1>La torre<br /><span>ciberresiliente</span></h1>
+      <p class="sub">
+        Ocho plantas, ocho decisiones de seguridad. Cada respuesta correcta
+        construye una planta; cada error daña la estructura y cuesta una vida.
+        El reloj corre y, como en obra, las tres últimas plantas son las más
+        difíciles de levantar.
+      </p>
+
+      <div class="rules">
+        <div class="rule">
+          <span class="rule-num">08</span>
+          <span class="rule-label">Plantas · Preguntas</span>
+        </div>
+        <div class="rule">
+          <span class="rule-num">03</span>
+          <span class="rule-label">Vidas disponibles</span>
+        </div>
+        <div class="rule">
+          <span class="rule-num">⏱</span>
+          <span class="rule-label">Tiempo limitado por pregunta</span>
+        </div>
+        <div class="rule">
+          <span class="rule-num">2+1</span>
+          <span class="rule-label">Final: 2 difíciles · 1 extrema</span>
+        </div>
+      </div>
+
+      <button id="btn-start" class="btn-primary">Comenzar la obra</button>
+      <p class="credits">Basado en «Cibergame: El arquitecto atacado» · Anabel Gil Cabrera</p>
+    </div>
+  </section>
+
+  <!-- ── PANTALLA DE JUEGO ───────────────────── -->
+  <section id="game-screen" class="screen">
+    <div class="game-layout">
+
+      <!-- Panel de la torre -->
+      <aside class="tower-panel">
+        <span class="hud-label">Estado de la obra</span>
+        <svg id="tower-svg" viewBox="0 0 220 470" xmlns="http://www.w3.org/2000/svg" aria-label="Torre en construcción">
+          <!-- Suelo -->
+          <line x1="8" y1="446" x2="212" y2="446" class="ground" />
+          <line x1="20" y1="454" x2="200" y2="454" class="ground ground-soft" />
+
+          <!-- Plantas (de abajo arriba). pathLength=100 permite animar el trazo. -->
+          <g id="floor-0" class="floor">
+            <rect x="40" y="401" width="140" height="45" pathLength="100" />
+            <line x1="87"  y1="401" x2="87"  y2="446" />
+            <line x1="133" y1="401" x2="133" y2="446" />
+            <line x1="30" y1="401" x2="190" y2="401" class="slab" />
+          </g>
+          <g id="floor-1" class="floor">
+            <rect x="40" y="356" width="140" height="45" pathLength="100" />
+            <line x1="87"  y1="356" x2="87"  y2="401" />
+            <line x1="133" y1="356" x2="133" y2="401" />
+          </g>
+          <g id="floor-2" class="floor">
+            <rect x="40" y="311" width="125" height="45" pathLength="100" />
+            <line x1="82"  y1="311" x2="82"  y2="356" />
+            <line x1="123" y1="311" x2="123" y2="356" />
+            <line x1="30" y1="356" x2="180" y2="356" class="slab" />
+          </g>
+          <g id="floor-3" class="floor">
+            <rect x="40" y="266" width="125" height="45" pathLength="100" />
+            <line x1="82"  y1="266" x2="82"  y2="311" />
+            <line x1="123" y1="266" x2="123" y2="311" />
+          </g>
+          <g id="floor-4" class="floor">
+            <rect x="40" y="221" width="110" height="45" pathLength="100" />
+            <line x1="77"  y1="221" x2="77"  y2="266" />
+            <line x1="113" y1="221" x2="113" y2="266" />
+            <line x1="30" y1="266" x2="170" y2="266" class="slab" />
+          </g>
+          <g id="floor-5" class="floor">
+            <rect x="40" y="176" width="110" height="45" pathLength="100" />
+            <line x1="77"  y1="176" x2="77"  y2="221" />
+            <line x1="113" y1="176" x2="113" y2="221" />
+          </g>
+          <g id="floor-6" class="floor">
+            <rect x="40" y="131" width="95" height="45" pathLength="100" />
+            <line x1="72"  y1="131" x2="72"  y2="176" />
+            <line x1="103" y1="131" x2="103" y2="176" />
+            <line x1="30" y1="176" x2="155" y2="176" class="slab" />
+          </g>
+          <g id="floor-7" class="floor">
+            <rect x="40" y="86" width="95" height="45" pathLength="100" />
+            <line x1="72"  y1="86" x2="72"  y2="131" />
+            <line x1="103" y1="86" x2="103" y2="131" />
+            <line x1="30" y1="131" x2="155" y2="131" class="slab" />
+          </g>
+
+          <!-- Coronación: aparece al completar la torre -->
+          <g id="tower-crown" class="crown">
+            <line x1="30" y1="86" x2="155" y2="86" class="slab" />
+            <line x1="60" y1="86" x2="60" y2="58" />
+            <line x1="48" y1="58" x2="72" y2="58" />
+            <circle cx="60" cy="50" r="3" />
+          </g>
+        </svg>
+        <div class="tower-caption">
+          <span id="floors-built">0</span> / 8 plantas aseguradas
+        </div>
+      </aside>
+
+      <!-- Panel de preguntas -->
+      <div class="game-inner">
+        <header class="hud">
+          <div class="hud-block">
+            <span class="hud-label">Vidas</span>
+            <div class="lives" id="lives"></div>
+          </div>
+          <div class="hud-block hud-center">
+            <span class="hud-label">Planta <span id="q-counter">01 / 08</span></span>
+            <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+          </div>
+          <div class="hud-block hud-right">
+            <span class="hud-label">Puntuación</span>
+            <span class="hud-score" id="score">000</span>
+          </div>
+        </header>
+
+        <main class="question-area" id="question-area">
+          <div class="q-meta">
+            <span class="chip" id="chip-cat">Nivel · Fácil</span>
+            <span class="q-tema" id="q-tema">Phishing</span>
+            <span class="timer-num" id="timer-num">25</span>
+          </div>
+          <div class="timer"><div class="timer-fill" id="timer-fill"></div></div>
+          <h2 class="q-text" id="q-text">—</h2>
+          <div class="options" id="options"></div>
+        </main>
+
+        <footer class="feedback" id="feedback">
+          <div class="feedback-head">
+            <span class="feedback-verdict" id="feedback-verdict">Correcto</span>
+            <span class="feedback-points" id="feedback-points">+10 pts</span>
+          </div>
+          <p class="feedback-text" id="feedback-text">—</p>
+          <button id="btn-next" class="btn-primary">Continuar</button>
+        </footer>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── PANTALLA FINAL ──────────────────────── -->
+  <section id="end-screen" class="screen">
+    <div class="end-inner">
+      <div class="end-tower" id="end-tower"></div>
+      <div class="end-content">
+        <div class="eyebrow" id="end-eyebrow">Obra finalizada</div>
+        <div class="end-score" id="end-score">100</div>
+        <div class="end-score-label">/ 100 puntos</div>
+        <h2 class="end-rank" id="end-rank">—</h2>
+        <p class="end-message" id="end-message">—</p>
+        <div class="end-stats" id="end-stats"></div>
+        <button id="btn-restart" class="btn-primary">Nueva obra</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="preguntas.js"></script>
+  <script src="cibergame3.js"></script>
+</body>
+</html>

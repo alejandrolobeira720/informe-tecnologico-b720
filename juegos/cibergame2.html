@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Cibergame 2 — Protocolo de Seguridad · b720</title>
+  <link rel="stylesheet" href="cibergame2.css" />
+</head>
+<body>
+
+  <!-- ── TOPBAR ──────────────────────────────── -->
+  <nav class="topbar">
+    <div class="topbar-brand">
+      <img src="assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+    </div>
+    <span class="topbar-meta">Cibergame · Simulación 02</span>
+  </nav>
+
+  <!-- ── PANTALLA DE INICIO ──────────────────── -->
+  <section id="start-screen" class="screen active">
+    <div class="start-inner">
+      <div class="eyebrow">Formación · Ciberseguridad</div>
+      <h1>Protocolo de<br /><span>seguridad</span></h1>
+      <p class="sub">
+        Ocho decisiones separan tu estudio de un incidente de seguridad.
+        Cada partida es distinta: las preguntas se eligen al azar de la piscina,
+        pero las tres últimas siempre suben el listón.
+      </p>
+
+      <div class="rules">
+        <div class="rule">
+          <span class="rule-num">08</span>
+          <span class="rule-label">Preguntas por partida</span>
+        </div>
+        <div class="rule">
+          <span class="rule-num">03</span>
+          <span class="rule-label">Vidas disponibles</span>
+        </div>
+        <div class="rule">
+          <span class="rule-num">2+1</span>
+          <span class="rule-label">Final: 2 difíciles · 1 extrema</span>
+        </div>
+      </div>
+
+      <button id="btn-start" class="btn-primary">Iniciar simulación</button>
+      <p class="credits">Basado en «Cibergame: El arquitecto atacado» · Anabel Gil Cabrera</p>
+    </div>
+  </section>
+
+  <!-- ── PANTALLA DE JUEGO ───────────────────── -->
+  <section id="game-screen" class="screen">
+    <div class="game-inner">
+
+      <header class="hud">
+        <div class="hud-block">
+          <span class="hud-label">Vidas</span>
+          <div class="lives" id="lives"></div>
+        </div>
+        <div class="hud-block hud-center">
+          <span class="hud-label">Pregunta <span id="q-counter">01 / 08</span></span>
+          <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+        <div class="hud-block hud-right">
+          <span class="hud-label">Puntuación</span>
+          <span class="hud-score" id="score">000</span>
+        </div>
+      </header>
+
+      <main class="question-area" id="question-area">
+        <div class="q-meta">
+          <span class="chip" id="chip-cat">Nivel · Fácil</span>
+          <span class="q-tema" id="q-tema">Phishing</span>
+        </div>
+        <h2 class="q-text" id="q-text">—</h2>
+        <div class="options" id="options"></div>
+      </main>
+
+      <footer class="feedback" id="feedback">
+        <div class="feedback-head">
+          <span class="feedback-verdict" id="feedback-verdict">Correcto</span>
+          <span class="feedback-points" id="feedback-points">+10 pts</span>
+        </div>
+        <p class="feedback-text" id="feedback-text">—</p>
+        <button id="btn-next" class="btn-primary">Continuar</button>
+      </footer>
+
+    </div>
+  </section>
+
+  <!-- ── PANTALLA FINAL ──────────────────────── -->
+  <section id="end-screen" class="screen">
+    <div class="end-inner">
+      <div class="eyebrow" id="end-eyebrow">Simulación finalizada</div>
+      <div class="end-score" id="end-score">100</div>
+      <div class="end-score-label">/ 100 puntos</div>
+      <h2 class="end-rank" id="end-rank">—</h2>
+      <p class="end-message" id="end-message">—</p>
+      <div class="end-stats" id="end-stats"></div>
+      <button id="btn-restart" class="btn-primary">Nueva simulación</button>
+    </div>
+  </section>
+
+  <script src="preguntas.js"></script>
+  <script src="cibergame2.js"></script>
+</body>
+</html>

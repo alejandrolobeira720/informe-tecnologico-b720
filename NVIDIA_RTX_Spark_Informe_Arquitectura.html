@@ -7,21 +7,24 @@
   <title>NVIDIA RTX Spark — Impacto en TIC y Estudios de Arquitectura</title>
   <style>
     :root {
-      /* b720 Fermín Vázquez Arquitectos */
+      /* Paleta corporativa b720 — IN-Formación v1.3 (Colores.pdf)
+         Pantone Neutral Black #4B4846 · Gris Medio #9D9894 · Gris Claro #F2F1F0
+         Blanco #FFFFFF · Naranja #D27533 — el negro puro (#000) está prohibido.
+         Texto sobre fondo plano: siempre Blanco (nunca Gris Claro). */
       --accent:   #FFFFFF;
-      --brand-d:  #4D4948;
-      --brand-l:  #A8A5A2;
+      --brand-d:  #4B4846;
+      --brand-l:  #9D9894;
       --green:    #FFFFFF;
-      --green-d:  #4D4948;
-      --green-l:  #C8C5C3;
-      --cyan:     #8A8684;
-      --bg:       #000000;
-      --bg2:      #0A0A0A;
-      --bg3:      #111111;
-      --card:     #0F0F0F;
-      --border:   #2A2827;
-      --text:     #E8E6E4;
-      --muted:    #8A8684;
+      --green-d:  #4B4846;
+      --green-l:  #FFFFFF;
+      --cyan:     #9D9894;
+      --bg:       #4B4846;
+      --bg2:      #45423F;
+      --bg3:      #3E3B39;
+      --card:     #413E3C;
+      --border:   #696562;
+      --text:     #FFFFFF;
+      --muted:    rgba(255,255,255,.74);
       --white:    #FFFFFF;
     }
 
@@ -50,7 +53,7 @@
     .topbar {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(0,0,0,.94);
+      background: rgba(75,72,70,.96);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       padding: 0 40px;
@@ -104,7 +107,7 @@
       border-radius: 12px;
       padding: 8px;
       display: none;
-      box-shadow: 0 16px 48px rgba(0,0,0,.6);
+      box-shadow: 0 16px 48px rgba(45,43,42,.6);
     }
     .topbar-nav.open .nav-dropdown { display: block; }
     .nav-dropdown a {
@@ -157,7 +160,7 @@
       position: absolute;
       bottom: -100px; left: -100px;
       width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(77,73,72,.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(157,152,148,.14) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -264,7 +267,7 @@
       font-weight: 600;
       letter-spacing: .06em;
       text-transform: uppercase;
-      color: #000;
+      color: var(--brand-d);
       background: var(--white);
       border: none;
       border-radius: 100px;
@@ -284,7 +287,7 @@
       align-items: center;
       justify-content: center;
       padding: 3vh 3vw;
-      background: rgba(0,0,0,.85);
+      background: rgba(45,43,42,.88);
       backdrop-filter: blur(8px);
     }
     .pdf-modal.open { display: flex; }
@@ -299,7 +302,7 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 32px 120px rgba(0,0,0,.7);
+      box-shadow: 0 32px 120px rgba(45,43,42,.7);
     }
     .pdf-modal-head {
       display: flex;
@@ -348,7 +351,7 @@
       flex: 1;
       width: 100%;
       border: none;
-      background: #1a1a1a;
+      background: var(--bg3);
     }
 
     .hero-img-wrap {
@@ -360,7 +363,7 @@
       border-radius: 20px;
       overflow: hidden;
       border: 1px solid var(--border);
-      box-shadow: 0 24px 80px rgba(0,0,0,.45);
+      box-shadow: 0 24px 80px rgba(45,43,42,.55);
     }
     .hero-img-wrap img {
       width: 100%;
@@ -369,7 +372,7 @@
       display: block;
     }
     .hero-img-overlay {
-      background: linear-gradient(to top, rgba(11,15,19,.95) 0%, rgba(11,15,19,.4) 60%, transparent 100%);
+      background: linear-gradient(to top, rgba(62,59,57,.95) 0%, rgba(62,59,57,.4) 60%, transparent 100%);
       padding: 20px 24px;
       margin-top: -80px;
       position: relative;
@@ -476,6 +479,15 @@
       margin-bottom: 0;
     }
 
+    /* ─── TABLA DESLIZABLE (scroll horizontal) ─ */
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+    .table-scroll .spec-table { min-width: 700px; }
+
     /* ─── SPEC TABLE ─────────────────────────── */
     .spec-table {
       width: 100%;
@@ -533,7 +545,7 @@
     .compare-table thead tr th.col-new .badge {
       display: inline-block;
       background: var(--green);
-      color: #000000;
+      color: var(--brand-d);
       font-size: 10px;
       font-weight: 700;
       letter-spacing: .06em;
@@ -567,7 +579,7 @@
     }
     .compare-table tbody tr:hover td { filter: brightness(1.08); }
     .check { color: var(--green); font-weight: 700; }
-    .cross { color: #e05555; }
+    .cross { color: #D27533; }
 
     /* ─── ENLACE COMPRA / RESERVA ────────────── */
     .buy-link {
@@ -659,7 +671,7 @@
       font-style: italic;
       line-height: 1.5;
     }
-    .img-caption a { color: var(--brand-l); font-style: normal; font-size: 11px; }
+    .img-caption a { color: var(--muted); font-style: normal; font-size: 11px; }
     .img-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -767,8 +779,8 @@
       border-radius: 100px;
       margin-bottom: 10px;
     }
-    .product-badge.old { background: rgba(122,138,153,.15); color: var(--muted); }
-    .product-badge.new { background: var(--green); color: #000; }
+    .product-badge.old { background: rgba(157,152,148,.22); color: var(--muted); }
+    .product-badge.new { background: var(--green); color: var(--brand-d); }
     .product-card-header h4 {
       font-size: 20px;
       color: var(--white);
@@ -803,7 +815,7 @@
       position: absolute;
       left: 7px; top: 8px; bottom: 8px;
       width: 2px;
-      background: linear-gradient(to bottom, var(--accent), var(--brand-d));
+      background: linear-gradient(to bottom, var(--accent), var(--brand-l));
     }
     .timeline-item {
       position: relative;
@@ -882,8 +894,8 @@
 
     /* ─── PILL TABLE ─────────────────────────── */
     .pill-green { background: rgba(255,255,255,.15); color: var(--green-l); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
-    .pill-cyan  { background: rgba(77,73,72,.35); color: var(--brand-l); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
-    .pill-gray  { background: rgba(122,138,153,.1); color: var(--muted); padding: 2px 10px; border-radius: 100px; font-size: 13px; }
+    .pill-cyan  { background: rgba(157,152,148,.3); color: var(--white); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
+    .pill-gray  { background: rgba(157,152,148,.18); color: var(--muted); padding: 2px 10px; border-radius: 100px; font-size: 13px; }
 
     /* ─── SOURCES ────────────────────────────── */
     .sources {
@@ -900,7 +912,7 @@
       border-bottom: 1px solid var(--border);
       color: var(--muted);
     }
-    .source-item a { color: var(--brand-l); font-size: 12px; }
+    .source-item a { color: var(--muted); font-size: 12px; }
 
     /* ─── FOOTER ─────────────────────────────── */
     footer {
@@ -923,6 +935,35 @@
       height: 42px;
       width: auto;
       opacity: .95;
+    }
+
+    /* ─── MÓVIL / TABLET ─────────────────────── */
+    html, body { overflow-x: clip; }
+    @media (max-width: 760px) {
+      .topbar { padding: 0 16px; }
+      .topbar-left { gap: 14px; }
+      .topbar-brand img { height: 24px; }
+      .nav-dropdown {
+        position: fixed;
+        top: 64px;
+        left: 12px;
+        right: 12px;
+        min-width: 0;
+      }
+      .hero { padding: 100px 20px 56px; }
+      section { padding: 56px 20px; }
+      .section-alt { padding: 56px 0; }
+      .section-alt > .inner { padding: 0 20px; }
+      .sources { padding: 48px 20px; }
+      .source-grid { columns: 1; }
+      footer { padding: 24px 20px; }
+      .blockquote { padding: 24px 20px 24px 28px; }
+      .num-list li { padding: 16px 12px 16px 56px; }
+      .num-list li::before { left: 12px; }
+      .hero-doc { padding: 18px 20px; }
+      .spec-table th, .spec-table td { padding: 12px 14px; }
+      .compare-table thead tr th { padding: 14px 16px; }
+      .compare-table tbody tr td { padding: 12px 16px; }
     }
 
     /* ─── PRINT / PDF ────────────────────────── */
@@ -964,6 +1005,26 @@
         </a>
         <!-- Añadir aquí nuevas noticias (copiar el bloque <a> anterior) -->
         <a class="nd-all" href="index.html">← Ver todas las noticias</a>
+      </div>
+    </div>
+    <div class="topbar-nav">
+      <button class="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+        Juegos <span class="caret">▾</span>
+      </button>
+      <div class="nav-dropdown">
+        <a href="juegos/backs.html" target="_blank" rel="noopener">
+          <span class="nd-date">Cibergame 1</span>
+          El arquitecto atacado — simulador de amenazas
+        </a>
+        <a href="juegos/cibergame2.html" target="_blank" rel="noopener">
+          <span class="nd-date">Cibergame 2</span>
+          Protocolo de seguridad — quiz de ciberseguridad
+        </a>
+        <a href="juegos/cibergame3.html" target="_blank" rel="noopener">
+          <span class="nd-date">Cibergame 3</span>
+          La torre ciberresiliente — contrarreloj por plantas
+        </a>
+        <!-- Añadir aquí nuevos juegos (copiar el bloque <a> anterior) -->
       </div>
     </div>
     <!-- Futuras secciones del menú (Opiniones, Recomendaciones, Extras…):
@@ -1101,29 +1162,30 @@
     <div class="diagram-wrap">
       <div class="diagram-title">Arquitectura interna del SoC</div>
       <svg viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Diagrama de arquitectura RTX Spark">
-        <rect x="20" y="20" width="360" height="240" rx="12" stroke="#2A2827" stroke-width="2" fill="#111111"/>
+        <rect x="20" y="20" width="360" height="240" rx="12" stroke="#6B6764" stroke-width="2" fill="#454240"/>
         <rect x="40" y="45" width="150" height="90" rx="8" stroke="#FFFFFF" stroke-width="2" fill="rgba(255,255,255,.06)"/>
         <text x="115" y="80" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">CPU Grace</text>
-        <text x="115" y="100" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">20 núcleos ARM</text>
-        <text x="115" y="118" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Cortex-X925 + A725</text>
-        <rect x="210" y="45" width="150" height="90" rx="8" stroke="#A8A5A2" stroke-width="2" fill="rgba(168,165,162,.08)"/>
-        <text x="285" y="80" text-anchor="middle" fill="#C8C5C3" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">GPU Blackwell</text>
-        <text x="285" y="100" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">6.144 CUDA cores</text>
-        <text x="285" y="118" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Tensor Gen.5 · RT Cores</text>
-        <rect x="130" y="155" width="140" height="28" rx="6" fill="#4D4948" fill-opacity=".4" stroke="#4D4948" stroke-width="1.5"/>
-        <text x="200" y="174" text-anchor="middle" fill="#E8E6E4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600">NVLink C2C</text>
-        <rect x="40" y="200" width="320" height="45" rx="8" stroke="#2A2827" stroke-width="1.5" fill="rgba(255,255,255,.04)"/>
-        <text x="200" y="222" text-anchor="middle" fill="#E8E6E4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600">Memoria unificada LPDDR5X</text>
-        <text x="200" y="238" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Hasta 128 GB · 256-bit · 300 GB/s</text>
+        <text x="115" y="100" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">20 núcleos ARM</text>
+        <text x="115" y="118" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Cortex-X925 + A725</text>
+        <rect x="210" y="45" width="150" height="90" rx="8" stroke="#C9C6C3" stroke-width="2" fill="rgba(157,152,148,.14)"/>
+        <text x="285" y="80" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">GPU Blackwell</text>
+        <text x="285" y="100" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">6.144 CUDA cores</text>
+        <text x="285" y="118" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Tensor Gen.5 · RT Cores</text>
+        <rect x="130" y="155" width="140" height="28" rx="6" fill="#9D9894" fill-opacity=".25" stroke="#9D9894" stroke-width="1.5"/>
+        <text x="200" y="174" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600">NVLink C2C</text>
+        <rect x="40" y="200" width="320" height="45" rx="8" stroke="#6B6764" stroke-width="1.5" fill="rgba(255,255,255,.04)"/>
+        <text x="200" y="222" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600">Memoria unificada LPDDR5X</text>
+        <text x="200" y="238" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Hasta 128 GB · 256-bit · 300 GB/s</text>
         <line x1="115" y1="135" x2="115" y2="155" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <line x1="285" y1="135" x2="285" y2="155" stroke="#A8A5A2" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <line x1="285" y1="135" x2="285" y2="155" stroke="#C9C6C3" stroke-width="1.5" stroke-dasharray="4 3"/>
         <line x1="115" y1="183" x2="115" y2="200" stroke="#FFFFFF" stroke-width="1"/>
-        <line x1="285" y1="183" x2="285" y2="200" stroke="#A8A5A2" stroke-width="1"/>
+        <line x1="285" y1="183" x2="285" y2="200" stroke="#C9C6C3" stroke-width="1"/>
       </svg>
     </div>
   </div>
   <p class="img-caption">Izquierda: prototipo HP mini-PC con RTX Spark (<a href="https://www.notebookcheck.org/El-aspirante-al-Mac-Nvidia-RTX-Spark-mini-PC-HP-en-primicia-con-puertos-ConnectX-7-y-hasta-128-GB-de-RAM.1317762.0.html" target="_blank">NotebookCheck</a>) · Derecha: diagrama simplificado Grace + Blackwell · CPU: <a href="https://www.profesionalreview.com/2026/06/08/nvidia-rtx-spark-cortex-x925-mercado-pc/" target="_blank">Profesional Review</a></p>
 
+  <div class="table-scroll">
   <table class="spec-table">
     <thead>
       <tr>
@@ -1180,6 +1242,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
 
   <div class="tags">
     <span class="tag">Blackwell GPU</span>
@@ -1711,7 +1774,8 @@
   <h3 style="color:var(--white); font-size:20px; margin-bottom:20px;">
     Tabla de impacto por herramienta AEC
   </h3>
-  <table class="spec-table" style="margin-bottom:40px;">
+  <div class="table-scroll" style="margin-bottom:40px;">
+  <table class="spec-table">
     <thead>
       <tr>
         <th>Herramienta / Flujo</th>
@@ -1771,6 +1835,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
 
   <div class="blockquote">
     <p>Un portátil RTX Spark cambia el paradigma del arquitecto en campo: ya no necesita
@@ -1789,8 +1854,8 @@
         IA que usen TensorRT/CUDA y toda la stack de NVIDIA (DLSS, OptiX, NVENC para video).
       </p>
     </div>
-    <div class="highlight-box" style="border-color: rgba(224,85,85,.25); background: rgba(224,85,85,.05);">
-      <h3 style="color: #e07777;">⚠️ Puntos de atención durante la transición</h3>
+    <div class="highlight-box" style="border-color: rgba(210,117,51,.4); background: rgba(210,117,51,.08);">
+      <h3 style="color: #E2945F;">⚠️ Puntos de atención durante la transición</h3>
       <p>
         Aplicaciones heredadas x86 sin versión ARM64 funcionarán mediante emulación Prism,
         con un impacto en rendimiento del 15-25%. Los títulos con antitrampas pueden tener
@@ -2034,18 +2099,29 @@
 
 <script>
 (function () {
-  var nav = document.getElementById('topbarNav');
-  var toggle = nav.querySelector('.nav-toggle');
-  toggle.addEventListener('click', function (e) {
-    e.stopPropagation();
-    var open = nav.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', open);
+  var navs = Array.prototype.slice.call(document.querySelectorAll('.topbar-nav'));
+  navs.forEach(function (nav) {
+    var toggle = nav.querySelector('.nav-toggle');
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      // Al abrir uno, cerramos los demás
+      navs.forEach(function (otro) {
+        if (otro !== nav) {
+          otro.classList.remove('open');
+          otro.querySelector('.nav-toggle').setAttribute('aria-expanded', 'false');
+        }
+      });
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+    });
   });
   document.addEventListener('click', function (e) {
-    if (!nav.contains(e.target)) {
-      nav.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    }
+    navs.forEach(function (nav) {
+      if (!nav.contains(e.target)) {
+        nav.classList.remove('open');
+        nav.querySelector('.nav-toggle').setAttribute('aria-expanded', 'false');
+      }
+    });
   });
 
   var modal = document.getElementById('pdfModal');
