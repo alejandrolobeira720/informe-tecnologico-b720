@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
   <title>Informe Tecnológico — b720 Fermín Vázquez Arquitectos</title>
   <style>
     :root {
@@ -53,6 +54,60 @@
     .topbar-brand img { height: 30px; width: auto; display: block; }
     .topbar-meta { font-size: 12px; color: var(--muted); }
     @media (max-width: 600px) { .topbar-meta { display: none; } }
+    .topbar-left { display: flex; align-items: center; gap: 32px; }
+
+    /* ─── TOPBAR NAV (selector de noticias) ──── */
+    .topbar-nav { position: relative; }
+    .nav-toggle {
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 8px 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color .2s;
+    }
+    .nav-toggle:hover { border-color: rgba(255,255,255,.45); }
+    .nav-toggle .caret { font-size: 9px; transition: transform .2s; }
+    .topbar-nav.open .caret { transform: rotate(180deg); }
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 0;
+      min-width: 340px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      display: none;
+      box-shadow: 0 16px 48px rgba(0,0,0,.6);
+    }
+    .topbar-nav.open .nav-dropdown { display: block; }
+    .nav-dropdown a {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .nav-dropdown a:hover { background: rgba(255,255,255,.06); text-decoration: none; }
+    .nav-dropdown .nd-date {
+      display: block;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
 
     /* ─── HEADER ─────────────────────────────── */
     .hub-header {
@@ -203,9 +258,25 @@
 
 <!-- ── TOPBAR ─────────────────────────────────────────── -->
 <nav class="topbar">
-  <a class="topbar-brand" href="index.html" aria-label="b720 Fermín Vázquez Arquitectos — Inicio">
-    <img src="NVIDIA_RTX_Spark_assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
-  </a>
+  <div class="topbar-left">
+    <a class="topbar-brand" href="index.html" aria-label="b720 Fermín Vázquez Arquitectos — Inicio">
+      <img src="NVIDIA_RTX_Spark_assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+    </a>
+    <div class="topbar-nav" id="topbarNav">
+      <button class="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+        Noticias <span class="caret">▾</span>
+      </button>
+      <div class="nav-dropdown">
+        <a href="NVIDIA_RTX_Spark_Informe_Arquitectura.html">
+          <span class="nd-date">Junio 2026</span>
+          NVIDIA RTX Spark: el superchip que reinventa el PC
+        </a>
+        <!-- Añadir aquí nuevas noticias (copiar el bloque <a> anterior) -->
+      </div>
+    </div>
+    <!-- Futuras secciones del menú (Opiniones, Recomendaciones, Extras…):
+         copiar aquí otro bloque <div class="topbar-nav"> con su botón y desplegable -->
+  </div>
   <span class="topbar-meta">Informe Tecnológico · b720 Estudio</span>
 </nav>
 
@@ -273,6 +344,24 @@
     Elaborado por: <span>b720 Fermín Vázquez Arquitectos</span>
   </div>
 </footer>
+
+<script>
+(function () {
+  var nav = document.getElementById('topbarNav');
+  var toggle = nav.querySelector('.nav-toggle');
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', function (e) {
+    if (!nav.contains(e.target)) {
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
+</script>
 
 </body>
 </html>

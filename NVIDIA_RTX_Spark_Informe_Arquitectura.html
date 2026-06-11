@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
   <title>NVIDIA RTX Spark — Impacto en TIC y Estudios de Arquitectura</title>
   <style>
     :root {
@@ -68,7 +69,7 @@
       font-size: 12px;
       color: var(--muted);
     }
-    .topbar-right { display: flex; align-items: center; gap: 20px; }
+    .topbar-left { display: flex; align-items: center; gap: 32px; }
     @media (max-width: 760px) { .topbar-meta { display: none; } }
 
     /* ─── TOPBAR NAV (selector de noticias) ──── */
@@ -96,7 +97,7 @@
     .nav-dropdown {
       position: absolute;
       top: calc(100% + 12px);
-      right: 0;
+      left: 0;
       min-width: 340px;
       background: var(--bg2);
       border: 1px solid var(--border);
@@ -948,11 +949,10 @@
 
 <!-- ── TOPBAR ─────────────────────────────────────────── -->
 <nav class="topbar">
-  <a class="topbar-brand" href="index.html" aria-label="b720 Fermín Vázquez Arquitectos — Inicio">
-    <img src="NVIDIA_RTX_Spark_assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
-  </a>
-  <div class="topbar-right">
-    <span class="topbar-meta">Informe Tecnológico · NVIDIA RTX Spark · Junio 2026</span>
+  <div class="topbar-left">
+    <a class="topbar-brand" href="index.html" aria-label="b720 Fermín Vázquez Arquitectos — Inicio">
+      <img src="NVIDIA_RTX_Spark_assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+    </a>
     <div class="topbar-nav" id="topbarNav">
       <button class="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false">
         Noticias <span class="caret">▾</span>
@@ -966,7 +966,10 @@
         <a class="nd-all" href="index.html">← Ver todas las noticias</a>
       </div>
     </div>
+    <!-- Futuras secciones del menú (Opiniones, Recomendaciones, Extras…):
+         copiar aquí otro bloque <div class="topbar-nav"> con su botón y desplegable -->
   </div>
+  <span class="topbar-meta">Informe Tecnológico · NVIDIA RTX Spark · Junio 2026</span>
 </nav>
 
 
