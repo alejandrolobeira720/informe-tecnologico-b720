@@ -19,12 +19,12 @@
       --green-l:  #FFFFFF;
       --cyan:     #9D9894;
       --bg:       #4B4846;
-      --bg2:      #45423F;
-      --bg3:      #3E3B39;
-      --card:     #413E3C;
-      --border:   #696562;
+      --bg2:      #514E4B; /* Neutral Black elevado (panel) */
+      --bg3:      #555250;
+      --card:     #555250; /* Neutral Black elevado (tarjeta) */
+      --border:   #6B6764;
       --text:     #FFFFFF;
-      --muted:    rgba(255,255,255,.74);
+      --muted:    #9D9894; /* Black 0961 — texto secundario */
       --white:    #FFFFFF;
     }
 
@@ -287,7 +287,7 @@
       align-items: center;
       justify-content: center;
       padding: 3vh 3vw;
-      background: rgba(45,43,42,.88);
+      background: rgba(75,72,70,.88);
       backdrop-filter: blur(8px);
     }
     .pdf-modal.open { display: flex; }
@@ -372,7 +372,7 @@
       display: block;
     }
     .hero-img-overlay {
-      background: linear-gradient(to top, rgba(62,59,57,.95) 0%, rgba(62,59,57,.4) 60%, transparent 100%);
+      background: linear-gradient(to top, rgba(75,72,70,.95) 0%, rgba(75,72,70,.4) 60%, transparent 100%);
       padding: 20px 24px;
       margin-top: -80px;
       position: relative;
@@ -1162,24 +1162,24 @@
     <div class="diagram-wrap">
       <div class="diagram-title">Arquitectura interna del SoC</div>
       <svg viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Diagrama de arquitectura RTX Spark">
-        <rect x="20" y="20" width="360" height="240" rx="12" stroke="#6B6764" stroke-width="2" fill="#454240"/>
+        <rect x="20" y="20" width="360" height="240" rx="12" stroke="#6B6764" stroke-width="2" fill="#514E4B"/>
         <rect x="40" y="45" width="150" height="90" rx="8" stroke="#FFFFFF" stroke-width="2" fill="rgba(255,255,255,.06)"/>
         <text x="115" y="80" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">CPU Grace</text>
-        <text x="115" y="100" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">20 núcleos ARM</text>
-        <text x="115" y="118" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Cortex-X925 + A725</text>
-        <rect x="210" y="45" width="150" height="90" rx="8" stroke="#C9C6C3" stroke-width="2" fill="rgba(157,152,148,.14)"/>
+        <text x="115" y="100" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">20 núcleos ARM</text>
+        <text x="115" y="118" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Cortex-X925 + A725</text>
+        <rect x="210" y="45" width="150" height="90" rx="8" stroke="#9D9894" stroke-width="2" fill="rgba(157,152,148,.14)"/>
         <text x="285" y="80" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">GPU Blackwell</text>
-        <text x="285" y="100" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">6.144 CUDA cores</text>
-        <text x="285" y="118" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Tensor Gen.5 · RT Cores</text>
+        <text x="285" y="100" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">6.144 CUDA cores</text>
+        <text x="285" y="118" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Tensor Gen.5 · RT Cores</text>
         <rect x="130" y="155" width="140" height="28" rx="6" fill="#9D9894" fill-opacity=".25" stroke="#9D9894" stroke-width="1.5"/>
         <text x="200" y="174" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600">NVLink C2C</text>
         <rect x="40" y="200" width="320" height="45" rx="8" stroke="#6B6764" stroke-width="1.5" fill="rgba(255,255,255,.04)"/>
         <text x="200" y="222" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600">Memoria unificada LPDDR5X</text>
-        <text x="200" y="238" text-anchor="middle" fill="#DAD7D5" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Hasta 128 GB · 256-bit · 300 GB/s</text>
+        <text x="200" y="238" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Hasta 128 GB · 256-bit · 300 GB/s</text>
         <line x1="115" y1="135" x2="115" y2="155" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <line x1="285" y1="135" x2="285" y2="155" stroke="#C9C6C3" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <line x1="285" y1="135" x2="285" y2="155" stroke="#9D9894" stroke-width="1.5" stroke-dasharray="4 3"/>
         <line x1="115" y1="183" x2="115" y2="200" stroke="#FFFFFF" stroke-width="1"/>
-        <line x1="285" y1="183" x2="285" y2="200" stroke="#C9C6C3" stroke-width="1"/>
+        <line x1="285" y1="183" x2="285" y2="200" stroke="#9D9894" stroke-width="1"/>
       </svg>
     </div>
   </div>
@@ -1715,7 +1715,7 @@
       </p>
     </div>
 
-    <div class="card" style="border-color: rgba(168,165,162,.3);">
+    <div class="card" style="border-color: rgba(157,152,148,.3);">
       <div class="card-icon">📐</div>
       <h3>BIM con IA generativa local</h3>
       <p>
@@ -1737,7 +1737,7 @@
       </p>
     </div>
 
-    <div class="card" style="border-color: rgba(168,165,162,.3);">
+    <div class="card" style="border-color: rgba(157,152,148,.3);">
       <div class="card-icon">⚙️</div>
       <h3>Simulaciones y análisis energético</h3>
       <p>
@@ -1759,7 +1759,7 @@
       </p>
     </div>
 
-    <div class="card" style="border-color: rgba(168,165,162,.3);">
+    <div class="card" style="border-color: rgba(157,152,148,.3);">
       <div class="card-icon">🔒</div>
       <h3>Seguridad y privacidad de datos</h3>
       <p>
@@ -1855,7 +1855,7 @@
       </p>
     </div>
     <div class="highlight-box" style="border-color: rgba(210,117,51,.4); background: rgba(210,117,51,.08);">
-      <h3 style="color: #E2945F;">⚠️ Puntos de atención durante la transición</h3>
+      <h3 style="color: var(--white);">⚠️ Puntos de atención durante la transición</h3>
       <p>
         Aplicaciones heredadas x86 sin versión ARM64 funcionarán mediante emulación Prism,
         con un impacto en rendimiento del 15-25%. Los títulos con antitrampas pueden tener
