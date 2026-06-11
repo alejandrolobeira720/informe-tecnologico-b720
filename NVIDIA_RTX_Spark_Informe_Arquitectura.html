@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NVIDIA RTX Spark — Impacto en TIC y Estudios de Arquitectura</title>
+  <style>
+    :root {
+      /* b720 Fermín Vázquez Arquitectos */
+      --accent:   #FFFFFF;
+      --brand-d:  #4D4948;
+      --brand-l:  #A8A5A2;
+      --green:    #FFFFFF;
+      --green-d:  #4D4948;
+      --green-l:  #C8C5C3;
+      --cyan:     #8A8684;
+      --bg:       #000000;
+      --bg2:      #0A0A0A;
+      --bg3:      #111111;
+      --card:     #0F0F0F;
+      --border:   #2A2827;
+      --text:     #E8E6E4;
+      --muted:    #8A8684;
+      --white:    #FFFFFF;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ─── TOPBAR ─────────────────────────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(0,0,0,.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .topbar-brand { display: flex; align-items: center; }
+    .topbar-brand img {
+      height: 30px;
+      width: auto;
+      display: block;
+    }
+    .topbar-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .topbar-right { display: flex; align-items: center; gap: 20px; }
+    @media (max-width: 760px) { .topbar-meta { display: none; } }
+
+    /* ─── TOPBAR NAV (selector de noticias) ──── */
+    .topbar-nav { position: relative; }
+    .nav-toggle {
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 8px 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color .2s;
+    }
+    .nav-toggle:hover { border-color: rgba(255,255,255,.45); }
+    .nav-toggle .caret { font-size: 9px; transition: transform .2s; }
+    .topbar-nav.open .caret { transform: rotate(180deg); }
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      min-width: 340px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      display: none;
+      box-shadow: 0 16px 48px rgba(0,0,0,.6);
+    }
+    .topbar-nav.open .nav-dropdown { display: block; }
+    .nav-dropdown a {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .nav-dropdown a:hover { background: rgba(255,255,255,.06); text-decoration: none; }
+    .nav-dropdown a.active { background: rgba(255,255,255,.04); box-shadow: inset 3px 0 0 var(--white); }
+    .nav-dropdown .nd-date {
+      display: block;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+    .nav-dropdown .nd-all {
+      border-top: 1px solid var(--border);
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* ─── HERO ───────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      padding: 120px 40px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(255,255,255,.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(77,73,72,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner { max-width: 900px; position: relative; z-index: 2; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.18);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .4; transform: scale(1.4); }
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 700;
+      line-height: 1.08;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+    .hero h1 span { color: var(--brand-l); }
+
+    .hero-sub {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--muted);
+      max-width: 640px;
+      line-height: 1.65;
+      margin-bottom: 48px;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 28px;
+      min-width: 160px;
+    }
+    .stat-value {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ─── DOCUMENTO PDF (hero) ───────────────── */
+    .hero-doc {
+      margin: 48px auto 0;
+      max-width: 660px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 28px;
+      flex-wrap: wrap;
+    }
+    .hero-doc-icon { font-size: 28px; line-height: 1; }
+    .hero-doc-text { flex: 1; min-width: 240px; }
+    .hero-doc-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: .02em;
+    }
+    .hero-doc-text span { font-size: 12px; color: var(--muted); }
+    .pdf-btn {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #000;
+      background: var(--white);
+      border: none;
+      border-radius: 100px;
+      padding: 12px 26px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity .2s, transform .2s;
+    }
+    .pdf-btn:hover { opacity: .85; transform: translateY(-1px); }
+
+    /* ─── MODAL VISOR PDF ────────────────────── */
+    .pdf-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 3vh 3vw;
+      background: rgba(0,0,0,.85);
+      backdrop-filter: blur(8px);
+    }
+    .pdf-modal.open { display: flex; }
+    .pdf-modal-box {
+      width: 100%;
+      max-width: 1040px;
+      height: 100%;
+      max-height: 94vh;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 32px 120px rgba(0,0,0,.7);
+    }
+    .pdf-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .pdf-modal-head strong {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    .pdf-modal-actions { display: flex; align-items: center; gap: 10px; }
+    .pdf-download {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 7px 16px;
+      transition: border-color .2s;
+    }
+    .pdf-download:hover { border-color: rgba(255,255,255,.45); text-decoration: none; }
+    .pdf-close {
+      font-family: inherit;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      transition: border-color .2s;
+    }
+    .pdf-close:hover { border-color: rgba(255,255,255,.45); }
+    .pdf-modal iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #1a1a1a;
+    }
+
+    .hero-img-wrap {
+      position: absolute;
+      right: 40px; top: 50%;
+      transform: translateY(-50%);
+      width: 40%;
+      max-width: 520px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 80px rgba(0,0,0,.45);
+    }
+    .hero-img-wrap img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-img-overlay {
+      background: linear-gradient(to top, rgba(11,15,19,.95) 0%, rgba(11,15,19,.4) 60%, transparent 100%);
+      padding: 20px 24px;
+      margin-top: -80px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-img-overlay span {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    @media (max-width: 900px) { .hero-img-wrap { display: none; } }
+
+    /* ─── SECTION WRAPPER ─────────────────────── */
+    section { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+    section + section { border-top: 1px solid var(--border); }
+
+    .section-alt {
+      background: var(--bg2);
+      max-width: 100%;
+      padding: 80px 0;
+    }
+    .section-alt > .inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    h2.section-title {
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    h2.section-title span { color: var(--green); }
+
+    .lead {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    p { margin-bottom: 16px; }
+
+    /* ─── GRID CARDS ─────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 600px) and (max-width: 900px) {
+      .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      transition: border-color .2s, transform .2s;
+      overflow: hidden;
+    }
+    .card-thumb {
+      width: calc(100% + 56px);
+      margin: -28px -28px 20px;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .card:hover {
+      border-color: rgba(255,255,255,.4);
+      transform: translateY(-2px);
+    }
+    .card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.12);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+    .card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 0;
+    }
+
+    /* ─── SPEC TABLE ─────────────────────────── */
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .spec-table th {
+      background: var(--card);
+      color: var(--green);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-align: left;
+      padding: 14px 20px;
+      border-bottom: 2px solid var(--green-d);
+    }
+    .spec-table td {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    .spec-table tr:hover td { background: rgba(255,255,255,.02); }
+    .spec-table td:first-child { color: var(--muted); font-weight: 500; white-space: nowrap; }
+
+    /* ─── COMPARISON TABLE ───────────────────── */
+    .compare-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .compare-table thead tr th {
+      padding: 18px 24px;
+      text-align: center;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .compare-table thead tr th:first-child { text-align: left; background: var(--bg3); }
+    .compare-table thead tr th.col-old {
+      background: var(--bg3);
+      color: var(--muted);
+      border-left: 1px solid var(--border);
+    }
+    .compare-table thead tr th.col-new {
+      background: rgba(255,255,255,.08);
+      color: var(--green);
+      border-left: 1px solid rgba(255,255,255,.3);
+    }
+    .compare-table thead tr th.col-new .badge {
+      display: inline-block;
+      background: var(--green);
+      color: #000000;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 100px;
+      margin-left: 8px;
+    }
+    .compare-table tbody tr td {
+      padding: 14px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text);
+    }
+    .compare-table tbody tr td:first-child {
+      background: var(--bg3);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .compare-table tbody tr td:nth-child(2) {
+      background: var(--bg3);
+      border-left: 1px solid var(--border);
+      text-align: center;
+    }
+    .compare-table tbody tr td:nth-child(3) {
+      background: rgba(255,255,255,.04);
+      border-left: 1px solid rgba(255,255,255,.2);
+      text-align: center;
+    }
+    .compare-table tbody tr:hover td { filter: brightness(1.08); }
+    .check { color: var(--green); font-weight: 700; }
+    .cross { color: #e05555; }
+
+    /* ─── ENLACE COMPRA / RESERVA ────────────── */
+    .buy-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 100px;
+      padding: 8px 18px;
+      transition: background .2s, border-color .2s;
+    }
+    .buy-link:hover {
+      background: rgba(255,255,255,.12);
+      border-color: var(--white);
+      text-decoration: none;
+    }
+
+    /* ─── CHIPS / TAGS ───────────────────────── */
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tag {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.25);
+      color: var(--green-l);
+    }
+
+    /* ─── QUOTE BLOCK ────────────────────────── */
+    .blockquote {
+      margin: 40px 0;
+      padding: 28px 36px;
+      background: var(--card);
+      border-left: 4px solid var(--green);
+      border-radius: 0 12px 12px 0;
+      position: relative;
+    }
+    .blockquote::before {
+      content: '"';
+      position: absolute;
+      top: 10px; left: 20px;
+      font-size: 80px;
+      font-family: Georgia, serif;
+      color: rgba(255,255,255,.15);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .blockquote p {
+      font-size: 18px;
+      font-style: italic;
+      color: var(--white);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 10px;
+    }
+    .blockquote cite {
+      font-size: 13px;
+      color: var(--muted);
+      font-style: normal;
+    }
+
+    /* ─── IMAGES & FIGURES ───────────────────── */
+    .img-band {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin: 32px 0 8px;
+    }
+    .img-band img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+    }
+    .img-band.tall img { height: 400px; }
+    .img-caption {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      margin: 8px 0 36px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .img-caption a { color: var(--brand-l); font-style: normal; font-size: 11px; }
+    .img-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 36px 0;
+    }
+    .img-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 800px) {
+      .img-grid, .img-grid.cols-3 { grid-template-columns: 1fr; }
+    }
+    figure.fig-card {
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--card);
+      margin: 0;
+    }
+    figure.fig-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+    figure.fig-card figcaption {
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      border-top: 1px solid var(--border);
+    }
+    figure.fig-card figcaption strong {
+      display: block;
+      color: var(--white);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .figure-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+      margin: 40px 0;
+    }
+    .figure-split img {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      height: 280px;
+      object-fit: cover;
+    }
+    .figure-split .diagram-wrap {
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 24px;
+    }
+    @media (max-width: 800px) { .figure-split { grid-template-columns: 1fr; } }
+    .diagram-wrap svg { width: 100%; height: auto; display: block; }
+    .diagram-title {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .product-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 40px 0;
+    }
+    .product-card {
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--card);
+    }
+    .product-card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .product-card-header {
+      padding: 28px 28px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .product-card-header.dgx { background: var(--bg3); }
+    .product-card-header.rtx {
+      background: rgba(255,255,255,.06);
+      border-bottom-color: rgba(255,255,255,.2);
+    }
+    .product-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+      margin-bottom: 10px;
+    }
+    .product-badge.old { background: rgba(122,138,153,.15); color: var(--muted); }
+    .product-badge.new { background: var(--green); color: #000; }
+    .product-card-header h4 {
+      font-size: 20px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .product-card-header p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+    .product-card-body { padding: 20px 28px 28px; }
+    .product-card-body ul {
+      list-style: none;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .product-card-body li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .product-card-body li:last-child { border-bottom: none; }
+    .product-card-body li span:first-child { color: var(--muted); }
+    @media (max-width: 700px) { .product-compare { grid-template-columns: 1fr; } }
+
+    /* ─── TIMELINE ───────────────────────────── */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px; top: 8px; bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--brand-d));
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -30px; top: 6px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--green);
+      border: 2px solid var(--bg);
+    }
+    .timeline-date {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 4px;
+    }
+    .timeline-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .timeline-item p { font-size: 14px; color: var(--muted); margin-bottom: 0; }
+
+    /* ─── NUMBERED LIST ──────────────────────── */
+    .num-list { counter-reset: item; list-style: none; }
+    .num-list li {
+      counter-increment: item;
+      padding: 18px 20px 18px 64px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .num-list li::before {
+      content: counter(item, decimal-leading-zero);
+      position: absolute;
+      left: 20px; top: 18px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: rgba(255,255,255,.35);
+      line-height: 1;
+    }
+    .num-list li strong {
+      display: block;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .num-list li span { font-size: 14px; color: var(--muted); }
+
+    /* ─── TWO-COL TEXT ───────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ─── HIGHLIGHT BOX ──────────────────────── */
+    .highlight-box {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin: 32px 0;
+    }
+    .highlight-box h3 {
+      font-size: 16px;
+      color: var(--green-l);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .highlight-box p { font-size: 14px; color: var(--text); margin-bottom: 0; }
+
+    /* ─── PILL TABLE ─────────────────────────── */
+    .pill-green { background: rgba(255,255,255,.15); color: var(--green-l); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
+    .pill-cyan  { background: rgba(77,73,72,.35); color: var(--brand-l); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
+    .pill-gray  { background: rgba(122,138,153,.1); color: var(--muted); padding: 2px 10px; border-radius: 100px; font-size: 13px; }
+
+    /* ─── SOURCES ────────────────────────────── */
+    .sources {
+      background: var(--bg3);
+      border-top: 1px solid var(--border);
+      padding: 60px 40px;
+    }
+    .sources .inner { max-width: 1100px; margin: 0 auto; }
+    .source-grid { columns: 2; column-gap: 40px; }
+    .source-item {
+      break-inside: avoid;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .source-item a { color: var(--brand-l); font-size: 12px; }
+
+    /* ─── FOOTER ─────────────────────────────── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    footer span { color: var(--accent); font-weight: 500; }
+    .hero-brand {
+      margin-bottom: 28px;
+    }
+    .hero-brand img {
+      height: 42px;
+      width: auto;
+      opacity: .95;
+    }
+
+    /* ─── PRINT / PDF ────────────────────────── */
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      .topbar, .pdf-modal, .hero-doc, .buy-link { display: none !important; }
+      body { background: var(--bg); color: var(--text); font-size: 11pt; }
+      .hero { min-height: auto; padding: 48px 40px 40px; page-break-after: avoid; }
+      .hero-img-wrap { position: static; transform: none; width: 100%; max-width: 100%; margin-top: 32px; }
+      .img-band img, .figure-split img { height: auto; max-height: 280px; }
+      figure.fig-card img { height: auto; max-height: 200px; }
+      section, .section-alt { page-break-inside: avoid; }
+      .card:hover, .compare-table tbody tr:hover td { transform: none; filter: none; }
+      a { color: var(--brand-l); }
+    }
+
+    /* ─── SCROLLBAR ──────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ── TOPBAR ─────────────────────────────────────────── -->
+<nav class="topbar">
+  <a class="topbar-brand" href="index.html" aria-label="b720 Fermín Vázquez Arquitectos — Inicio">
+    <img src="NVIDIA_RTX_Spark_assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+  </a>
+  <div class="topbar-right">
+    <span class="topbar-meta">Informe Tecnológico · NVIDIA RTX Spark · Junio 2026</span>
+    <div class="topbar-nav" id="topbarNav">
+      <button class="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+        Noticias <span class="caret">▾</span>
+      </button>
+      <div class="nav-dropdown">
+        <a href="NVIDIA_RTX_Spark_Informe_Arquitectura.html" class="active">
+          <span class="nd-date">Junio 2026</span>
+          NVIDIA RTX Spark: el superchip que reinventa el PC
+        </a>
+        <!-- Añadir aquí nuevas noticias (copiar el bloque <a> anterior) -->
+        <a class="nd-all" href="index.html">← Ver todas las noticias</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ── HERO ───────────────────────────────────────────── -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-brand">
+      <img src="NVIDIA_RTX_Spark_assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+    </div>
+    <div class="hero-eyebrow">Análisis Tecnológico · Computex 2026</div>
+    <h1>NVIDIA RTX Spark:<br/>El <span>superchip</span> que<br/>reinventa el PC</h1>
+    <p class="hero-sub">
+      El lanzamiento del SoC NVIDIA RTX Spark en Computex 2026 marca un punto de inflexión para
+      el sector TIC y, especialmente, para sectores profesionales como los estudios de arquitectura.
+      Este informe analiza su arquitectura, su impacto en el ecosistema tecnológico y las
+      oportunidades concretas que abre para nuestro estudio en Madrid.
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-value">1 PF</div>
+        <div class="stat-label">Rendimiento IA (FP4)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">128 GB</div>
+        <div class="stat-label">Memoria unificada</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">6.144</div>
+        <div class="stat-label">Núcleos CUDA</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">3 nm</div>
+        <div class="stat-label">Nodo TSMC</div>
+      </div>
+    </div>
+    <div class="hero-doc">
+      <div class="hero-doc-icon">📄</div>
+      <div class="hero-doc-text">
+        <strong>Evaluación Tecnológica: Sistema NVIDIA RTX Spark</strong>
+        <span>Documento técnico completo del estudio · PDF</span>
+      </div>
+      <button class="pdf-btn" id="openPdfBtn" type="button">Ver documento</button>
+    </div>
+  </div>
+  <div class="hero-img-wrap">
+    <img src="NVIDIA_RTX_Spark_assets/01-hero-hipertextual.jpg" alt="NVIDIA RTX Spark — anuncio Computex 2026" />
+    <div class="hero-img-overlay"><span>NVIDIA RTX Spark · SoC Blackwell · Grace ARM</span></div>
+  </div>
+</header>
+<p class="img-caption" style="max-width:1100px;margin:-40px auto 0;padding:0 40px;text-align:left;">Imagen principal: NVIDIA RTX Spark en Computex 2026 · <a href="https://hipertextual.com/tecnologia/nvidia-rtx-spark/" target="_blank">Fuente: Hipertextual</a></p>
+
+
+<!-- ── RESUMEN EJECUTIVO ──────────────────────────────── -->
+<section>
+  <div class="eyebrow">01 · Introducción</div>
+  <h2 class="section-title">Resumen<br/><span>Ejecutivo</span></h2>
+  <p class="lead">
+    El 31 de mayo de 2026, Jensen Huang subió al escenario de Computex en Taipéi
+    con un anuncio que redefine los PCs: el <strong>NVIDIA RTX Spark</strong>, el primer
+    SoC (System-on-Chip) de NVIDIA diseñado para portátiles y mini-PCs con Windows 11.
+  </p>
+
+  <div class="img-grid">
+    <figure class="fig-card">
+      <img src="NVIDIA_RTX_Spark_assets/02-microsoft-computex.png" alt="Microsoft y NVIDIA — PCs Windows con RTX Spark en Computex" />
+      <figcaption><strong>Colaboración Microsoft + NVIDIA</strong> Windows optimizado para RTX Spark: memoria unificada, Prism y agentes de IA locales. <a href="https://news.microsoft.com/source/latam/noticias-de-microsoft/presentamos-un-nuevo-y-potente-capitulo-para-los-pcs-con-windows-acelerado-por-nvidia-rtx-spark/" target="_blank">Fuente: Microsoft LATAM</a></figcaption>
+    </figure>
+    <figure class="fig-card">
+      <img src="NVIDIA_RTX_Spark_assets/03-xataka-rtx-spark.jpg" alt="Portátiles con chip NVIDIA RTX Spark" />
+      <figcaption><strong>Ecosistema OEM confirmado</strong> Ocho fabricantes preparan portátiles con el nuevo SoC para otoño 2026. <a href="https://www.xataka.com/seleccion/oficiales-ocho-portatiles-que-podras-comprar-proximamente-nuevo-chip-nvidia-rtx-spark" target="_blank">Fuente: Xataka</a></figcaption>
+    </figure>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <p>
+        Desde hace más de una década, el paradigma de los ordenadores personales bajo Windows
+        se fundamentaba en un modelo binario: procesadores Intel o AMD de arquitectura x86.
+        La llegada de Apple Silicon con la serie M demostró que la arquitectura ARM podía
+        competir —y superar— en rendimiento por vatio a las soluciones convencionales.
+        Qualcomm intentó replicar esa fórmula en Windows con sus chips Snapdragon X Elite,
+        con resultados mixtos.
+      </p>
+      <p>
+        El RTX Spark cambia el tablero por completo. Al combinar una CPU Grace de 20 núcleos
+        (co-diseñada con MediaTek sobre ARM) con una GPU Blackwell de 6.144 núcleos CUDA,
+        todo ello conectado mediante NVLink C2C y alimentando hasta 128 GB de memoria
+        unificada LPDDR5X, NVIDIA trae a un portátil el equivalente de una RTX 5070
+        discreta más una estación de trabajo de IA.
+      </p>
+    </div>
+    <div>
+      <p>
+        La relevancia de este lanzamiento se amplifica por el respaldo inmediato del ecosistema:
+        Microsoft confirma un Surface Laptop Ultra con RTX Spark; HP, Dell, ASUS, Lenovo y MSI
+        preparan sus propios dispositivos para el otoño de 2026. El mercado de PCs con Windows
+        asiste, por primera vez en décadas, a una ruptura real con el binomio Intel/AMD.
+      </p>
+      <p>
+        Para un estudio de arquitectura en Madrid, este salto tecnológico tiene implicaciones
+        directas: flujos de trabajo BIM más fluidos, renderizado en tiempo real sin hardware
+        externo, modelos de IA generativa ejecutados localmente sin depender de la nube y una
+        reducción significativa del coste total de propiedad de las estaciones de trabajo.
+      </p>
+    </div>
+  </div>
+
+  <div class="blockquote">
+    <p>El PC se está reinventando. Durante cuarenta años, abrías aplicaciones mediante clics.
+      Los agentes de IA son el nuevo interface que permite comandar el sistema con lenguaje natural.</p>
+    <cite>— Jensen Huang, CEO de NVIDIA, keynote Computex 2026</cite>
+  </div>
+</section>
+
+
+<!-- ── ESPECIFICACIONES ───────────────────────────────── -->
+<div class="section-alt">
+<div class="inner">
+  <div class="eyebrow">02 · Arquitectura</div>
+  <h2 class="section-title">Anatomía del<br/><span>RTX Spark</span></h2>
+  <p class="lead">
+    Bajo la denominación RTX Spark se esconde un diseño de dos chiplets fabricados en el
+    nodo de 3 nm EUV de TSMC, con una arquitectura que hereda directamente el ADN del
+    superchip GB10 del DGX Spark pero reoptimizado para dispositivos portátiles y de escritorio compacto.
+  </p>
+
+  <div class="figure-split">
+    <img src="NVIDIA_RTX_Spark_assets/04-notebookcheck-hp-minipc.png" alt="HP mini PC con NVIDIA RTX Spark y ConnectX-7" />
+    <div class="diagram-wrap">
+      <div class="diagram-title">Arquitectura interna del SoC</div>
+      <svg viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Diagrama de arquitectura RTX Spark">
+        <rect x="20" y="20" width="360" height="240" rx="12" stroke="#2A2827" stroke-width="2" fill="#111111"/>
+        <rect x="40" y="45" width="150" height="90" rx="8" stroke="#FFFFFF" stroke-width="2" fill="rgba(255,255,255,.06)"/>
+        <text x="115" y="80" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">CPU Grace</text>
+        <text x="115" y="100" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">20 núcleos ARM</text>
+        <text x="115" y="118" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Cortex-X925 + A725</text>
+        <rect x="210" y="45" width="150" height="90" rx="8" stroke="#A8A5A2" stroke-width="2" fill="rgba(168,165,162,.08)"/>
+        <text x="285" y="80" text-anchor="middle" fill="#C8C5C3" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">GPU Blackwell</text>
+        <text x="285" y="100" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">6.144 CUDA cores</text>
+        <text x="285" y="118" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Tensor Gen.5 · RT Cores</text>
+        <rect x="130" y="155" width="140" height="28" rx="6" fill="#4D4948" fill-opacity=".4" stroke="#4D4948" stroke-width="1.5"/>
+        <text x="200" y="174" text-anchor="middle" fill="#E8E6E4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600">NVLink C2C</text>
+        <rect x="40" y="200" width="320" height="45" rx="8" stroke="#2A2827" stroke-width="1.5" fill="rgba(255,255,255,.04)"/>
+        <text x="200" y="222" text-anchor="middle" fill="#E8E6E4" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600">Memoria unificada LPDDR5X</text>
+        <text x="200" y="238" text-anchor="middle" fill="#8A8684" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Hasta 128 GB · 256-bit · 300 GB/s</text>
+        <line x1="115" y1="135" x2="115" y2="155" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <line x1="285" y1="135" x2="285" y2="155" stroke="#A8A5A2" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <line x1="115" y1="183" x2="115" y2="200" stroke="#FFFFFF" stroke-width="1"/>
+        <line x1="285" y1="183" x2="285" y2="200" stroke="#A8A5A2" stroke-width="1"/>
+      </svg>
+    </div>
+  </div>
+  <p class="img-caption">Izquierda: prototipo HP mini-PC con RTX Spark (<a href="https://www.notebookcheck.org/El-aspirante-al-Mac-Nvidia-RTX-Spark-mini-PC-HP-en-primicia-con-puertos-ConnectX-7-y-hasta-128-GB-de-RAM.1317762.0.html" target="_blank">NotebookCheck</a>) · Derecha: diagrama simplificado Grace + Blackwell · CPU: <a href="https://www.profesionalreview.com/2026/06/08/nvidia-rtx-spark-cortex-x925-mercado-pc/" target="_blank">Profesional Review</a></p>
+
+  <table class="spec-table">
+    <thead>
+      <tr>
+        <th>Componente</th>
+        <th>Especificación</th>
+        <th>Contexto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Proceso de fabricación</td>
+        <td>TSMC N3E (3 nm EUV)</td>
+        <td>El mismo nodo que los chips Apple M4; máxima eficiencia disponible</td>
+      </tr>
+      <tr>
+        <td>CPU "Grace"</td>
+        <td>20 núcleos ARM (10× Cortex-X925 + 10× Cortex-A725)</td>
+        <td>Co-diseñado con MediaTek; hasta 4,1 GHz en núcleos de rendimiento</td>
+      </tr>
+      <tr>
+        <td>GPU "Blackwell RTX"</td>
+        <td>6.144 núcleos CUDA · 48 SM · Tensor Cores 5.ª gen. (FP4)</td>
+        <td>Equivalente a una RTX 5070 (versión laptop)</td>
+      </tr>
+      <tr>
+        <td>Interconnect CPU↔GPU</td>
+        <td>NVLink C2C</td>
+        <td>Acceso coherente a toda la memoria sin penalización de copia</td>
+      </tr>
+      <tr>
+        <td>Memoria</td>
+        <td>Hasta 128 GB LPDDR5X unificada · 256-bit · 273–300 GB/s</td>
+        <td>Misma pool para CPU y GPU; configuraciones desde 16 GB</td>
+      </tr>
+      <tr>
+        <td>Rendimiento IA</td>
+        <td>1 petaFLOP FP4</td>
+        <td>Los Copilot+ actuales ofrecen 40–50 TOPS; RTX Spark alcanza ~1.000 TOPS</td>
+      </tr>
+      <tr>
+        <td>TDP</td>
+        <td>10 W – 80 W (configurable por OEM)</td>
+        <td>Alta eficiencia energética, apto para portátiles finos y mini-PCs</td>
+      </tr>
+      <tr>
+        <td>Sistema operativo</td>
+        <td>Windows 11 (ARM64) + CUDA, DLSS, TensorRT, OptiX, G-SYNC</td>
+        <td>Ecosistema CUDA completo en arquitectura ARM, una novedad histórica</td>
+      </tr>
+      <tr>
+        <td>Compatibilidad</td>
+        <td>Apps x86 vía emulación; apps ARM64 nativas</td>
+        <td>Herramienta Prism de Windows 11 para la capa de emulación x86</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="tags">
+    <span class="tag">Blackwell GPU</span>
+    <span class="tag">ARM Grace CPU</span>
+    <span class="tag">CUDA nativo</span>
+    <span class="tag">NVLink C2C</span>
+    <span class="tag">Windows on ARM</span>
+    <span class="tag">DLSS 4</span>
+    <span class="tag">NVIDIA OptiX</span>
+    <span class="tag">TensorRT</span>
+    <span class="tag">FP4 Inference</span>
+    <span class="tag">MediaTek co-design</span>
+  </div>
+</div>
+</div>
+
+
+<!-- ── CRONOLOGÍA ─────────────────────────────────────── -->
+<section>
+  <div class="eyebrow">03 · Contexto histórico</div>
+  <h2 class="section-title">Cómo llegamos<br/><span>hasta aquí</span></h2>
+  <p class="lead">
+    El RTX Spark no es un producto aislado; es el resultado de años de inversión de NVIDIA
+    en arquitectura ARM para centros de datos, primero, y ahora para el consumidor.
+  </p>
+
+  <div class="img-band">
+    <img src="NVIDIA_RTX_Spark_assets/05-profesionalreview-cortex.jpg" alt="NVIDIA RTX Spark — núcleos Cortex-X925 modificados" />
+  </div>
+  <p class="img-caption">Evolución del silicio ARM de NVIDIA: del DGX Spark (GB10) al RTX Spark para Windows · <a href="https://www.profesionalreview.com/2026/06/08/nvidia-rtx-spark-cortex-x925-mercado-pc/" target="_blank">Fuente: Profesional Review</a></p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-date">2012 – 2014</div>
+      <h4>NVIDIA Tegra para Windows RT</h4>
+      <p>NVIDIA suministra su SoC Tegra a Microsoft para los primeros Surface RT,
+        el primer intento de Windows en ARM. La escasa compatibilidad de software hace que fracase en el mercado.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">2020</div>
+      <h4>Apple M1: el gran cambio de paradigma</h4>
+      <p>Apple lanza el M1, primer SoC propio con memoria unificada CPU+GPU. Demuestra que
+        ARM puede superar a x86 en rendimiento por vatio, especialmente en cargas creativas y de IA.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">CES · Enero 2025</div>
+      <h4>Project DIGITS (proto-DGX Spark)</h4>
+      <p>Jensen Huang anuncia en CES 2025 un mini-supercomputador personal basado en el
+        superchip GB10 Grace Blackwell. Se posiciona como herramienta de IA para desarrolladores,
+        bajo Linux, con 1 petaFLOP. El precio anunciado: 3.000 dólares.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">GTC · Marzo 2025</div>
+      <h4>Rebautizo a NVIDIA DGX Spark</h4>
+      <p>El dispositivo recibe su nombre definitivo, alineándose con la línea DGX de NVIDIA.
+        Sube de precio a 3.999 dólares. Corre Ubuntu/Linux. Dirigido a científicos de datos
+        e investigadores de IA. Primer competidor real del Mac Studio en el segmento IA personal.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Octubre 2025</div>
+      <h4>Lanzamiento comercial del DGX Spark</h4>
+      <p>Se pone a la venta el 15 de octubre de 2025. Socios OEM: Acer, ASUS, Dell, HP, Lenovo, MSI
+        y Gigabyte lanzan sus propias versiones basadas en GB10. En febrero 2026, la escasez de DRAM
+        eleva el precio a 4.699 dólares.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">CES · Enero 2026</div>
+      <h4>Actualización de software DGX Spark</h4>
+      <p>NVIDIA anuncia una mejora de software que multiplica por 2,5x el rendimiento del DGX Spark
+        respecto al lanzamiento, demostrando el potencial del chip GB10 todavía sin explotar.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Computex · 31 Mayo 2026</div>
+      <h4>Anuncio del NVIDIA RTX Spark SoC</h4>
+      <p>Jensen Huang presenta oficialmente el RTX Spark en Computex: el primer SoC ARM de NVIDIA
+        pensado para portátiles y mini-PCs con <strong>Windows 11</strong>. Co-diseñado con MediaTek.
+        Adopción inmediata de Microsoft, HP, Dell, ASUS, Lenovo y MSI.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">Otoño · 2026</div>
+      <h4>Llegada al mercado de los primeros dispositivos RTX Spark</h4>
+      <p>Portátiles Surface Ultra, ASUS ProArt P14/P16, Dell XPS, HP, MSI y Lenovo
+        Yoga Pro con RTX Spark comenzarán a estar disponibles para el consumidor
+        y el sector profesional.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── LOS DOS SPARK ──────────────────────────────────── -->
+<div class="section-alt">
+<div class="inner">
+  <div class="eyebrow">04 · Diferenciación crítica</div>
+  <h2 class="section-title">Los dos <span>«Spark»</span> de NVIDIA:<br/>no son el mismo producto</h2>
+  <p class="lead">
+    Uno de los puntos de mayor confusión en la cobertura mediática es la existencia de dos
+    productos NVIDIA bajo el apellido "Spark". Su origen en el mismo chip GB10 los hace
+    técnicamente parecidos, pero responden a mercados, sistemas operativos y casos de uso
+    completamente distintos. Este apartado los diferencia con claridad.
+  </p>
+
+  <div class="product-compare">
+    <div class="product-card">
+      <img class="product-card-img" src="NVIDIA_RTX_Spark_assets/07-nvidia-dgx-spark.jpg" alt="NVIDIA DGX Spark — mini estación de trabajo de escritorio" />
+      <div class="product-card-header dgx">
+        <span class="product-badge old">Producto anterior</span>
+        <h4>DGX Spark</h4>
+        <p>Estación de trabajo IA de escritorio · Linux</p>
+      </div>
+      <div class="product-card-body">
+        <ul>
+          <li><span>Forma</span><span>Mini-PC (150×150×50 mm)</span></li>
+          <li><span>Sistema</span><span>Ubuntu + NVIDIA AI Stack</span></li>
+          <li><span>Público</span><span>Desarrolladores IA, investigación</span></li>
+          <li><span>Precio</span><span>~4.700 €</span></li>
+          <li><span>Estado</span><span class="pill-green">Disponible</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="product-card">
+      <img class="product-card-img" src="NVIDIA_RTX_Spark_assets/17-hipertextual-spark2.jpg" alt="NVIDIA RTX Spark — SoC para portátiles Windows" />
+      <div class="product-card-header rtx">
+        <span class="product-badge new">Nuevo · Computex 2026</span>
+        <h4>RTX Spark</h4>
+        <p>SoC para portátiles y mini-PCs · Windows 11</p>
+      </div>
+      <div class="product-card-body">
+        <ul>
+          <li><span>Forma</span><span>SoC integrado en laptops / mini-PCs</span></li>
+          <li><span>Sistema</span><span>Windows 11 ARM64 + CUDA</span></li>
+          <li><span>Público</span><span>Creativos, ingenieros, empresas</span></li>
+          <li><span>Precio</span><span>~2.000–4.000 € (portátil)</span></li>
+          <li><span>Estado</span><span class="pill-cyan">Otoño 2026</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-wrap">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="col-old">NVIDIA DGX Spark<br/><small style="font-weight:400;color:var(--muted)">El que ya existía — Antiguo</small></th>
+          <th class="col-new">NVIDIA RTX Spark <span class="badge">Nuevo</span><br/><small style="font-weight:400">Computex 2026</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Anuncio</td>
+          <td>CES 2025 (enero) como «Project DIGITS»</td>
+          <td>Computex 2026 (31 mayo)</td>
+        </tr>
+        <tr>
+          <td>Chip</td>
+          <td>NVIDIA GB10 Grace Blackwell Superchip</td>
+          <td>NVIDIA RTX Spark SoC (basado en GB10, co-diseñado con MediaTek)</td>
+        </tr>
+        <tr>
+          <td>Arquitectura CPU</td>
+          <td>20 núcleos ARM Grace (10 × Cortex-X925 + 10 × A725)</td>
+          <td>20 núcleos ARM Grace (10 × Cortex-X925 modificado + 10 × A725)</td>
+        </tr>
+        <tr>
+          <td>GPU</td>
+          <td>Blackwell — 6.144 núcleos CUDA</td>
+          <td>Blackwell RTX — 6.144 núcleos CUDA + RT Cores + Tensor Gen.5</td>
+        </tr>
+        <tr>
+          <td>Memoria</td>
+          <td>128 GB LPDDR5X unificada · 273 GB/s</td>
+          <td>Hasta 128 GB LPDDR5X unificada · hasta 300 GB/s (configs desde 16 GB)</td>
+        </tr>
+        <tr>
+          <td>Forma física</td>
+          <td>Mini-PC de escritorio compacto<br/>(150×150×50 mm, 1,1 litros)</td>
+          <td>SoC para <strong>portátiles</strong> y mini-PCs compactos (múltiples OEM)</td>
+        </tr>
+        <tr>
+          <td>Sistema operativo</td>
+          <td><strong>Linux</strong> (Ubuntu 22.04 + NVIDIA AI Stack)</td>
+          <td><strong>Windows 11 on ARM</strong> (+ ecosistema CUDA, DLSS, OptiX)</td>
+        </tr>
+        <tr>
+          <td>Objetivo de mercado</td>
+          <td>Desarrolladores de IA, científicos de datos, investigadores, empresas</td>
+          <td>Profesionales creativos, ingenieros, jugadores, consumidor avanzado</td>
+        </tr>
+        <tr>
+          <td>Sofware de IA</td>
+          <td>NVIDIA AI Enterprise, DeepSeek, Meta Llama locales, Jupyter, Docker</td>
+          <td>CUDA, TensorRT, DLSS 4, NPU, agentes de IA Windows, apps creativas</td>
+        </tr>
+        <tr>
+          <td>Precio de lanzamiento</td>
+          <td>3.999 $ (oct. 2025) → subió a 4.699 $ (feb. 2026)</td>
+          <td>Pendiente (precio estimado de portátil: 2.000–4.000 €, según OEM)</td>
+        </tr>
+        <tr>
+          <td>Disponibilidad</td>
+          <td><span class="pill-green">Disponible desde oct. 2025</span></td>
+          <td><span class="pill-cyan">Otoño 2026</span></td>
+        </tr>
+        <tr>
+          <td>Conectividad</td>
+          <td>ConnectX-7 (200 GbE), USB-C, HDMI 2.1</td>
+          <td>Según OEM (algunos con ConnectX-7, Thunderbolt 5, USB4)</td>
+        </tr>
+        <tr>
+          <td>Ecosistema software</td>
+          <td>Entorno cerrado de IA — no apto para ofimática general</td>
+          <td>Windows completo — compatible con todo el software empresarial x86</td>
+        </tr>
+        <tr>
+          <td>¿Reemplaza al anterior?</td>
+          <td colspan="2" style="text-align:center; color: var(--text);">
+            <strong>No.</strong> Son productos complementarios. El DGX Spark es una estación de trabajo IA
+            para entornos Linux. El RTX Spark es un SoC para el mercado Windows masivo.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="highlight-box">
+    <h3>⚠️ Resumen clave de la diferenciación</h3>
+    <p>
+      El <strong>DGX Spark</strong> es una caja de escritorio con Linux, orientada al desarrollo profesional
+      de modelos de IA. El <strong>RTX Spark</strong> es el chip que va dentro de los portátiles con Windows
+      que comprará el mercado masivo en otoño de 2026. Comparten ADN técnico (ambos derivan del
+      GB10), pero son factores de forma, sistemas operativos y audiencias completamente distintos.
+      Cuando la prensa habla de "NVIDIA entrando al mercado de portátiles Windows", se refiere siempre
+      al RTX Spark, no al DGX Spark.
+    </p>
+  </div>
+</div>
+</div>
+
+
+<!-- ── IMPACTO EN TIC ──────────────────────────────────── -->
+<section>
+  <div class="eyebrow">05 · Análisis de impacto</div>
+  <h2 class="section-title">Impacto en el<br/><span>Ecosistema TIC</span></h2>
+  <p class="lead">
+    El RTX Spark no es solo un nuevo procesador: es una declaración de intenciones que
+    reordena el tablero competitivo de toda la industria de las Tecnologías de la
+    Información y la Comunicación.
+  </p>
+
+  <h3 style="color:var(--white); font-size:20px; margin-bottom:16px;">Ruptura del duopolio Intel/AMD</h3>
+  <p>
+    Durante más de cuatro décadas, el mercado de PCs con Windows se ha definido por la arquitectura
+    x86, con Intel y AMD como únicos proveedores de procesadores relevantes. La llegada de los chips
+    Snapdragon X Elite de Qualcomm en 2024 fue el primer aviso serio, pero su rendimiento gráfico
+    limitado frenó la adopción masiva en entornos profesionales. El RTX Spark cambia la ecuación:
+    lleva al portátil una GPU Blackwell equivalente a una tarjeta discreta de gama alta, unida a
+    una CPU ARM de última generación.
+  </p>
+  <p>
+    Para el sector TIC, esto implica una fragmentación del mercado de chips de PC que no se veía
+    desde los años 90. Los fabricantes de software deberán compilar versiones nativas ARM64
+    para no perder rendimiento en los nuevos dispositivos. Microsoft ya está liderando este
+    proceso: Windows 11 ha sido reescrito parcialmente para soportar la memoria unificada
+    y los nuevos límites de acceso GPU del RTX Spark.
+  </p>
+
+  <div class="img-grid">
+    <figure class="fig-card">
+      <img src="NVIDIA_RTX_Spark_assets/16-arkaia-dgx.webp" alt="NVIDIA DGX Spark — estación de IA de escritorio" />
+      <figcaption><strong>Estación IA de escritorio (DGX Spark)</strong> Hasta 200B parámetros en local para desarrollo e investigación. <a href="https://www.nvidia.com/es-es/products/workstations/dgx-spark/" target="_blank">Fuente: NVIDIA</a></figcaption>
+    </figure>
+    <figure class="fig-card">
+      <img src="NVIDIA_RTX_Spark_assets/06-ecosistema-ia-local.jpg" alt="NVIDIA RTX Spark — IA local en portátil Windows" />
+      <figcaption><strong>IA local en portátil (RTX Spark)</strong> 128 GB y 6.144 núcleos CUDA para inferencia sin nube. <a href="https://ecosistemastartup.com/nvidia-rtx-spark-128-gb-y-6-144-nucleos-para-ia-local-en-windows/" target="_blank">Fuente: Ecosistema Startup</a></figcaption>
+    </figure>
+  </div>
+
+  <div class="grid-3" style="margin: 40px 0;">
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <h3>IA Local vs. Nube</h3>
+      <p>Con 1 petaFLOP FP4, un portátil RTX Spark puede ejecutar modelos de IA de 120.000 millones
+        de parámetros localmente, eliminando la dependencia de APIs de pago y latencias de red.
+        Impacto directo en el coste de infraestructura cloud.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏗️</div>
+      <h3>Democratización del HPC</h3>
+      <p>Rendimiento de supercomputación en formato portátil. Lo que antes requería una tarjeta
+        gráfica de escritorio de 1.000€ más un potente CPU ahora cabe en un laptop de 2 kg.
+        Abre el HPC a usuarios que no podían costear workstations dedicadas.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔄</div>
+      <h3>Presión sobre Qualcomm y Apple</h3>
+      <p>Qualcomm Snapdragon X Elite se enfrenta a un rival con GPU notablemente superior y
+        el peso del ecosistema CUDA. Apple verá cómo su ventaja de memoria unificada en Windows
+        queda igualada. La competencia entre plataformas acelerará la innovación.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🛠️</div>
+      <h3>Transformación del Stack de Software</h3>
+      <p>El ecosistema CUDA —con 15 años de librerías, frameworks y herramientas— llega
+        por primera vez a arquitectura ARM en Windows. Desarrolladores de IA, gráficos y
+        computación científica tendrán su entorno habitual en el nuevo hardware.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📉</div>
+      <h3>Reducción del TCO</h3>
+      <p>Un portátil RTX Spark ofrece rendimiento de workstation profesional. Para empresas,
+        esto puede significar consolidar equipos: un solo dispositivo reemplaza al laptop
+        + estación de trabajo de renderizado externa.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔋</div>
+      <h3>Eficiencia Energética</h3>
+      <p>El nodo TSMC 3nm y la arquitectura ARM permiten el mismo rendimiento con
+        consumos de entre 10 W y 80 W, frente a los 150-250 W de soluciones x86+GPU discreta
+        equivalentes. Relevante para objetivos de sostenibilidad corporativa.</p>
+    </div>
+  </div>
+
+  <h3 style="color:var(--white); font-size:20px; margin-bottom:16px; margin-top:48px;">Comparativa con el ecosistema actual</h3>
+  <div class="compare-wrap" style="margin-bottom: 32px;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="col-old">Apple Silicon M4/M5</th>
+          <th class="col-old">Qualcomm Snapdragon X Elite</th>
+          <th class="col-new">NVIDIA RTX Spark <span class="badge">Nuevo</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Arquitectura</td>
+          <td>ARM (Apple custom)</td>
+          <td>ARM (Qualcomm Oryon)</td>
+          <td>ARM (NVIDIA Grace + MediaTek)</td>
+        </tr>
+        <tr>
+          <td>GPU</td>
+          <td>GPU Apple (Metal) — sin CUDA</td>
+          <td>Adreno — sin CUDA</td>
+          <td>Blackwell RTX — CUDA nativo</td>
+        </tr>
+        <tr>
+          <td>Ecosistema IA</td>
+          <td>Core ML / Metal Performance Shaders</td>
+          <td>QNN, DirectML</td>
+          <td>CUDA, TensorRT, DLSS, OptiX</td>
+        </tr>
+        <tr>
+          <td>Memoria unificada máx.</td>
+          <td>128 GB (MacBook Pro M4 Max)</td>
+          <td>64 GB</td>
+          <td>128 GB</td>
+        </tr>
+        <tr>
+          <td>Rendimiento IA (FP4)</td>
+          <td>No compatible con FP4 cuantificado</td>
+          <td>~45 TOPS (NPU)</td>
+          <td>1.000.000 TOPS (1 petaFLOP)</td>
+        </tr>
+        <tr>
+          <td>Sistema operativo</td>
+          <td>macOS (ecosistema cerrado)</td>
+          <td>Windows 11</td>
+          <td>Windows 11</td>
+        </tr>
+        <tr>
+          <td>Compatibilidad software empresarial</td>
+          <td>Limitada (macOS vs Windows)</td>
+          <td>Alta (emulación x86)</td>
+          <td>Alta (emulación x86 + nativo ARM64)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="blockquote">
+    <p>El RTX Spark es el «Apple M1 moment» de NVIDIA: la primera vez en más de una década
+      que lanzan un chipset ARM para ordenadores personales, y lo hacen directamente con GPU
+      de nivel RTX 5070 y 1 petaFLOP de IA.</p>
+    <cite>— WhattsNew.com, análisis Computex 2026</cite>
+  </div>
+
+  <h3 style="color:var(--white); font-size:20px; margin-bottom:16px; margin-top:48px;">Implicaciones para la infraestructura TIC empresarial</h3>
+  <ul class="num-list">
+    <li>
+      <strong>Reducción de dependencia cloud para inferencia de IA</strong>
+      <span>Los equipos con RTX Spark pueden ejecutar modelos LLM de hasta 120 mil millones de parámetros
+        localmente. Esto permite a empresas repatriar cargas de trabajo de IA que hoy pagan
+        a OpenAI, Anthropic o Google, con implicaciones significativas en GDPR y soberanía de datos.</span>
+    </li>
+    <li>
+      <strong>Revisión de las políticas de refresh de hardware</strong>
+      <span>Si el RTX Spark entrega rendimiento de workstation en un portátil, los ciclos de renovación
+        de equipos en empresas se simplificarán: un único dispositivo portable cubre las necesidades
+        de oficina y de procesamiento intensivo.</span>
+    </li>
+    <li>
+      <strong>Nuevas exigencias al software corporativo</strong>
+      <span>Las aplicaciones empresariales (ERP, CAD, BIM, software AEC) deberán ofrecer versiones
+        nativas ARM64 para aprovechar el rendimiento completo. Los equipos IT deberán auditar
+        el catálogo de software antes de migrar a dispositivos RTX Spark.</span>
+    </li>
+    <li>
+      <strong>Reconfiguración del mercado de workstations</strong>
+      <span>Dell, HP y ASUS están lanzando mini-PCs basados en RTX Spark que compiten directamente
+        con el Mac Studio y las workstations tradicionales de torre. A 2.500–4.700€, ofrecen
+        rendimiento antes reservado a sistemas de 8.000–15.000€.</span>
+    </li>
+    <li>
+      <strong>Aceleración de la IA agéntica en el endpoint</strong>
+      <span>Microsoft está reescribiendo Windows para convertirlo en un "OS agéntico", donde los
+        agentes de IA corren localmente en el hardware RTX Spark. Esto tendrá impacto en
+        cómo se diseñan las aplicaciones empresariales en los próximos 3-5 años.</span>
+    </li>
+  </ul>
+</section>
+
+
+<!-- ── IMPACTO EN ESTUDIOS DE ARQUITECTURA ──────────────── -->
+<div class="section-alt">
+<div class="inner">
+  <div class="eyebrow">06 · Sector AEC</div>
+  <h2 class="section-title">Impacto en los<br/><span>Estudios de Arquitectura</span></h2>
+  <p class="lead">
+    Para un estudio de arquitectura en Madrid, el RTX Spark representa una oportunidad concreta
+    de transformar flujos de trabajo, reducir tiempos y democratizar herramientas de IA que
+    hoy exigen hardware costoso o suscripciones cloud permanentes.
+  </p>
+
+  <div class="img-band">
+    <img src="NVIDIA_RTX_Spark_assets/09-microsoft-nv-app.png" alt="NVIDIA App en Windows con RTX Spark — renderizado y IA" />
+  </div>
+  <p class="img-caption">Windows + RTX Spark: GPU Blackwell para renderizado ray tracing, DLSS y cargas de IA locales vía Windows ML · <a href="https://news.microsoft.com/source/latam/noticias-de-microsoft/presentamos-un-nuevo-y-potente-capitulo-para-los-pcs-con-windows-acelerado-por-nvidia-rtx-spark/" target="_blank">Fuente: Microsoft LATAM</a></p>
+
+  <div class="img-grid cols-3">
+    <figure class="fig-card">
+      <img src="NVIDIA_RTX_Spark_assets/10-microsoft-apps-creativos.png" alt="Aplicaciones creativas nativas en Windows ARM" />
+      <figcaption><strong>Apps creativas nativas</strong> Blender, DaVinci Resolve, Adobe, Cinema4D y MATLAB optimizados para ARM. <a href="https://news.microsoft.com/source/latam/noticias-de-microsoft/presentamos-un-nuevo-y-potente-capitulo-para-los-pcs-con-windows-acelerado-por-nvidia-rtx-spark/" target="_blank">Fuente: Microsoft LATAM</a></figcaption>
+    </figure>
+    <figure class="fig-card">
+      <img src="NVIDIA_RTX_Spark_assets/12-notebookcheck-msi.png" alt="MSI Prestige N16 Flip AI+ con RTX Spark" />
+      <figcaption><strong>Portátil 2-en-1 para presentaciones</strong> MSI Prestige N16 Flip AI+: OLED tandem UHD+, IA NVIDIA y batería 99,9 Wh. <a href="https://www.notebookcheck.org/El-aspirante-al-Mac-Nvidia-RTX-Spark-mini-PC-HP-en-primicia-con-puertos-ConnectX-7-y-hasta-128-GB-de-RAM.1317762.0.html" target="_blank">Fuente: NotebookCheck</a></figcaption>
+    </figure>
+    <figure class="fig-card">
+      <img src="NVIDIA_RTX_Spark_assets/06-ecosistema-ia-local.jpg" alt="IA local con RTX Spark — 128 GB memoria unificada" />
+      <figcaption><strong>IA generativa y LLM locales</strong> Modelos de hasta 120B parámetros sin enviar planos ni datos del cliente a la nube. <a href="https://ecosistemastartup.com/nvidia-rtx-spark-128-gb-y-6-144-nucleos-para-ia-local-en-windows/" target="_blank">Fuente: Ecosistema Startup</a></figcaption>
+    </figure>
+  </div>
+
+  <h3 style="color:var(--white); font-size:22px; margin:40px 0 20px;">
+    Áreas de impacto directo para nuestro estudio
+  </h3>
+
+  <div class="grid-2" style="margin-bottom:40px;">
+
+    <div class="card" style="border-color: rgba(255,255,255,.3);">
+      <div class="card-icon">🏛️</div>
+      <h3>Renderizado en tiempo real</h3>
+      <p>
+        El equivalente de una RTX 5070 embebida en el portátil permite usar NVIDIA RTX
+        con path tracing en tiempo real en Enscape, Lumion, D5 Render y V-Ray.
+        El arquitecto puede revisar materiales, iluminación y sombras mientras modela,
+        sin esperar tiempos de render de horas. Los renders finales se aceleran con
+        DLSS 4 y NVIDIA OptiX.
+      </p>
+    </div>
+
+    <div class="card" style="border-color: rgba(168,165,162,.3);">
+      <div class="card-icon">📐</div>
+      <h3>BIM con IA generativa local</h3>
+      <p>
+        Con 128 GB de memoria unificada y 1 petaFLOP de IA, el RTX Spark puede ejecutar
+        modelos LLM localmente: asistentes de documentación técnica, generación de planos
+        a partir de especificaciones, análisis de proyectos anteriores o extracción automática
+        de mediciones desde modelos IFC. Sin enviar datos sensibles del cliente a la nube.
+      </p>
+    </div>
+
+    <div class="card" style="border-color: rgba(255,255,255,.3);">
+      <div class="card-icon">🎨</div>
+      <h3>IA generativa en el flujo creativo</h3>
+      <p>
+        Herramientas como Stable Diffusion, Flux o modelos de generación 3D correrán en local
+        con el RTX Spark. Esto permite generar referencias visuales de conceptos, variaciones
+        de fachadas, propuestas de materiales o moodboards directamente desde el portátil
+        del arquitecto, sin depender de servicios externos ni APIs de pago.
+      </p>
+    </div>
+
+    <div class="card" style="border-color: rgba(168,165,162,.3);">
+      <div class="card-icon">⚙️</div>
+      <h3>Simulaciones y análisis energético</h3>
+      <p>
+        Los 6.144 núcleos CUDA aceleran simulaciones CFD (fluidodinámica), análisis de
+        radiación solar, iluminación daylighting y cálculos de eficiencia energética mediante
+        herramientas como Ansys Fluent, EnergyPlus acelerado por GPU o plugins de OpenFOAM.
+        Estudios que antes requerían servidores externos.
+      </p>
+    </div>
+
+    <div class="card" style="border-color: rgba(255,255,255,.3);">
+      <div class="card-icon">📱</div>
+      <h3>Presentaciones inmersivas in situ</h3>
+      <p>
+        Un portátil RTX Spark permite llevar una escena de realidad virtual fotorrealista
+        directamente a la reunión con el cliente, sin depender de un PC de sobremesa fijo.
+        La GPU Blackwell soporta VR a resoluciones altas con DLSS, manteniendo tiempos
+        de respuesta fluidos para paseos virtuales interactivos.
+      </p>
+    </div>
+
+    <div class="card" style="border-color: rgba(168,165,162,.3);">
+      <div class="card-icon">🔒</div>
+      <h3>Seguridad y privacidad de datos</h3>
+      <p>
+        El procesamiento local de IA elimina la necesidad de subir planos, maquetas y datos
+        de clientes a servidores externos. En un contexto de GDPR y gestión de proyectos
+        con información confidencial (concursos, proyectos privados), la IA local es
+        una ventaja competitiva y una obligación regulatoria.
+      </p>
+    </div>
+  </div>
+
+  <h3 style="color:var(--white); font-size:20px; margin-bottom:20px;">
+    Tabla de impacto por herramienta AEC
+  </h3>
+  <table class="spec-table" style="margin-bottom:40px;">
+    <thead>
+      <tr>
+        <th>Herramienta / Flujo</th>
+        <th>Situación actual</th>
+        <th>Con RTX Spark</th>
+        <th>Impacto esperado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Revit + Enscape (BIM + render)</td>
+        <td>Workstation escritorio RTX 4080, sin portabilidad</td>
+        <td>Portátil RTX Spark (equivalente RTX 5070)</td>
+        <td class="check">Render en tiempo real en cualquier lugar</td>
+      </tr>
+      <tr>
+        <td>AutoCAD / ArchiCAD</td>
+        <td>Buen rendimiento en x86 actual</td>
+        <td>Depende de versión nativa ARM64</td>
+        <td><span class="pill-gray">Transición necesaria</span></td>
+      </tr>
+      <tr>
+        <td>Rhino + Grasshopper</td>
+        <td>CPU-bound; GPU no relevante</td>
+        <td>CPU Grace ligeramente mejor; sin cambio drástico</td>
+        <td><span class="pill-gray">Mejora moderada</span></td>
+      </tr>
+      <tr>
+        <td>V-Ray / Corona Renderer</td>
+        <td>Horas de render en GPU discreta</td>
+        <td>GPU Blackwell + TensorRT para denoising; DLSS 4</td>
+        <td class="check">Reducción del 40-60% en tiempo de render</td>
+      </tr>
+      <tr>
+        <td>Modelos LLM locales (asistente IA)</td>
+        <td>Dependencia API OpenAI/Anthropic; privacidad limitada</td>
+        <td>Modelos de hasta 120B parámetros en local con 128 GB RAM unificada</td>
+        <td class="check">IA local, sin coste recurrente, datos seguros</td>
+      </tr>
+      <tr>
+        <td>Stable Diffusion / IA generativa</td>
+        <td>Requiere workstation GPU dedicada</td>
+        <td>6.144 CUDA cores; rendimiento profesional en portátil</td>
+        <td class="check">Generación de imágenes conceptuales en segundos</td>
+      </tr>
+      <tr>
+        <td>Presentaciones VR (Oculus Link)</td>
+        <td>Necesita PC gaming externo + cable</td>
+        <td>VR nativo desde el portátil; portabilidad total</td>
+        <td class="check">Presentaciones inmersivas en cliente sin hardware extra</td>
+      </tr>
+      <tr>
+        <td>Simulación energética (EnergyPlus)</td>
+        <td>Simulaciones lentas o en servidor cloud</td>
+        <td>GPU CUDA para aceleración; resultados en minutos</td>
+        <td class="check">Integración en flujo de diseño en tiempo real</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="blockquote">
+    <p>Un portátil RTX Spark cambia el paradigma del arquitecto en campo: ya no necesita
+      una workstation de 8.000€ en la oficina para tener una demo fotorrealista del proyecto.
+      La lleva en el maletín.</p>
+    <cite>— Análisis propio basado en especificaciones publicadas</cite>
+  </div>
+
+  <h3 style="color:var(--white); font-size:20px; margin:40px 0 20px;">Consideraciones de transición</h3>
+  <div class="grid-2">
+    <div class="highlight-box">
+      <h3>✅ Lo que funcionará bien desde el primer día</h3>
+      <p>
+        Software ya compilado para ARM64 (Visual Studio, .NET 8, algunos plugins de Revit),
+        aplicaciones de renderizado GPU-accelerated que usen CUDA nativo, herramientas de
+        IA que usen TensorRT/CUDA y toda la stack de NVIDIA (DLSS, OptiX, NVENC para video).
+      </p>
+    </div>
+    <div class="highlight-box" style="border-color: rgba(224,85,85,.25); background: rgba(224,85,85,.05);">
+      <h3 style="color: #e07777;">⚠️ Puntos de atención durante la transición</h3>
+      <p>
+        Aplicaciones heredadas x86 sin versión ARM64 funcionarán mediante emulación Prism,
+        con un impacto en rendimiento del 15-25%. Los títulos con antitrampas pueden tener
+        problemas. Conviene auditar el catálogo de software del estudio antes de migrar.
+        Los primeros equipos llegarán en otoño 2026.
+      </p>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ── DISPOSITIVOS DISPONIBLES ───────────────────────── -->
+<section>
+  <div class="eyebrow">07 · Mercado</div>
+  <h2 class="section-title">Dispositivos <span>anunciados</span><br/>con RTX Spark</h2>
+  <p class="lead">
+    Desde el anuncio en Computex, numerosos fabricantes han confirmado dispositivos.
+    Esta es la panorámica de equipos disponibles o inminentes.
+  </p>
+
+  <div class="img-band tall">
+    <img src="NVIDIA_RTX_Spark_assets/11-xataka-lineup.jpg" alt="Portátiles oficiales con NVIDIA RTX Spark" />
+  </div>
+  <p class="img-caption">Ocho portátiles confirmados con RTX Spark: Surface, ASUS ProArt, Dell XPS, HP, Lenovo y MSI · <a href="https://www.xataka.com/seleccion/oficiales-ocho-portatiles-que-podras-comprar-proximamente-nuevo-chip-nvidia-rtx-spark" target="_blank">Fuente: Xataka</a></p>
+
+  <div class="grid-3" style="margin-bottom: 48px;">
+    <div class="card">
+      <img class="card-thumb" src="NVIDIA_RTX_Spark_assets/15-notebookcheck-surface.jpg" alt="Microsoft Surface Laptop Ultra" />
+      <h3>Microsoft Surface Laptop Ultra</h3>
+      <p>El primero confirmado oficialmente. Combina RTX Spark con 128 GB de RAM y diseño
+        premium. Será la referencia del segmento enterprise. Precio pendiente.</p>
+      <div class="tags"><span class="tag">Portátil</span><span class="tag">Enterprise</span></div>
+      <a class="buy-link" href="https://www.microsoft.com/es-es/surface" target="_blank" rel="noopener">Reservar en España ↗</a>
+    </div>
+    <div class="card">
+      <img class="card-thumb" src="NVIDIA_RTX_Spark_assets/03-xataka-rtx-spark.jpg" alt="ASUS ProArt P14 / P16" />
+      <h3>ASUS ProArt P14 / P16</h3>
+      <p>Presentados en Computex. Orientados a creativos y profesionales de diseño. El ProArt P16
+        con RTX Spark combina una pantalla OLED 4K con la GPU Blackwell.</p>
+      <div class="tags"><span class="tag">Portátil</span><span class="tag">Creativo</span></div>
+      <a class="buy-link" href="https://www.asus.com/es/laptops/for-creators/proart/" target="_blank" rel="noopener">Reservar en España ↗</a>
+    </div>
+    <div class="card">
+      <img class="card-thumb" src="NVIDIA_RTX_Spark_assets/13-notebookcheck-dell.png" alt="Dell XPS con RTX Spark" />
+      <h3>Dell XPS con RTX Spark</h3>
+      <p>Dell prepara versiones del XPS premium con el SoC. El mini-PC de Dell con RTX Spark
+        ha sido comparado visualmente con el Mac Studio por su diseño compacto y elegante.</p>
+      <div class="tags"><span class="tag">Portátil</span><span class="tag">Mini-PC</span></div>
+      <a class="buy-link" href="https://www.dell.com/es-es/shop/portatiles-dell/sf/xps-laptops" target="_blank" rel="noopener">Reservar en España ↗</a>
+    </div>
+    <div class="card">
+      <img class="card-thumb" src="NVIDIA_RTX_Spark_assets/04-notebookcheck-hp-minipc.png" alt="HP mini-PC RTX Spark" />
+      <h3>HP (sin nombre oficial)</h3>
+      <p>HP ha mostrado un prototipo de mini-PC con ConnectX-7, hasta 128 GB de RAM y
+        capacidad de edición de vídeo 12K. Aún sin nombre oficial ni precio.</p>
+      <div class="tags"><span class="tag">Mini-PC</span><span class="tag">Pro</span></div>
+      <a class="buy-link" href="https://www.hp.com/es-es/shop/" target="_blank" rel="noopener">Reservar en España ↗</a>
+    </div>
+    <div class="card">
+      <img class="card-thumb" src="NVIDIA_RTX_Spark_assets/14-notebookcheck-lenovo.png" alt="Lenovo Yoga Pro / ThinkPad" />
+      <h3>Lenovo Yoga Pro 9 / ThinkPad</h3>
+      <p>Lenovo ha confirmado dispositivos RTX Spark tanto en la línea Yoga (consumidor premium)
+        como en ThinkPad (enterprise). Disponibilidad para otoño 2026.</p>
+      <div class="tags"><span class="tag">Portátil</span><span class="tag">Business</span></div>
+      <a class="buy-link" href="https://www.lenovo.com/es/es/laptops/yoga/" target="_blank" rel="noopener">Reservar en España ↗</a>
+    </div>
+    <div class="card">
+      <img class="card-thumb" src="NVIDIA_RTX_Spark_assets/12-notebookcheck-msi.png" alt="MSI Titan / Creator Series" />
+      <h3>MSI Titan / Creator Series</h3>
+      <p>MSI anuncia portátiles de la línea Titan y Creator con RTX Spark, enfocados en gaming
+        de alto rendimiento y creación de contenido. Aprovechan al máximo los 80 W de TDP.</p>
+      <div class="tags"><span class="tag">Portátil</span><span class="tag">Gaming</span></div>
+      <a class="buy-link" href="https://es.msi.com/Laptops/Products" target="_blank" rel="noopener">Reservar en España ↗</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── CONCLUSIONES ───────────────────────────────────── -->
+<div class="section-alt">
+<div class="inner">
+  <div class="eyebrow">08 · Conclusiones</div>
+  <h2 class="section-title">Perspectivas y<br/><span>recomendaciones</span></h2>
+  <p class="lead">
+    El lanzamiento del RTX Spark en Computex 2026 no es un lanzamiento más de hardware.
+    Es el inicio de una transición profunda en cómo se estructura la computación
+    profesional bajo Windows.
+  </p>
+
+  <div class="img-band">
+    <img src="NVIDIA_RTX_Spark_assets/18-martes-rtx-spark.png" alt="NVIDIA RTX Spark — chip ARM para PCs Windows 2026" />
+  </div>
+  <p class="img-caption">El RTX Spark consolida oficina, campo y procesamiento intensivo en un único dispositivo · <a href="https://martestecnologico.com/nvidia-rtx-spark-arm-chip-windows-pc-2026" target="_blank">Fuente: Martes Tecnológico</a> · <a href="https://hipertextual.com/tecnologia/nvidia-rtx-spark/" target="_blank">Hipertextual</a></p>
+
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--white); font-size:18px; margin-bottom:12px;">Para el sector TIC</h3>
+      <p>El RTX Spark consolida la tendencia hacia chips altamente integrados que eliminen
+        la separación tradicional CPU/GPU/NPU. El ecosistema CUDA en ARM supone la mayor
+        disrupción en el mercado de PCs profesionales desde la introducción de los
+        procesadores multinúcleo en la primera década del siglo XXI.</p>
+      <p>La fragmentación entre x86 y ARM acelerará la inversión de los ISVs en versiones
+        nativas ARM64 de sus productos, lo que beneficiará a todo el ecosistema móvil/ARM
+        a largo plazo. Intel y AMD deberán responder con propuestas de integración similares.</p>
+    </div>
+    <div>
+      <h3 style="color:var(--white); font-size:18px; margin-bottom:12px;">Para el estudio de arquitectura</h3>
+      <p>La llegada del RTX Spark representa una oportunidad de modernizar el parque de
+        hardware del estudio con un coste de propiedad reducido, mayor rendimiento y
+        la posibilidad de integrar IA local en los flujos de trabajo BIM, renderizado
+        y presentación al cliente.</p>
+      <p>Se recomienda monitorizar los lanzamientos de otoño 2026, especialmente el
+        Surface Laptop Ultra y el ASUS ProArt P16, para evaluar su adopción como
+        equipos de nueva generación en el estudio.</p>
+    </div>
+  </div>
+
+  <h3 style="color:var(--white); font-size:20px; margin:48px 0 20px;">Acciones recomendadas</h3>
+  <ul class="num-list">
+    <li>
+      <strong>Auditoría de software (inmediata)</strong>
+      <span>Inventariar el software del estudio y verificar qué aplicaciones tienen ya versión
+        ARM64 nativa (Revit, AutoCAD, Rhino, V-Ray). Contactar a proveedores sin versión ARM64
+        para conocer su roadmap.</span>
+    </li>
+    <li>
+      <strong>Piloto con DGX Spark (corto plazo)</strong>
+      <span>Si el estudio tiene flujos de IA generativa intensa (generación de renders,
+        análisis de proyectos), un DGX Spark (~4.700€) puede ser ya hoy una inversión rentable
+        frente al coste de APIs cloud o workstations tradicionales.</span>
+    </li>
+    <li>
+      <strong>Evaluar primeros dispositivos RTX Spark (otoño 2026)</strong>
+      <span>Cuando lleguen los primeros portátiles y mini-PCs con RTX Spark, hacer un
+        benchmark con los flujos de trabajo específicos del estudio: Revit + Enscape,
+        renders V-Ray, Stable Diffusion local.</span>
+    </li>
+    <li>
+      <strong>Explorar herramientas de IA local para AEC</strong>
+      <span>Identificar qué modelos de LLM de código abierto (Llama 4, DeepSeek V3) pueden
+        cubrir casos de uso del estudio: redacción de memorias, análisis normativo, gestión
+        documental. Con RTX Spark, estos corren en local sin enviar datos del cliente a la nube.</span>
+    </li>
+    <li>
+      <strong>Seguimiento del ecosistema de software AEC para ARM</strong>
+      <span>Suscribirse a las comunicaciones de Autodesk, McNeel (Rhino), Chaos (V-Ray) y
+        NVIDIA Studio para estar al tanto de actualizaciones que aprovechen el RTX Spark.
+        NVIDIA ya tiene el programa NVIDIA Studio validando aplicaciones creativas para la nueva plataforma.</span>
+    </li>
+  </ul>
+</div>
+</div>
+
+
+<!-- ── REFERENCIAS ────────────────────────────────────── -->
+<div class="sources">
+  <div class="inner">
+    <div class="eyebrow">Referencias</div>
+    <h2 class="section-title" style="margin-bottom:32px;">Fuentes</h2>
+    <div class="source-grid">
+      <div class="source-item">
+        <strong>Microsoft LATAM</strong> — Presentamos un nuevo capítulo para los PCs con Windows acelerado por NVIDIA RTX Spark<br/>
+        <a href="https://news.microsoft.com/source/latam/noticias-de-microsoft/presentamos-un-nuevo-y-potente-capitulo-para-los-pcs-con-windows-acelerado-por-nvidia-rtx-spark/" target="_blank">↗ news.microsoft.com</a>
+      </div>
+      <div class="source-item">
+        <strong>Ecosistema Startup</strong> — Nvidia RTX Spark: 128 GB y 6.144 núcleos para IA local en Windows<br/>
+        <a href="https://ecosistemastartup.com/nvidia-rtx-spark-128-gb-y-6-144-nucleos-para-ia-local-en-windows/" target="_blank">↗ ecosistemastartup.com</a>
+      </div>
+      <div class="source-item">
+        <strong>Profesional Review</strong> — Nvidia RTX Spark tiene núcleos Cortex-X925 modificados<br/>
+        <a href="https://www.profesionalreview.com/2026/06/08/nvidia-rtx-spark-cortex-x925-mercado-pc/" target="_blank">↗ profesionalreview.com</a>
+      </div>
+      <div class="source-item">
+        <strong>NotebookCheck ES</strong> — HP mini PC con RTX Spark y puertos ConnectX-7<br/>
+        <a href="https://www.notebookcheck.org/El-aspirante-al-Mac-Nvidia-RTX-Spark-mini-PC-HP-en-primicia-con-puertos-ConnectX-7-y-hasta-128-GB-de-RAM.1317762.0.html" target="_blank">↗ notebookcheck.org</a>
+      </div>
+      <div class="source-item">
+        <strong>Xataka</strong> — Ocho portátiles que podrás comprar con el nuevo chip NVIDIA RTX Spark<br/>
+        <a href="https://www.xataka.com/seleccion/oficiales-ocho-portatiles-que-podras-comprar-proximamente-nuevo-chip-nvidia-rtx-spark" target="_blank">↗ xataka.com</a>
+      </div>
+      <div class="source-item">
+        <strong>NVIDIA oficial</strong> — NVIDIA DGX Spark (producto anterior)<br/>
+        <a href="https://www.nvidia.com/es-es/products/workstations/dgx-spark/" target="_blank">↗ nvidia.com</a>
+      </div>
+      <div class="source-item">
+        <strong>TechRadar</strong> — Dell RTX Spark mini PC frente al Mac Studio<br/>
+        <a href="https://global.techradar.com/es-mx/computing/" target="_blank">↗ techradar.com</a>
+      </div>
+      <div class="source-item">
+        <strong>Martes Tecnológico</strong> — RTX Spark ARM chip Windows PC 2026<br/>
+        <a href="https://martestecnologico.com/nvidia-rtx-spark-arm-chip-windows-pc-2026" target="_blank">↗ martestecnologico.com</a>
+      </div>
+      <div class="source-item">
+        <strong>Tom's Hardware</strong> — NVIDIA RTX Spark Superchip at Computex 2026<br/>
+        <a href="https://www.tomshardware.com" target="_blank">↗ tomshardware.com</a>
+      </div>
+      <div class="source-item">
+        <strong>Wikipedia ES</strong> — Nvidia RTX Spark<br/>
+        <a href="https://es.wikipedia.org/wiki/Nvidia_RTX_Spark" target="_blank">↗ es.wikipedia.org</a>
+      </div>
+      <div class="source-item">
+        <strong>Hipertextual</strong> — NVIDIA provoca un terremoto con RTX Spark<br/>
+        <a href="https://hipertextual.com/tecnologia/nvidia-rtx-spark/" target="_blank">↗ hipertextual.com</a>
+      </div>
+      <div class="source-item">
+        <strong>Arkaia Corp</strong> — NVIDIA DGX Spark: Review y Guía completa 2026<br/>
+        <a href="https://arkaiacorp.com/blog/nvidia-dgx-spark-review-guia-completa-2026" target="_blank">↗ arkaiacorp.com</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── FOOTER ──────────────────────────────────────────── -->
+<footer>
+  <div>
+    <strong style="color:var(--white);">Informe Tecnológico</strong> ·
+    NVIDIA RTX Spark: Impacto en TIC y Estudios de Arquitectura
+  </div>
+  <div>
+    Elaborado por: <span>b720 Fermín Vázquez Arquitectos</span> &nbsp;·&nbsp;
+    Fecha: <span>Junio 2026</span>
+  </div>
+</footer>
+
+
+<!-- ── MODAL VISOR PDF ─────────────────────────────────── -->
+<div class="pdf-modal" id="pdfModal" role="dialog" aria-modal="true" aria-label="Evaluación Tecnológica: Sistema NVIDIA RTX Spark">
+  <div class="pdf-modal-box">
+    <div class="pdf-modal-head">
+      <strong>Evaluación Tecnológica · Sistema NVIDIA RTX Spark</strong>
+      <div class="pdf-modal-actions">
+        <a class="pdf-download" href="evaluacion-tecnologica-nvidia-rtx-spark.pdf" download>Descargar</a>
+        <button class="pdf-close" id="closePdfBtn" type="button" aria-label="Cerrar visor">✕</button>
+      </div>
+    </div>
+    <iframe id="pdfFrame" data-src="evaluacion-tecnologica-nvidia-rtx-spark.pdf#view=FitH" title="Visor PDF — Evaluación Tecnológica NVIDIA RTX Spark"></iframe>
+  </div>
+</div>
+
+<script>
+(function () {
+  var nav = document.getElementById('topbarNav');
+  var toggle = nav.querySelector('.nav-toggle');
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', function (e) {
+    if (!nav.contains(e.target)) {
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  var modal = document.getElementById('pdfModal');
+  var frame = document.getElementById('pdfFrame');
+  document.getElementById('openPdfBtn').addEventListener('click', function () {
+    if (!frame.src) frame.src = frame.dataset.src;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('closePdfBtn').addEventListener('click', closeModal);
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+})();
+</script>
+
+</body>
+</html>
