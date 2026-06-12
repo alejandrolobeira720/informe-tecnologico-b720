@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -31,8 +31,8 @@
     }
 
     /* Zonas oscuras (portada, topbar, drawer, footer):
-       Blanco sobre Neutral Black, como las portadas de informe b720
-       y con el amarillo de b720.com como acento. */
+       Blanco sobre Neutral Black, como las portadas de informe b720.
+       El acento sobre Neutral Black es el propio Blanco (combinación aprobada). */
     .topbar, .drawer, .hero, footer {
       --bg:     #4B4846;
       --bg2:    #514E4B;
@@ -42,10 +42,10 @@
       --text:   #FFFFFF;
       --muted:  rgba(255,255,255,.65);
       --ink:    #FFFFFF;
-      --accent: #FFFD00;
-      --green:  #FFFD00;
-      --green-l:#F9F8A6;
-      --green-d:#FFFD00;
+      --accent: #FFFFFF;
+      --green:  #FFFFFF;
+      --green-l:#FFFFFF;
+      --green-d:#FFFFFF;
     }
 
     /* Los desplegables de la topbar son tarjetas blancas, como en el hub */
@@ -120,7 +120,7 @@
       color: var(--text);
       background: rgba(255,255,255,.06);
       border: 1px solid var(--border);
-      border-radius: 100px;
+      border-radius: 0;
       padding: 8px 18px;
       cursor: pointer;
       display: inline-flex;
@@ -138,7 +138,7 @@
       min-width: 340px;
       background: var(--bg2);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 0;
       padding: 8px;
       display: none;
       box-shadow: 0 12px 32px rgba(75,72,70,.18);
@@ -147,7 +147,7 @@
     .nav-dropdown a {
       display: block;
       padding: 12px 14px;
-      border-radius: 8px;
+      border-radius: 0;
       font-size: 13px;
       line-height: 1.45;
       color: var(--text);
@@ -172,7 +172,7 @@
     .nav-dropdown .nd-item-off {
       display: block;
       padding: 12px 14px;
-      border-radius: 8px;
+      border-radius: 0;
       font-size: 13px;
       line-height: 1.45;
       color: var(--muted);
@@ -232,7 +232,7 @@
       background: rgba(255,255,255,.06);
       border: 1px solid rgba(255,255,255,.18);
       padding: 5px 14px;
-      border-radius: 100px;
+      border-radius: 0;
       margin-bottom: 32px;
     }
     .hero-eyebrow::before {
@@ -272,7 +272,7 @@
     .stat {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 0;
       padding: 20px 28px;
       min-width: 160px;
     }
@@ -301,7 +301,7 @@
       gap: 20px;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 0;
       padding: 22px 28px;
       flex-wrap: wrap;
     }
@@ -325,7 +325,7 @@
       color: var(--brand-d);
       background: var(--ink);
       border: none;
-      border-radius: 100px;
+      border-radius: 0;
       padding: 12px 26px;
       cursor: pointer;
       white-space: nowrap;
@@ -353,11 +353,11 @@
       max-height: 94vh;
       background: var(--bg2);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 0;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 32px 120px rgba(45,43,42,.7);
+      box-shadow: 0 32px 120px rgba(75,72,70,.7);
     }
     .pdf-modal-box.concl {
       max-width: 760px;
@@ -387,11 +387,11 @@
       text-transform: uppercase;
       color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 100px;
+      border-radius: 0;
       padding: 7px 16px;
       transition: border-color .2s;
     }
-    .pdf-download:hover { border-color: rgba(255,255,255,.45); text-decoration: none; }
+    .pdf-download:hover { border-color: rgba(75,72,70,.45); text-decoration: none; }
     .pdf-close {
       font-family: inherit;
       background: none;
@@ -405,7 +405,7 @@
       line-height: 1;
       transition: border-color .2s;
     }
-    .pdf-close:hover { border-color: rgba(255,255,255,.45); }
+    .pdf-close:hover { border-color: rgba(75,72,70,.45); }
     .pdf-modal iframe {
       flex: 1;
       width: 100%;
@@ -419,10 +419,10 @@
       transform: translateY(-50%);
       width: 40%;
       max-width: 520px;
-      border-radius: 20px;
+      border-radius: 0;
       overflow: hidden;
       border: 1px solid var(--border);
-      box-shadow: 0 24px 80px rgba(45,43,42,.55);
+      box-shadow: 0 24px 80px rgba(75,72,70,.55);
     }
     .hero-img-wrap img {
       width: 100%;
@@ -478,7 +478,8 @@
 
     .lead {
       font-size: 17px;
-      color: var(--muted);
+      color: var(--text);
+      opacity: .85; /* Black 0961 sobre Gris Claro está prohibido: usamos Neutral Black suavizado */
       max-width: 760px;
       line-height: 1.7;
       margin-bottom: 48px;
@@ -500,7 +501,7 @@
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 0;
       padding: 28px;
       transition: border-color .2s, transform .2s;
       overflow: hidden;
@@ -520,7 +521,7 @@
     }
     .card-icon {
       width: 40px; height: 40px;
-      border-radius: 10px;
+      border-radius: 0;
       background: rgba(75,72,70,.08);
       display: flex; align-items: center; justify-content: center;
       margin-bottom: 16px;
@@ -544,7 +545,7 @@
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 0;
     }
     .table-scroll .spec-table { min-width: 700px; }
 
@@ -576,7 +577,7 @@
     /* ─── COMPARISON TABLE ───────────────────── */
     .compare-wrap {
       overflow-x: auto;
-      border-radius: 14px;
+      border-radius: 0;
       border: 1px solid var(--border);
     }
     .compare-table {
@@ -598,7 +599,7 @@
       border-left: 1px solid var(--border);
     }
     .compare-table thead tr th.col-new {
-      background: rgba(255,253,0,.18); /* columna destacada en amarillo b720.com */
+      background: rgba(17,97,136,.12); /* columna destacada — tinte Azul corporativo */
       color: var(--text);
       border-left: 1px solid rgba(75,72,70,.3);
     }
@@ -611,7 +612,7 @@
       letter-spacing: .06em;
       text-transform: uppercase;
       padding: 2px 8px;
-      border-radius: 100px;
+      border-radius: 0;
       margin-left: 8px;
     }
     .compare-table tbody tr td {
@@ -633,11 +634,11 @@
       text-align: center;
     }
     .compare-table tbody tr td:nth-child(3) {
-      background: rgba(255,255,255,.04);
-      border-left: 1px solid rgba(255,255,255,.2);
+      background: rgba(17,97,136,.07); /* columna destacada — tinte Azul corporativo */
+      border-left: 1px solid rgba(75,72,70,.2);
       text-align: center;
     }
-    .compare-table tbody tr:hover td { filter: brightness(1.08); }
+    .compare-table tbody tr:hover td { filter: brightness(.97); }
     .check { color: var(--green); font-weight: 700; }
     .cross { color: #D27533; }
 
@@ -652,13 +653,13 @@
       letter-spacing: .05em;
       text-transform: uppercase;
       color: var(--ink);
-      border: 1px solid rgba(255,255,255,.35);
-      border-radius: 100px;
+      border: 1px solid rgba(75,72,70,.35);
+      border-radius: 0;
       padding: 8px 18px;
       transition: background .2s, border-color .2s;
     }
     .buy-link:hover {
-      background: rgba(255,255,255,.12);
+      background: rgba(75,72,70,.06);
       border-color: var(--ink);
       text-decoration: none;
     }
@@ -669,9 +670,9 @@
       font-size: 12px;
       font-weight: 500;
       padding: 4px 12px;
-      border-radius: 100px;
-      background: rgba(255,255,255,.1);
-      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 0;
+      background: rgba(17,97,136,.08);
+      border: 1px solid rgba(17,97,136,.3);
       color: var(--green-l);
     }
 
@@ -681,7 +682,7 @@
       padding: 28px 36px;
       background: var(--card);
       border-left: 4px solid var(--green);
-      border-radius: 0 12px 12px 0;
+      border-radius: 0;
       position: relative;
     }
     .blockquote::before {
@@ -689,8 +690,8 @@
       position: absolute;
       top: 10px; left: 20px;
       font-size: 80px;
-      font-family: Georgia, serif;
-      color: rgba(255,255,255,.15);
+      font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: rgba(75,72,70,.12);
       line-height: 1;
       pointer-events: none;
     }
@@ -711,7 +712,7 @@
     /* ─── IMAGES & FIGURES ───────────────────── */
     .img-band {
       width: 100%;
-      border-radius: 14px;
+      border-radius: 0;
       border: 1px solid var(--border);
       overflow: hidden;
       margin: 32px 0 8px;
@@ -725,13 +726,14 @@
     .img-band.tall img { height: 400px; }
     .img-caption {
       font-size: 12px;
-      color: var(--muted);
+      color: var(--text);
+      opacity: .8;
       text-align: center;
       margin: 8px 0 36px;
       font-style: italic;
       line-height: 1.5;
     }
-    .img-caption a { color: var(--muted); font-style: normal; font-size: 11px; }
+    .img-caption a { color: var(--text); font-style: normal; font-size: 11px; }
     .img-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -743,7 +745,7 @@
       .img-grid, .img-grid.cols-3 { grid-template-columns: 1fr; }
     }
     figure.fig-card {
-      border-radius: 14px;
+      border-radius: 0;
       border: 1px solid var(--border);
       overflow: hidden;
       background: var(--card);
@@ -777,13 +779,13 @@
     }
     .figure-split img {
       width: 100%;
-      border-radius: 14px;
+      border-radius: 0;
       border: 1px solid var(--border);
       height: 280px;
       object-fit: cover;
     }
     .figure-split .diagram-wrap {
-      border-radius: 14px;
+      border-radius: 0;
       border: 1px solid var(--border);
       background: var(--card);
       padding: 24px;
@@ -808,7 +810,7 @@
       margin: 40px 0;
     }
     .product-card {
-      border-radius: 14px;
+      border-radius: 0;
       border: 1px solid var(--border);
       overflow: hidden;
       background: var(--card);
@@ -826,8 +828,8 @@
     }
     .product-card-header.dgx { background: var(--bg3); }
     .product-card-header.rtx {
-      background: rgba(255,255,255,.06);
-      border-bottom-color: rgba(255,255,255,.2);
+      background: rgba(17,97,136,.1); /* producto destacado — tinte Azul corporativo */
+      border-bottom-color: rgba(75,72,70,.2);
     }
     .product-badge {
       display: inline-block;
@@ -836,11 +838,11 @@
       letter-spacing: .08em;
       text-transform: uppercase;
       padding: 3px 10px;
-      border-radius: 100px;
+      border-radius: 0;
       margin-bottom: 10px;
     }
     .product-badge.old { background: rgba(157,152,148,.22); color: var(--muted); }
-    .product-badge.new { background: var(--green); color: var(--brand-d); }
+    .product-badge.new { background: var(--green); color: #FFFFFF; }
     .product-card-header h4 {
       font-size: 20px;
       color: var(--ink);
@@ -904,7 +906,7 @@
       color: var(--ink);
       margin-bottom: 6px;
     }
-    .timeline-item p { font-size: 14px; color: var(--muted); margin-bottom: 0; }
+    .timeline-item p { font-size: 14px; color: var(--text); opacity: .8; margin-bottom: 0; }
 
     /* ─── NUMBERED LIST ──────────────────────── */
     .num-list { counter-reset: item; list-style: none; }
@@ -921,7 +923,7 @@
       font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 22px;
       font-weight: 700;
-      color: rgba(255,255,255,.35);
+      color: rgba(75,72,70,.3);
       line-height: 1;
     }
     .num-list li strong {
@@ -930,7 +932,7 @@
       color: var(--ink);
       margin-bottom: 4px;
     }
-    .num-list li span { font-size: 14px; color: var(--muted); }
+    .num-list li span { font-size: 14px; color: var(--text); opacity: .8; }
 
     /* ─── TWO-COL TEXT ───────────────────────── */
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
@@ -938,9 +940,9 @@
 
     /* ─── HIGHLIGHT BOX ──────────────────────── */
     .highlight-box {
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 14px;
+      background: rgba(17,97,136,.08); /* caja destacada — tinte Azul corporativo */
+      border: 1px solid rgba(17,97,136,.25);
+      border-radius: 0;
       padding: 28px 32px;
       margin: 32px 0;
     }
@@ -953,9 +955,9 @@
     .highlight-box p { font-size: 14px; color: var(--text); margin-bottom: 0; }
 
     /* ─── PILL TABLE ─────────────────────────── */
-    .pill-green { background: rgba(255,255,255,.15); color: var(--green-l); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
-    .pill-cyan  { background: rgba(157,152,148,.3); color: var(--ink); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
-    .pill-gray  { background: rgba(157,152,148,.18); color: var(--muted); padding: 2px 10px; border-radius: 100px; font-size: 13px; }
+    .pill-green { background: rgba(17,97,136,.12); color: var(--green-l); padding: 2px 10px; border-radius: 0; font-size: 13px; font-weight: 600; }
+    .pill-cyan  { background: rgba(157,152,148,.3); color: var(--ink); padding: 2px 10px; border-radius: 0; font-size: 13px; font-weight: 600; }
+    .pill-gray  { background: rgba(157,152,148,.18); color: var(--muted); padding: 2px 10px; border-radius: 0; font-size: 13px; }
 
     /* ─── SOURCES ────────────────────────────── */
     .sources {
@@ -969,10 +971,10 @@
       break-inside: avoid;
       font-size: 13px;
       padding: 8px 0;
-      border-bottom: 1px solid var(--border);
-      color: var(--muted);
+      border-bottom: 1px solid rgba(75,72,70,.18);
+      color: var(--text);
     }
-    .source-item a { color: var(--muted); font-size: 12px; }
+    .source-item a { color: var(--text); font-size: 12px; }
 
     /* ─── FOOTER ─────────────────────────────── */
     footer {
@@ -1015,13 +1017,13 @@
       height: 2px;
       width: 100%;
       background: var(--ink);
-      border-radius: 2px;
+      border-radius: 0;
     }
     .drawer-overlay {
       position: fixed;
       inset: 0;
       z-index: 290;
-      background: rgba(45,43,42,.6);
+      background: rgba(75,72,70,.55);
       backdrop-filter: blur(3px);
       opacity: 0;
       pointer-events: none;
@@ -1152,7 +1154,7 @@
     /* ─── SCROLLBAR ──────────────────────────── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 0; }
   </style>
 </head>
 <body>
@@ -1358,24 +1360,24 @@
     <div class="diagram-wrap">
       <div class="diagram-title">Arquitectura interna del SoC</div>
       <svg viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Diagrama de arquitectura RTX Spark">
-        <rect x="20" y="20" width="360" height="240" rx="12" stroke="#6B6764" stroke-width="2" fill="#514E4B"/>
-        <rect x="40" y="45" width="150" height="90" rx="8" stroke="#FFFFFF" stroke-width="2" fill="rgba(255,255,255,.06)"/>
-        <text x="115" y="80" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">CPU Grace</text>
-        <text x="115" y="100" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">20 núcleos ARM</text>
-        <text x="115" y="118" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Cortex-X925 + A725</text>
-        <rect x="210" y="45" width="150" height="90" rx="8" stroke="#9D9894" stroke-width="2" fill="rgba(157,152,148,.14)"/>
-        <text x="285" y="80" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600">GPU Blackwell</text>
-        <text x="285" y="100" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">6.144 CUDA cores</text>
-        <text x="285" y="118" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Tensor Gen.5 · RT Cores</text>
-        <rect x="130" y="155" width="140" height="28" rx="6" fill="#9D9894" fill-opacity=".25" stroke="#9D9894" stroke-width="1.5"/>
-        <text x="200" y="174" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600">NVLink C2C</text>
-        <rect x="40" y="200" width="320" height="45" rx="8" stroke="#6B6764" stroke-width="1.5" fill="rgba(255,255,255,.04)"/>
-        <text x="200" y="222" text-anchor="middle" fill="#FFFFFF" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600">Memoria unificada LPDDR5X</text>
-        <text x="200" y="238" text-anchor="middle" fill="#9D9894" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Hasta 128 GB · 256-bit · 300 GB/s</text>
-        <line x1="115" y1="135" x2="115" y2="155" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <line x1="285" y1="135" x2="285" y2="155" stroke="#9D9894" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <line x1="115" y1="183" x2="115" y2="200" stroke="#FFFFFF" stroke-width="1"/>
-        <line x1="285" y1="183" x2="285" y2="200" stroke="#9D9894" stroke-width="1"/>
+        <rect x="20" y="20" width="360" height="240" rx="0" stroke="#CECCCB" stroke-width="2" fill="#F2F1F0"/>
+        <rect x="40" y="45" width="150" height="90" rx="0" stroke="#4B4846" stroke-width="2" fill="rgba(75,72,70,.05)"/>
+        <text x="115" y="80" text-anchor="middle" fill="#4B4846" font-family="Circular, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700">CPU Grace</text>
+        <text x="115" y="100" text-anchor="middle" fill="#9D9894" font-family="Circular, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">20 núcleos ARM</text>
+        <text x="115" y="118" text-anchor="middle" fill="#9D9894" font-family="Circular, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Cortex-X925 + A725</text>
+        <rect x="210" y="45" width="150" height="90" rx="0" stroke="#116188" stroke-width="2" fill="rgba(17,97,136,.08)"/>
+        <text x="285" y="80" text-anchor="middle" fill="#116188" font-family="Circular, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="700">GPU Blackwell</text>
+        <text x="285" y="100" text-anchor="middle" fill="#9D9894" font-family="Circular, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11">6.144 CUDA cores</text>
+        <text x="285" y="118" text-anchor="middle" fill="#9D9894" font-family="Circular, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Tensor Gen.5 · RT Cores</text>
+        <rect x="130" y="155" width="140" height="28" rx="0" fill="#9D9894" fill-opacity=".25" stroke="#9D9894" stroke-width="1.5"/>
+        <text x="200" y="174" text-anchor="middle" fill="#4B4846" font-family="Circular, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700">NVLink C2C</text>
+        <rect x="40" y="200" width="320" height="45" rx="0" stroke="#CECCCB" stroke-width="1.5" fill="#FFFFFF"/>
+        <text x="200" y="222" text-anchor="middle" fill="#4B4846" font-family="Circular, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700">Memoria unificada LPDDR5X</text>
+        <text x="200" y="238" text-anchor="middle" fill="#9D9894" font-family="Circular, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10">Hasta 128 GB · 256-bit · 300 GB/s</text>
+        <line x1="115" y1="135" x2="115" y2="155" stroke="#4B4846" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <line x1="285" y1="135" x2="285" y2="155" stroke="#116188" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <line x1="115" y1="183" x2="115" y2="200" stroke="#4B4846" stroke-width="1"/>
+        <line x1="285" y1="183" x2="285" y2="200" stroke="#116188" stroke-width="1"/>
       </svg>
     </div>
   </div>
@@ -1899,7 +1901,7 @@
 
   <div class="grid-2" style="margin-bottom:40px;">
 
-    <div class="card" style="border-color: rgba(255,255,255,.3);">
+    <div class="card" style="border-color: rgba(75,72,70,.3);">
       <div class="card-icon">🏛️</div>
       <h3>Renderizado en tiempo real</h3>
       <p>
@@ -1922,7 +1924,7 @@
       </p>
     </div>
 
-    <div class="card" style="border-color: rgba(255,255,255,.3);">
+    <div class="card" style="border-color: rgba(75,72,70,.3);">
       <div class="card-icon">🎨</div>
       <h3>IA generativa en el flujo creativo</h3>
       <p>
@@ -1944,7 +1946,7 @@
       </p>
     </div>
 
-    <div class="card" style="border-color: rgba(255,255,255,.3);">
+    <div class="card" style="border-color: rgba(75,72,70,.3);">
       <div class="card-icon">📱</div>
       <h3>Presentaciones inmersivas in situ</h3>
       <p>

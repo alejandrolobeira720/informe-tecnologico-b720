@@ -51,8 +51,9 @@
   --b720-naranja: #D27533;
 
   /* —— Tokens web (extraídos de b720.com) ———————— */
-  --b720-accent:      #FFFD00;   /* amarillo: subrayados y hovers, con mesura */
-  --b720-accent-soft: #F9F8A6;
+  /* PROHIBIDO: el amarillo NO forma parte de la identidad b720.
+     El acento del informe es el Azul corporativo (--b720-azul). No reintroducir
+     #FFFD00 ni #F9F8A6 — el usuario lo desmintió explícitamente. */
   --b720-surface-1:   #E3E0DC;
   --b720-surface-2:   #DBDAD9;
   --b720-surface-3:   #CECCCB;
