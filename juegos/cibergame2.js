@@ -14,6 +14,13 @@ let puntos = 0;
 let aciertos = 0;
 let opcionesActuales = null; // { opciones, correcta } de la pregunta en pantalla
 
+/* ─── Sesión encadenada + leaderboard (leaderboard.js) ───
+   La sesión acumula puntos ronda tras ronda sin repetir preguntas;
+   las rondas perfectas encadenan racha con bonus creciente. */
+const LB_CLAVE = "b720_lb_cibergame2";
+const BONUS_RACHA = 25; // bonus por ronda perfecta: 25 × racha
+let sesion = null;
+
 const $ = id => document.getElementById(id);
 
 /* ─── Navegación entre pantallas ─── */
@@ -22,9 +29,11 @@ function mostrarPantalla(id) {
   $(id).classList.add("active");
 }
 
-/* ─── Inicio de partida ─── */
+/* ─── Inicio de partida (ronda de la sesión) ─── */
 function empezarPartida() {
-  setPartida = generarSetPartida(POOL_CIBERGAME2);
+  setPartida = generarSetPartidaSinRepetir(POOL_CIBERGAME2, sesion.usadas);
+  if (!setPartida) { terminarSesion(); return; } // piscina agotada
+  setPartida.forEach(q => sesion.usadas.add(q.pregunta));
   indicePregunta = 0;
   vidas = TOTAL_VIDAS;
   puntos = 0;
@@ -120,6 +129,7 @@ function responder(indiceElegido, btnElegido) {
     $("feedback-points").textContent = "+" + ptsPregunta + " pts";
   } else {
     vidas--;
+    sesion.fallos++;
     pintarVidas();
     feedback.classList.add("show", "bad");
     $("feedback-verdict").textContent = "Fallo de seguridad — vida perdida";
@@ -182,13 +192,73 @@ function finalizar(superada) {
   $("end-rank").textContent = rango;
   $("end-message").textContent = mensaje;
 
+  /* Acumulado de sesión y racha de rondas perfectas */
+  const rondaPerfecta = superada && aciertos === setPartida.length;
+  let bonusRacha = 0;
+  if (rondaPerfecta) {
+    sesion.racha++;
+    bonusRacha = BONUS_RACHA * sesion.racha;
+  } else {
+    sesion.racha = 0;
+  }
+  sesion.total += puntos + bonusRacha;
+  sesion.rondas++;
+
   $("end-stats").innerHTML = `
     <div class="end-stat"><b>${aciertos} / ${setPartida.length}</b><span>Aciertos</span></div>
     <div class="end-stat"><b>${vidas}</b><span>Vidas restantes</span></div>
-    <div class="end-stat"><b>${puntos}</b><span>Puntos</span></div>
+    <div class="end-stat"><b>${puntos}</b><span>Puntos ronda</span></div>
   `;
+
+  const quedan = hayPreguntasRestantes(POOL_CIBERGAME2, sesion.usadas);
+  if (!quedan) sesion.agotada = true;
+
+  let resumen = `<div class="sesion-row"><span>Total acumulado · ${sesion.rondas} ${sesion.rondas === 1 ? "ronda" : "rondas"}</span><b>${sesion.total} pts</b></div>`;
+  if (rondaPerfecta) {
+    resumen += `<div class="sesion-row racha"><span>Ronda perfecta — racha ×${sesion.racha}</span><b>+${bonusRacha} pts de bonus</b></div>`;
+    if (quedan) resumen += `<div class="sesion-row"><span>La racha sigue viva: la próxima ronda perfecta vale +${BONUS_RACHA * (sesion.racha + 1)} pts</span></div>`;
+  }
+  if (!quedan) resumen += `<div class="sesion-row agotada"><span>¡Te has pasado TODAS las preguntas del juego!</span></div>`;
+  $("end-session").innerHTML = resumen;
+
+  $("btn-restart").style.display = quedan ? "" : "none";
+}
+
+/* ─── Fin de sesión: registrar y mostrar clasificación ─── */
+function terminarSesion() {
+  const res = lbRegistrar(LB_CLAVE, sesion.nombre, sesion.total);
+  const perfecta = sesion.rondas > 0 && sesion.fallos === 0;
+  const brillar = res.posicion === 1 || perfecta;
+
+  let msg;
+  if (res.posicion === 1) {
+    msg = `${sesion.nombre}, eres el número 1 de la clasificación con ${res.mejor} puntos.`;
+  } else if (res.posicion !== null && res.posicion <= 5) {
+    msg = `¡Enhorabuena, ${sesion.nombre}! Estás en el TOP ${res.posicion} de la clasificación.`;
+  } else {
+    msg = `Sesión registrada: ${sesion.total} puntos${res.mejor > sesion.total ? ` (tu mejor marca: ${res.mejor})` : ""}. ¡Sigue entrenando!`;
+  }
+  if (perfecta) {
+    msg += sesion.agotada
+      ? ` Y además: TODAS las preguntas del juego respondidas sin un solo fallo. Leyenda de la ciberseguridad.`
+      : ` Sesión PERFECTA: ${sesion.rondas * 8} preguntas sin un solo fallo.`;
+  }
+  $("lb-congrats").textContent = msg;
+
+  lbRender($("lb-list"), res.lista, sesion.nombre, brillar);
+  mostrarPantalla("lb-screen");
 }
 
 /* ─── Listeners ─── */
-$("btn-start").onclick = empezarPartida;
-$("btn-restart").onclick = empezarPartida;
+const leerNombre = lbConectarNombre($("player-name"), $("btn-start"));
+
+$("btn-start").onclick = () => {
+  const nombre = leerNombre();
+  if (nombre.length < 2) return;
+  lbGuardarNombre(nombre);
+  sesion = { nombre: nombre, total: 0, racha: 0, fallos: 0, rondas: 0, usadas: new Set(), agotada: false };
+  empezarPartida();
+};
+$("btn-restart").onclick = empezarPartida;        // seguir jugando (misma sesión)
+$("btn-finish").onclick = terminarSesion;         // terminar y ver clasificación
+$("btn-again").onclick = () => mostrarPantalla("start-screen");

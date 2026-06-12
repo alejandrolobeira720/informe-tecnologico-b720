@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../design-system/tokens.css" />
   <link rel="stylesheet" href="../design-system/topbar.css" />
   <link rel="stylesheet" href="cibergame2.css" />
+  <link rel="stylesheet" href="leaderboard.css" />
   <style>
     /* Navegación fluida con el hub del Informe Tecnológico */
     body { animation: pageIn .35s ease; }
@@ -106,6 +107,12 @@
         </div>
       </div>
 
+      <div class="lb-name-row">
+        <label class="lb-name-label" for="player-name">Tu nombre · imprescindible para la clasificación</label>
+        <input id="player-name" class="lb-name-input" type="text" maxlength="20"
+               placeholder="Escribe tu nombre…" autocomplete="off" spellcheck="false" />
+      </div>
+
       <button id="btn-start" class="btn-primary">Iniciar simulación</button>
       <p class="credits">Basado en «Cibergame: El arquitecto atacado» · Anabel Gil Cabrera</p>
     </div>
@@ -160,11 +167,27 @@
       <h2 class="end-rank" id="end-rank">—</h2>
       <p class="end-message" id="end-message">—</p>
       <div class="end-stats" id="end-stats"></div>
-      <button id="btn-restart" class="btn-primary">Nueva simulación</button>
+      <div class="end-session" id="end-session"></div>
+      <div class="end-actions">
+        <button id="btn-restart" class="btn-primary">Seguir jugando</button>
+        <button id="btn-finish" class="btn-ghost">Terminar y ver clasificación</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PANTALLA DE CLASIFICACIÓN ───────────── -->
+  <section id="lb-screen" class="screen">
+    <div class="lb-inner">
+      <div class="eyebrow">Protocolo de seguridad</div>
+      <h2 class="lb-title">Clasificación</h2>
+      <p class="lb-congrats" id="lb-congrats"></p>
+      <ol class="lb-list" id="lb-list"></ol>
+      <button id="btn-again" class="btn-primary">Jugar otra vez</button>
     </div>
   </section>
 
   <script src="preguntas.js"></script>
+  <script src="leaderboard.js"></script>
   <script src="cibergame2.js"></script>
   <script>
     // Topbar del hub: desplegables exclusivos + navegación fluida

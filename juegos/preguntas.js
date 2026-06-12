@@ -1302,6 +1302,33 @@ function generarSetPartida(pool) {
   return [...barajar([...faciles, ...medias]), ...dificiles, ...extrema];
 }
 
+/*
+  Variante para sesiones encadenadas: genera el set EXCLUYENDO las
+  preguntas ya usadas en intentos anteriores (Set de textos de pregunta).
+  Devuelve null si la piscina restante no da para una ronda completa.
+*/
+function generarSetPartidaSinRepetir(pool, usadas) {
+  const libres = pool.filter(q => !usadas.has(q.pregunta));
+  const faciles   = barajar(libres.filter(q => q.cat === "facil")).slice(0, 3);
+  const medias    = barajar(libres.filter(q => q.cat === "media")).slice(0, 2);
+  const dificiles = barajar(libres.filter(q => q.cat === "dificil")).slice(0, 2);
+  const extrema   = barajar(libres.filter(q => q.cat === "extrema")).slice(0, 1);
+
+  if (faciles.length < 3 || medias.length < 2 || dificiles.length < 2 || extrema.length < 1) {
+    return null; // piscina agotada para una ronda más
+  }
+  return [...barajar([...faciles, ...medias]), ...dificiles, ...extrema];
+}
+
+/* ¿Da la piscina restante para otra ronda completa? */
+function hayPreguntasRestantes(pool, usadas) {
+  const libres = pool.filter(q => !usadas.has(q.pregunta));
+  return libres.filter(q => q.cat === "facil").length   >= 3 &&
+         libres.filter(q => q.cat === "media").length   >= 2 &&
+         libres.filter(q => q.cat === "dificil").length >= 2 &&
+         libres.filter(q => q.cat === "extrema").length >= 1;
+}
+
 /* Baraja las opciones de una pregunta manteniendo cuál es la correcta */
 function prepararOpciones(pregunta) {
   const indices = barajar(pregunta.opciones.map((_, i) => i));
