@@ -46,108 +46,7 @@ body {
 button { font-family: inherit; cursor: pointer; }
 
 /* ─── TOPBAR ─────────────────────────────── */
-.topbar {
-  position: fixed; top: 0; left: 0; right: 0;
-  z-index: 100;
-  background: rgba(75,72,70,.96); /* Neutral Black, nunca negro puro */
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 40px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.topbar-brand img { height: 28px; width: auto; display: block; }
-.topbar-meta { font-size: 12px; color: var(--muted); letter-spacing: .04em; }
-.topbar-left { display: flex; align-items: center; gap: 28px; }
-
-/* ─── TOPBAR NAV (desplegables del hub) ──── */
-.topbar-nav { position: relative; }
-.nav-toggle {
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--text);
-  background: rgba(255,255,255,.06);
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  padding: 8px 18px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: border-color .2s;
-}
-.nav-toggle:hover { border-color: rgba(255,255,255,.45); }
-.nav-toggle .caret { font-size: 9px; transition: transform .2s; }
-.topbar-nav.open .caret { transform: rotate(180deg); }
-.nav-dropdown {
-  position: absolute;
-  top: calc(100% + 12px);
-  left: 0;
-  min-width: 320px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 8px;
-  display: none;
-  box-shadow: 0 16px 48px rgba(45,43,42,.6);
-  z-index: 200;
-}
-.topbar-nav.open .nav-dropdown { display: block; }
-.nav-dropdown a {
-  display: block;
-  padding: 12px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  line-height: 1.45;
-  color: var(--text);
-  text-decoration: none;
-}
-.nav-dropdown a:hover { background: rgba(255,255,255,.06); }
-.nav-dropdown a.active { background: rgba(255,255,255,.04); box-shadow: inset 3px 0 0 var(--white); }
-.nav-dropdown .nd-date {
-  display: block;
-  font-size: 10px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 3px;
-}
-.nav-dropdown .nd-all {
-  margin-top: 4px;
-  border-top: 1px solid var(--border);
-  border-radius: 0 0 8px 8px;
-  font-size: 12px;
-  color: var(--muted);
-}
-/* Juego retirado: visible pero sin enlace */
-.nav-dropdown .nd-item-off {
-  display: block;
-  padding: 12px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  line-height: 1.45;
-  color: var(--muted);
-  opacity: .55;
-  cursor: not-allowed;
-  user-select: none;
-}
-.nav-dropdown .nd-item-off .nd-off {
-  display: block;
-  margin-top: 3px;
-  font-size: 10px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-@media (max-width: 700px) {
-  .topbar-left { gap: 12px; }
-  .nav-dropdown { position: fixed; top: 64px; left: 12px; right: 12px; min-width: 0; }
-}
+/* Compartida con el hub: design-system/topbar.css (idéntica en todo el sitio) */
 
 /* ─── SISTEMA DE PANTALLAS ───────────────── */
 .screen {
@@ -533,8 +432,6 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ─── RESPONSIVE ─────────────────────────── */
 @media (max-width: 640px) {
-  .topbar { padding: 0 20px; }
-  .topbar-meta { display: none; }
   .screen { padding: 84px 20px 32px; }
   .rules { grid-template-columns: 1fr; }
   .hud { flex-wrap: wrap; }

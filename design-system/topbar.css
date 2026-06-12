@@ -1,0 +1,124 @@
+/* ============================================================
+   Topbar compartida — b720 Fermín Vázquez Arquitectos
+   La usan index.html y juegos/*.html para que la barra sea
+   idéntica en todo el sitio. Requiere tokens.css (variables
+   --b720-* y la fuente Circular autoalojada).
+   Combinación: Blanco sobre Pantone Neutral Black.
+   ============================================================ */
+
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(75,72,70,.97);
+  backdrop-filter: blur(12px);
+  font-family: var(--b720-font-base);
+  color: var(--b720-text-inverse);
+  padding: 0 40px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar-brand { display: flex; align-items: center; transition: opacity .2s; }
+.topbar-brand:hover { opacity: .75; }
+.topbar-brand img { height: 30px; width: auto; display: block; }
+.topbar-meta { font-size: 12px; color: rgba(255,255,255,.65); }
+.topbar-left { display: flex; align-items: center; gap: 32px; }
+
+/* ─── Desplegables (Noticias, Juegos…) ─────────────────── */
+.topbar-nav { position: relative; }
+.nav-toggle {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: var(--b720-weight-bold);
+  letter-spacing: var(--b720-tracking-label);
+  text-transform: uppercase;
+  color: var(--b720-text-inverse);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: var(--b720-radius);
+  padding: 8px 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color .2s;
+}
+.nav-toggle:hover { border-color: var(--b720-blanco); }
+.nav-toggle .caret { font-size: 9px; transition: transform .2s; }
+.topbar-nav.open .caret { transform: rotate(180deg); }
+
+/* Tarjeta blanca: Neutral Black sobre Blanco */
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  min-width: 340px;
+  background: var(--b720-bg-card);
+  border: 1px solid var(--b720-border);
+  border-radius: var(--b720-radius);
+  padding: 8px;
+  display: none;
+  box-shadow: 0 12px 32px rgba(75,72,70,.18);
+  color: var(--b720-text);
+  z-index: 200;
+}
+.topbar-nav.open .nav-dropdown { display: block; }
+.nav-dropdown a {
+  display: block;
+  padding: 12px 14px;
+  border-radius: var(--b720-radius);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--b720-text);
+  text-decoration: none;
+}
+.nav-dropdown a:hover { background: var(--b720-gris-claro); text-decoration: none; }
+.nav-dropdown a.active {
+  background: var(--b720-gris-claro);
+  box-shadow: inset 3px 0 0 var(--b720-neutral-black);
+}
+.nav-dropdown .nd-date {
+  display: block;
+  font-size: 10px;
+  letter-spacing: var(--b720-tracking-label);
+  text-transform: uppercase;
+  color: var(--b720-text-muted);
+  margin-bottom: 3px;
+}
+.nav-dropdown .nd-all {
+  margin-top: 4px;
+  border-top: 1px solid var(--b720-border);
+  font-size: 12px;
+  color: var(--b720-text-muted);
+}
+/* Juego retirado: visible pero sin enlace */
+.nav-dropdown .nd-item-off {
+  display: block;
+  padding: 12px 14px;
+  border-radius: var(--b720-radius);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--b720-text-muted);
+  opacity: .65;
+  cursor: not-allowed;
+  user-select: none;
+}
+.nav-dropdown .nd-item-off .nd-off {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  letter-spacing: var(--b720-tracking-label);
+  text-transform: uppercase;
+  color: var(--b720-text-muted);
+}
+
+/* ─── Móvil / tablet ────────────────────────────────────── */
+@media (max-width: 700px) {
+  .topbar { padding: 0 16px; }
+  .topbar-left { gap: 14px; }
+  .topbar-brand img { height: 24px; }
+  .topbar-meta { display: none; }
+  /* En páginas sin drawer (juegos) el desplegable ocupa el ancho */
+  .nav-dropdown { position: fixed; top: 64px; left: 12px; right: 12px; min-width: 0; }
+}
