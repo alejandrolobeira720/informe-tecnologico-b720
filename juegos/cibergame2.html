@@ -57,7 +57,28 @@
       </div>
     </div>
     <span class="topbar-meta">Cibergame · Simulación 02</span>
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- ── MENÚ LATERAL (móvil) ────────────────── -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer" aria-label="Menú de navegación">
+    <div class="drawer-head">
+      <img src="assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+      <button class="drawer-close" id="drawerClose" type="button" aria-label="Cerrar menú">✕</button>
+    </div>
+    <nav class="drawer-nav">
+      <div class="drawer-group">Noticias</div>
+      <a href="../NVIDIA_RTX_Spark_Informe_Arquitectura.html">NVIDIA RTX Spark: el superchip que reinventa el PC<span>Junio 2026</span></a>
+      <a href="../index.html">Ver todas las noticias<span>Inicio</span></a>
+      <div class="drawer-group">Juegos</div>
+      <span class="drawer-off" aria-disabled="true">El arquitecto atacado<span>Cibergame 1 · No disponible</span></span>
+      <a href="cibergame2.html" class="active">Protocolo de seguridad<span>Cibergame 2 · quiz de ciberseguridad</span></a>
+      <a href="cibergame3.html">La torre ciberresiliente<span>Cibergame 3 · contrarreloj por plantas</span></a>
+    </nav>
+  </aside>
 
   <!-- ── PANTALLA DE INICIO ──────────────────── -->
   <section id="start-screen" class="screen active">
@@ -172,8 +193,28 @@
         });
       });
 
+      // Menú lateral (móvil) — mismo comportamiento que el hub
+      var drawer = document.getElementById("drawer");
+      var drawerOverlay = document.getElementById("drawerOverlay");
+      var menuBtn = document.getElementById("menuBtn");
+      function cerrarDrawer() {
+        drawer.classList.remove("open");
+        drawerOverlay.classList.remove("show");
+        menuBtn.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+      }
+      menuBtn.addEventListener("click", function () {
+        drawer.classList.add("open");
+        drawerOverlay.classList.add("show");
+        menuBtn.setAttribute("aria-expanded", "true");
+        document.body.style.overflow = "hidden";
+      });
+      document.getElementById("drawerClose").addEventListener("click", cerrarDrawer);
+      drawerOverlay.addEventListener("click", cerrarDrawer);
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrarDrawer(); });
+
       // Fundido de salida en el logo y en los enlaces de los desplegables
-      var enlaces = Array.prototype.slice.call(document.querySelectorAll(".nav-dropdown a, a.topbar-brand"));
+      var enlaces = Array.prototype.slice.call(document.querySelectorAll(".nav-dropdown a, .drawer-nav a, a.topbar-brand"));
       enlaces.forEach(function (link) {
         link.addEventListener("click", function (e) {
           e.preventDefault();
