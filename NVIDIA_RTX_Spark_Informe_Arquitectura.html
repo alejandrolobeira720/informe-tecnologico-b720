@@ -315,6 +315,7 @@
       letter-spacing: .02em;
     }
     .hero-doc-text span { font-size: 12px; color: var(--muted); }
+    .hero-doc-btns { display: flex; gap: 10px; flex-wrap: wrap; }
     .pdf-btn {
       font-family: inherit;
       font-size: 12px;
@@ -357,6 +358,10 @@
       flex-direction: column;
       overflow: hidden;
       box-shadow: 0 32px 120px rgba(45,43,42,.7);
+    }
+    .pdf-modal-box.concl {
+      max-width: 760px;
+      max-height: 85vh;
     }
     .pdf-modal-head {
       display: flex;
@@ -1258,9 +1263,12 @@
       <div class="hero-doc-icon">📄</div>
       <div class="hero-doc-text">
         <strong>Evaluación Tecnológica: Sistema NVIDIA RTX Spark</strong>
-        <span>Documento resumido · Conclusiones y opinión personal al final, para una lectura ligera · PDF</span>
+        <span>Documento resumen con conclusiones personales al final · PDF</span>
       </div>
-      <button class="pdf-btn" id="openPdfBtn" type="button">Ver documento</button>
+      <div class="hero-doc-btns">
+        <button class="pdf-btn" id="openPdfBtn" type="button">PDF Completo</button>
+        <button class="pdf-btn" id="openConclBtn" type="button">Leer Conclusiones</button>
+      </div>
     </div>
   </div>
   <div class="hero-img-wrap">
@@ -2273,15 +2281,15 @@
 
 <!-- ── MODAL VISOR PDF ─────────────────────────────────── -->
 <div class="pdf-modal" id="pdfModal" role="dialog" aria-modal="true" aria-label="Evaluación Tecnológica: Sistema NVIDIA RTX Spark">
-  <div class="pdf-modal-box">
+  <div class="pdf-modal-box" id="pdfModalBox">
     <div class="pdf-modal-head">
-      <strong>Evaluación Tecnológica · Sistema NVIDIA RTX Spark</strong>
+      <strong id="pdfModalTitle">Evaluación Tecnológica · Sistema NVIDIA RTX Spark</strong>
       <div class="pdf-modal-actions">
-        <a class="pdf-download" href="evaluacion-tecnologica-nvidia-rtx-spark.pdf" download>Descargar</a>
+        <a class="pdf-download" href="evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612" download>Descargar</a>
         <button class="pdf-close" id="closePdfBtn" type="button" aria-label="Cerrar visor">✕</button>
       </div>
     </div>
-    <iframe id="pdfFrame" data-src="evaluacion-tecnologica-nvidia-rtx-spark.pdf#view=FitH" title="Visor PDF — Evaluación Tecnológica NVIDIA RTX Spark"></iframe>
+    <iframe id="pdfFrame" data-src="evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612#view=FitH" title="Visor PDF — Evaluación Tecnológica NVIDIA RTX Spark"></iframe>
   </div>
 </div>
 
@@ -2352,13 +2360,27 @@
 
   var modal = document.getElementById('pdfModal');
   var frame = document.getElementById('pdfFrame');
-  document.getElementById('openPdfBtn').addEventListener('click', function () {
-    if (!frame.src) frame.src = frame.dataset.src;
+  var modalBox = document.getElementById('pdfModalBox');
+  var modalTitle = document.getElementById('pdfModalTitle');
+  var PDF_FULL = 'evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612#view=FitH';
+  var PDF_CONCL = 'evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612#page=8&view=FitH';
+  function openModal(opts) {
+    frame.src = opts.src;
+    modalTitle.textContent = opts.title;
+    modalBox.classList.toggle('concl', !!opts.concl);
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
+  }
+  document.getElementById('openPdfBtn').addEventListener('click', function () {
+    openModal({ src: PDF_FULL, title: 'Evaluación Tecnológica: Sistema NVIDIA RTX Spark', concl: false });
+  });
+  document.getElementById('openConclBtn').addEventListener('click', function () {
+    openModal({ src: PDF_CONCL, title: 'Conclusiones — opinión personal', concl: true });
   });
   function closeModal() {
     modal.classList.remove('open');
+    frame.src = '';
+    modalBox.classList.remove('concl');
     document.body.style.overflow = '';
   }
   document.getElementById('closePdfBtn').addEventListener('click', closeModal);

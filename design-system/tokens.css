@@ -1,0 +1,81 @@
+/* ============================================================
+   Design tokens — b720 Fermín Vázquez Arquitectos
+   Fuentes: b720.com/es/ (kit Elementor, 2026-06-12)
+            + manual IN-Formación v1.3 (Colores.pdf)
+   Regla de oro: el negro puro #000 está PROHIBIDO.
+   ============================================================ */
+
+/* Circular Std — autoalojada en este repo (design-system/fonts/),
+   con el hotlink de b720.com como respaldo si faltara el archivo. */
+@font-face {
+  font-family: 'Circular';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/CircularStd-Book.otf') format('opentype'),
+       url('https://b720.com/wp-content/uploads/2022/02/CircularStd-Book.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Circular';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('fonts/CircularStd-Medium.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Circular';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/CircularStd-Bold.ttf') format('truetype'),
+       url('https://b720.com/wp-content/uploads/2022/02/CircularStd-Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Circular';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('fonts/CircularStd-Black.otf') format('opentype');
+}
+
+:root {
+  /* —— Paleta principal (Colores.pdf) ——————————— */
+  --b720-gris-claro:    #F2F1F0;  /* fondo de página; nunca como texto */
+  --b720-black-0961:    #9D9894;  /* texto secundario sobre blanco     */
+  --b720-neutral-black: #4B4846;  /* el oscuro corporativo             */
+  --b720-blanco:        #FFFFFF;  /* texto/logos sobre fondos oscuros  */
+
+  /* —— Secundarios (Colores.pdf) ———————————————— */
+  --b720-azul:    #116188;
+  --b720-verde:   #879F41;
+  --b720-naranja: #D27533;
+
+  /* —— Tokens web (extraídos de b720.com) ———————— */
+  --b720-accent:      #FFFD00;   /* amarillo: subrayados y hovers, con mesura */
+  --b720-accent-soft: #F9F8A6;
+  --b720-surface-1:   #E3E0DC;
+  --b720-surface-2:   #DBDAD9;
+  --b720-surface-3:   #CECCCB;
+
+  /* —— Semánticos ——————————————————————————————— */
+  --b720-bg:           var(--b720-gris-claro);
+  --b720-bg-card:      var(--b720-blanco);
+  --b720-bg-inverse:   var(--b720-neutral-black); /* topbar/footer: Blanco sobre Neutral Black */
+  --b720-text:         var(--b720-neutral-black);
+  --b720-text-muted:   var(--b720-black-0961);
+  --b720-text-inverse: var(--b720-blanco);
+  --b720-border:       var(--b720-surface-3);
+
+  /* —— Tipografía ——————————————————————————————— */
+  --b720-font-base: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --b720-weight-book: 400;
+  --b720-weight-bold: 700;   /* títulos h1–h4 siempre bold */
+  --b720-lh-heading: 1.1;
+  --b720-lh-body: 1.6;
+  --b720-tracking-label: 1.2px;
+
+  /* —— Layout ———————————————————————————————————— */
+  --b720-container: 1140px;  /* ancho de contenedor de b720.com   */
+  --b720-radius: 0;          /* identidad plana: esquinas rectas  */
+  --b720-shadow-subtle: 0 1px 0 rgba(75, 72, 70, 0.08);
+}
