@@ -4,8 +4,11 @@
    · POOL_CIBERGAME2 → Cibergame 2 (Protocolo de Seguridad)
    · POOL_CIBERGAME3 → Cibergame 3 (La Torre Ciberresiliente)
    Categorías: facil · media · dificil · extrema
-   Cada juego usa 36 preguntas propias (10+10+9+7) para que
-   varias partidas seguidas no repitan las mismas preguntas.
+   Cada juego tiene su propia piscina (CG2: 13+14+13+11 = 51,
+   CG3: 14+14+13+11 = 52) para que varias partidas seguidas no
+   repitan las mismas preguntas. Sin preguntas repetidas entre
+   los dos juegos: si un escenario aparece en uno, en el otro
+   se trata una lección distinta.
    ===================================================== */
 
 /* ---------------------------------------------------
@@ -13,7 +16,7 @@
    --------------------------------------------------- */
 const POOL_CIBERGAME2 = [
 
-  /* ───── FÁCIL (10) ───── */
+  /* ───── FÁCIL (13) ───── */
   {
     cat: "facil", tema: "Phishing",
     pregunta: "Recibes un email de «soporte-microsoft365@gmail.com» pidiendo tu contraseña por «mantenimiento del servidor». ¿Qué haces?",
@@ -123,19 +126,55 @@ const POOL_CIBERGAME2 = [
     explicacion: "Lentitud repentina y popups son síntomas clásicos de infección. Cuanto antes actúe IT, menos se extiende. Actuar por tu cuenta puede destruir pistas o empeorarlo."
   },
   {
-    cat: "facil", tema: "Sesiones",
-    pregunta: "Usas el ordenador compartido de la sala de maquetas para mirar tu correo. Al terminar, ¿qué haces?",
+    cat: "facil", tema: "Soporte externo",
+    pregunta: "No te abre AutoCAD y tienes entrega esta semana. ¿Cuál es el camino correcto para resolverlo?",
     opciones: [
-      "Cerrar la sesión del correo y no guardar la contraseña en el navegador",
-      "Dejar la sesión abierta, mañana vuelves",
-      "Minimizar la ventana, nadie mira",
-      "Apagar el monitor"
+      "Avisar al soporte externo del estudio (ESKAPE) por el canal oficial y describir bien el error",
+      "Descargar de un foro un «AutoCAD portable» que no necesita instalación",
+      "Pedirle a un amigo de otro estudio que te pase su instalador con su licencia",
+      "Reiniciar el equipo veinte veces hasta que abra solo"
     ],
     correcta: 0,
-    explicacion: "En un equipo compartido, una sesión abierta es tu buzón entero a disposición del siguiente que se siente. Cierra sesión siempre y rechaza el «¿guardar contraseña?» del navegador."
+    explicacion: "Para eso está el contrato de soporte: diagnostican, reinstalan y gestionan la licencia de forma legal. El «portable» de foro es malware con casi total seguridad, y la licencia prestada, además de ilegal, te deja sin soporte cuando algo falle de verdad."
+  },
+  {
+    cat: "facil", tema: "Google Chat",
+    pregunta: "Te escribe por el chat de Gmail una cuenta nueva que se presenta como «IT b720» y te pide entrar en un enlace para «revalidar tu cuenta hoy». ¿Qué haces?",
+    opciones: [
+      "Desconfiar: IT escribe siempre desde su cuenta corporativa habitual; verificarlo con ellos antes de tocar el enlace",
+      "Entrar rápido, no quieres quedarte sin cuenta",
+      "Pedir que te manden el enlace también por email",
+      "Responder con tu contraseña para ahorrar pasos"
+    ],
+    correcta: 0,
+    explicacion: "La suplantación también existe en el chat corporativo: una cuenta externa con el nombre y la foto de IT cuela igual que un email falso. Fíjate en la dirección de la cuenta, no en el nombre, y verifica por el canal de siempre."
+  },
+  {
+    cat: "facil", tema: "Cultura de reporte",
+    pregunta: "Haces clic sin pensar en el enlace de un correo sospechoso. La página tarda, te asustas y la cierras. ¿Y ahora qué?",
+    opciones: [
+      "Avisar a IT igualmente y contarles lo ocurrido: más vale un aviso de más que un incidente oculto",
+      "No decir nada, total, no pasó nada",
+      "Borrar el historial para que no quede rastro",
+      "Apagar el equipo y esperar al día siguiente"
+    ],
+    correcta: 0,
+    explicacion: "Hacer clic le pasa a cualquiera; ocultarlo es lo único imperdonable. Un aviso a tiempo permite revisar el equipo y bloquear el dominio para todo el estudio. Nadie te va a regañar por reportar: es exactamente lo que hay que hacer."
+  },
+  {
+    cat: "facil", tema: "Red de invitados",
+    pregunta: "Durante una reunión, un cliente te pide la contraseña del wifi para conectar su portátil. ¿Cuál es la respuesta correcta?",
+    opciones: [
+      "Darle acceso a la red de invitados, nunca a la red interna del estudio",
+      "Darle la del wifi interno, es un cliente de confianza",
+      "Dejarle tu equipo para que use su correo",
+      "Decirle que en el estudio no hay wifi"
+    ],
+    correcta: 0,
+    explicacion: "El portátil de un invitado puede venir infectado sin que él lo sepa. La red de invitados existe justo para eso: da internet sin tocar servidores ni carpetas del estudio. Confianza con el cliente, sí; su portátil dentro de tu red, no."
   },
 
-  /* ───── MEDIA (10) ───── */
+  /* ───── MEDIA (14) ───── */
   {
     cat: "media", tema: "Copias de seguridad",
     pregunta: "¿En qué consiste la regla «3-2-1» de copias de seguridad?",
@@ -256,8 +295,56 @@ const POOL_CIBERGAME2 = [
     correcta: 0,
     explicacion: "Las cuentas huérfanas son un clásico de los incidentes: nadie las vigila y conservan acceso a todo. El offboarding (baja inmediata de accesos) es tan importante como el alta."
   },
+  {
+    cat: "media", tema: "Soporte externo",
+    pregunta: "Llamada: «Hola, soy de ESKAPE, estamos renovando las licencias y necesito tu contraseña para activarte la nueva versión». ¿Qué haces?",
+    opciones: [
+      "No darla nunca: el soporte real no necesita tu contraseña; colgar y llamar tú al número de siempre para verificar",
+      "Dársela, ESKAPE es el proveedor de confianza del estudio",
+      "Dársela pero cambiarla esa misma tarde",
+      "Negociar: solo le das la mitad de la contraseña"
+    ],
+    correcta: 0,
+    explicacion: "Un técnico legítimo trabaja con sus propias credenciales de administración: JAMÁS necesita la tuya. Que el nombre del proveedor sea el real no prueba nada — suplantar a la empresa de soporte que ya conoces es el disfraz perfecto. Verifica llamando tú."
+  },
+  {
+    cat: "media", tema: "Licencias",
+    pregunta: "Pides a ESKAPE una licencia nueva y el técnico te solicita datos para tramitarla. ¿Cuál de estas peticiones NO es normal y debería hacerte sospechar?",
+    opciones: [
+      "Que te pida tu contraseña «para dejártelo todo configurado»",
+      "Que te pida el nombre del equipo",
+      "Que te pida tu usuario corporativo",
+      "Que te pida la versión del programa que usas"
+    ],
+    correcta: 0,
+    explicacion: "Nombre de equipo, usuario y versión son datos normales para tramitar una licencia. La contraseña, nunca: con tus credenciales no instala una licencia, se convierte en ti. Si alguien de soporte te la pide, algo huele mal: verifica antes de seguir."
+  },
+  {
+    cat: "media", tema: "Descargas con prisa",
+    pregunta: "Un cliente pide a última hora demostrar que en el ascensor caben a la vez un carrito de bebé y una silla de ruedas, y necesitas un bloque CAD del carrito YA. ¿De dónde lo sacas?",
+    opciones: [
+      "De bibliotecas de bloques que ya conozcáis o de webs de fabricantes; si dudas, pregunta a IT antes de descargar",
+      "Del primer resultado de Google con un botón de DESCARGA GRATIS bien grande",
+      "De un foro que pide desactivar el antivirus para poder descargar",
+      "Instalando el «gestor de descargas» que recomienda la propia web"
+    ],
+    correcta: 0,
+    explicacion: "Las prisas de última hora son el mejor amigo del malware: las webs de «bloques gratis» viven de botones falsos, instaladores basura y permisos de notificación. En el estudio ya hubo un susto real así. Treinta segundos eligiendo bien la fuente ahorran semanas de limpieza."
+  },
+  {
+    cat: "media", tema: "Control remoto",
+    pregunta: "Para arreglarte un programa, el técnico externo propone: «déjame el equipo desbloqueado a la hora de comer y entro yo». ¿Qué está mal?",
+    opciones: [
+      "Las sesiones remotas se hacen contigo delante, iniciadas por el canal oficial y con la herramienta corporativa, no con el equipo abierto y sin vigilancia",
+      "Nada, así no pierdes tiempo de trabajo",
+      "Solo está mal si tarda más de una hora",
+      "Que debería entrar mejor por la noche, sin molestar"
+    ],
+    correcta: 0,
+    explicacion: "Un equipo desbloqueado y sin supervisión es acceso total a tu correo, proyectos y credenciales, sin registro de quién hizo qué. El soporte serio trabaja contigo presente y deja trazabilidad. Si la propuesta es «cuando no estés», la respuesta es no."
+  },
 
-  /* ───── DIFÍCIL (9) ───── */
+  /* ───── DIFÍCIL (13) ───── */
   {
     cat: "dificil", tema: "Typosquatting",
     pregunta: "Necesitas descargar DWG TrueView. ¿Cuál de estos dominios es el legítimo?",
@@ -366,8 +453,56 @@ const POOL_CIBERGAME2 = [
     correcta: 0,
     explicacion: "Un spear phishing convincente se fabrica con datos reales: proyectos, clientes, software que usáis, hasta nombres en los post-its. Revisa qué se ve en cada foto antes de publicarla."
   },
+  {
+    cat: "dificil", tema: "ClickFix",
+    pregunta: "Buscando en foros un error de AutoCAD, una página te pide «verificar que eres humano»: pulsar Win+R, pegar lo que ya ha copiado por ti y dar Enter. ¿Qué haces?",
+    opciones: [
+      "No hacerlo jamás: es el ataque «ClickFix», te dictan los pasos para que ejecutes TÚ su malware con tus propias manos",
+      "Hacerlo, los CAPTCHA modernos funcionan así",
+      "Hacerlo pero leyendo antes el comando por encima",
+      "Hacerlo en el equipo de un compañero para no arriesgar el tuyo"
+    ],
+    correcta: 0,
+    explicacion: "Ninguna verificación humana legítima pide abrir Ejecutar ni pegar comandos. El truco (ClickFix) está disparando infecciones en toda Europa: como lo ejecutas tú, se salta muchas protecciones. Si una web te pide teclear comandos, cierra y reporta."
+  },
+  {
+    cat: "dificil", tema: "Malvertising",
+    pregunta: "Buscas «descargar visor DWG» y el PRIMER resultado del buscador es un anuncio con un dominio casi idéntico al oficial. ¿Cuál es el riesgo?",
+    opciones: [
+      "Los anuncios se compran: es malvertising; baja hasta el resultado orgánico o teclea tú la URL oficial",
+      "Ninguno, Google verifica todos los anuncios",
+      "Solo es arriesgado si el anuncio tiene faltas de ortografía",
+      "Los anuncios son más seguros porque son de pago"
+    ],
+    correcta: 0,
+    explicacion: "Comprar un anuncio que aparezca POR ENCIMA del resultado real cuesta poco, y las campañas de malvertising clonan webs de instaladores populares al píxel. El primer puesto pagado no es un aval: para descargar software, URL oficial escrita a mano."
+  },
+  {
+    cat: "dificil", tema: "Chat comprometido",
+    pregunta: "La cuenta de Google Chat de un compañero —la auténtica— te envía un ZIP: «instálate este parche urgente de ESKAPE». El tono no suena a él. ¿Qué haces?",
+    opciones: [
+      "No abrirlo y verificarlo con él por otro canal (llamada o en persona): su cuenta puede estar comprometida",
+      "Abrirlo: viene de una cuenta interna real",
+      "Abrirlo en el portátil de las visitas",
+      "Pedirle por el mismo chat que confirme que es él"
+    ],
+    correcta: 0,
+    explicacion: "Una cuenta interna robada hereda toda la confianza de su dueño, y el atacante responde «sí, soy yo» en el mismo chat. Además, los parches reales llegan por el canal de soporte, no por ZIP en un chat. Verifica por OTRO canal, siempre."
+  },
+  {
+    cat: "dificil", tema: "Verificación de identidad",
+    pregunta: "Llamas a ESKAPE porque olvidaste tu contraseña y el técnico te la restablece al momento, sin verificar de ninguna manera que eres tú. Te resuelve rápido… ¿por qué es un problema?",
+    opciones: [
+      "Si te la cambian sin verificar tu identidad, también se la cambiarán a un atacante que se haga pasar por ti",
+      "No es ningún problema, eso es buen servicio",
+      "Solo sería grave si tardara más de un día",
+      "Porque deberías poder cambiarla tú sin llamar"
+    ],
+    correcta: 0,
+    explicacion: "El reset «amable» sin verificación es exactamente cómo cayó MGM Resorts en 2023: un atacante llamó al soporte haciéndose pasar por un empleado. Que te pidan verificar tu identidad no es burocracia: es la prueba de que tu cuenta no se la darán a cualquiera."
+  },
 
-  /* ───── EXTREMA (7) ───── */
+  /* ───── EXTREMA (11) ───── */
   {
     cat: "extrema", tema: "Cadena de suministro",
     pregunta: "La actualización OFICIAL y firmada de tu software de mediciones resulta contener malware (ataque tipo SolarWinds). ¿Cuál es la defensa más realista para un estudio?",
@@ -451,6 +586,54 @@ const POOL_CIBERGAME2 = [
     ],
     correcta: 0,
     explicacion: "Quien controla tu dominio controla tu web Y tu correo (y puede pedir restablecimientos de contraseña de casi todo). La cuenta del registrador es una joya de la corona: MFA, bloqueo de transferencia (registrar lock) y acceso restringido."
+  },
+  {
+    cat: "extrema", tema: "Proveedor suplantado",
+    pregunta: "Email de «ESKAPE»: «Hemos sufrido un incidente, instala urgentemente nuestra nueva herramienta de soporte». Cita números y detalles REALES de tus tickets. ¿Qué haces?",
+    opciones: [
+      "No instalar nada y verificar por un canal independiente: si conocen tus tickets, el proveedor (o su correo) puede estar comprometido",
+      "Instalarla: conocen tus tickets, es imposible que sea falso",
+      "Instalarla solo en un equipo poco importante",
+      "Responder al email pidiendo más pruebas"
+    ],
+    correcta: 0,
+    explicacion: "Quien compromete a una empresa de soporte hereda la confianza de TODOS sus clientes: lee los tickets reales y los usa como credencial. Cuanto más urgente y más «instala esto», más verificación necesita. Llama tú al número de siempre; no respondas al email."
+  },
+  {
+    cat: "extrema", tema: "MSP comprometido",
+    pregunta: "La herramienta de gestión remota de tu proveedor de soporte es comprometida y los atacantes la usan para empujar malware a todos sus clientes a la vez (caso Kaseya, 2021). ¿Qué limita el daño en el estudio?",
+    opciones: [
+      "Mínimo privilegio para la herramienta del proveedor, MFA, registro de sus sesiones y segmentación de red: la confianza en el proveedor no puede ser acceso ilimitado",
+      "Nada: si cae el proveedor, caes tú y punto",
+      "Tener dos proveedores de soporte distintos por si acaso",
+      "Prohibir el soporte remoto y que vengan siempre en persona"
+    ],
+    correcta: 0,
+    explicacion: "El acceso remoto permanente de un proveedor es una autopista hacia tus equipos: si lo comprometen a él, te tienen a ti. Acotar qué puede tocar su herramienta, auditar sus sesiones y exigir requisitos de seguridad en el contrato convierte una catástrofe del sector en un susto contenido."
+  },
+  {
+    cat: "extrema", tema: "Fraude de licencias",
+    pregunta: "Email con logos perfectos: «Su licencia de Autodesk caduca HOY, pague aquí para evitar el corte» (dominio: autodesk-renewals.com). Y encima es verdad que os caduca pronto. ¿Qué haces?",
+    opciones: [
+      "Tramitarlo solo a través del distribuidor habitual (ESKAPE) por el canal conocido, y revisar el buzón: que acierten la fecha puede significar correo espiado",
+      "Pagar: la fecha coincide, así que es legítimo",
+      "Pagar pero pedir factura para protegerte",
+      "Esperar al corte para comprobar si era verdad"
+    ],
+    correcta: 0,
+    explicacion: "Las renovaciones se pagan al canal de siempre, jamás a un enlace de email con dominio «parecido». Y la coincidencia con tu caducidad real es la pista gorda: o lo sacaron de un correo comprometido o de información filtrada. Verifica el pago Y revisa reglas de reenvío en el buzón."
+  },
+  {
+    cat: "extrema", tema: "Datos y soporte",
+    pregunta: "Para reproducir un fallo, el técnico externo te pide que le mandes por tu WeTransfer personal la carpeta completa del proyecto, planos confidenciales del cliente incluidos. ¿Respuesta correcta?",
+    opciones: [
+      "Enviar solo lo mínimo imprescindible, por el canal corporativo aprobado y con el acuerdo de confidencialidad del proveedor en vigor",
+      "Enviarlo todo: sin datos no pueden arreglar nada",
+      "Enviarlo desde tu Gmail personal, que es más rápido",
+      "Enviarlo pero pidiéndole que lo borre cuando acabe"
+    ],
+    correcta: 0,
+    explicacion: "El soporte necesita reproducir el fallo, no tu proyecto entero: minimiza (¿basta un archivo de prueba?). Y los datos de cliente solo viajan por canales del estudio y bajo contrato (RGPD incluido). Tu WeTransfer personal deja los planos fuera de todo control: eso es shadow IT con datos ajenos."
   }
 ];
 
@@ -460,7 +643,7 @@ const POOL_CIBERGAME2 = [
    --------------------------------------------------- */
 const POOL_CIBERGAME3 = [
 
-  /* ───── FÁCIL (10) ───── */
+  /* ───── FÁCIL (14) ───── */
   {
     cat: "facil", tema: "Contraseñas",
     pregunta: "¿Cuál de estas contraseñas protegería mejor tu cuenta de BIM 360?",
@@ -581,8 +764,56 @@ const POOL_CIBERGAME3 = [
     correcta: 0,
     explicacion: "El spam te hace perder tiempo; el phishing te tiende una trampa. El primero se borra y punto; el segundo se reporta, porque detrás hay un ataque dirigido a ti o al estudio."
   },
+  {
+    cat: "facil", tema: "Notificaciones falsas",
+    pregunta: "Mientras trabajas te salta un aviso en la esquina: «Windows: su equipo está infectado, haga clic aquí para solucionarlo». IT descubre que viene de una web de bloques CAD visitada días atrás. ¿Qué era?",
+    opciones: [
+      "Notificaciones del navegador que esa web pidió permiso para enviarte: alertas de virus falsas; no se hace clic y se revoca el permiso",
+      "Windows avisando de una infección real",
+      "El antivirus del estudio haciendo su trabajo",
+      "Un recordatorio de actualización de AutoCAD"
+    ],
+    correcta: 0,
+    explicacion: "Caso real del estudio: una web dudosa pidió «Permitir notificaciones», alguien aceptó sin querer, y desde entonces enviaba falsas alertas disfrazadas de Windows. Se arregla quitando el permiso de notificaciones y las cookies de ese sitio en el navegador. Windows nunca avisa así."
+  },
+  {
+    cat: "facil", tema: "Botones de descarga",
+    pregunta: "Entras a una web de descargas y hay CUATRO botones de «DESCARGAR», a cual más grande y brillante. ¿Cuál es la trampa?",
+    opciones: [
+      "Los botones llamativos suelen ser anuncios o instaladores basura; el enlace real acostumbra a ser el discreto… y la web, de poca confianza",
+      "Ninguna: cuantos más botones, más opciones de descarga",
+      "El botón verdadero es siempre el más grande",
+      "Solo hay trampa si la web tarda en cargar"
+    ],
+    correcta: 0,
+    explicacion: "Los botones-anuncio gigantes son el modelo de negocio de esas webs: cada clic equivocado instala basura o algo peor. Si para bajar un simple bloque tienes que jugar al «¿cuál es el botón real?», estás en el sitio equivocado: busca una fuente seria."
+  },
+  {
+    cat: "facil", tema: "Contraseña olvidada",
+    pregunta: "Has olvidado tu contraseña de acceso. ¿Cuál es la forma correcta de recuperarla?",
+    opciones: [
+      "Pedir el restablecimiento al soporte (ESKAPE/IT) por el canal oficial y elegir tú una nueva en el primer acceso",
+      "Usar la cuenta de un compañero mientras tanto",
+      "Probar todas tus contraseñas viejas hasta que el sistema te bloquee",
+      "Apuntar la nueva en un post-it para que no vuelva a pasar"
+    ],
+    correcta: 0,
+    explicacion: "Olvidar contraseñas es humano y para eso está el soporte: piden el reset quienes lo necesitan a diario. Lo importante: que la temporal se cambie en el primer uso, que nadie más la conozca y que la nueva vaya al gestor de contraseñas, no al post-it."
+  },
+  {
+    cat: "facil", tema: "Actualizaciones falsas",
+    pregunta: "Una página te muestra un aviso: «Su Chrome está desactualizado. Descargue aquí la actualización (update.exe)». ¿Qué haces?",
+    opciones: [
+      "Cerrar la página: el navegador se actualiza solo desde su propio menú, nunca con un .exe descargado de una web",
+      "Descargar el archivo, mantenerse actualizado es importante",
+      "Descargarlo pero ejecutarlo otro día",
+      "Pedir a un compañero que lo pruebe primero"
+    ],
+    correcta: 0,
+    explicacion: "Las «actualizaciones de navegador» ofrecidas por webs son una campaña clásica de malware (SocGholish y compañía). Chrome se actualiza automáticamente o desde Ayuda → Información de Google Chrome. Un update.exe de una página cualquiera es un troyano con disfraz."
+  },
 
-  /* ───── MEDIA (10) ───── */
+  /* ───── MEDIA (14) ───── */
   {
     cat: "media", tema: "Fraude del CEO",
     pregunta: "Email de «Fermín» a contabilidad: «Necesito una transferencia URGENTE y CONFIDENCIAL. No comentes con nadie. Te paso el IBAN». ¿Qué haces?",
@@ -703,8 +934,56 @@ const POOL_CIBERGAME3 = [
     correcta: 0,
     explicacion: "Con un duplicado de tu SIM, el atacante recibe tus códigos SMS y va reseteando contraseñas una a una. La pérdida súbita de cobertura es LA señal: cada minuto cuenta. Mejor MFA por app que por SMS."
   },
+  {
+    cat: "media", tema: "Permisos de notificación",
+    pregunta: "Buscando un bloque CAD urgente acabas en una web llena de pop-ups que dice: «Pulsa PERMITIR en las notificaciones para iniciar la descarga». ¿Qué haces?",
+    opciones: [
+      "Cerrar la web: ese permiso es su negocio (publicidad y falsas alertas), y un archivo que se «paga» con permisos no es de fiar",
+      "Permitir, es solo una notificación de descarga",
+      "Permitir y quitar el permiso la semana que viene",
+      "Permitir pero con el antivirus abierto al lado"
+    ],
+    correcta: 0,
+    explicacion: "Ninguna descarga necesita permiso de notificaciones: es el peaje con el que esas webs te bombardean después con falsas alertas de virus y publicidad. Si una página condiciona la descarga a darle permisos, ya sabes a qué se dedica: cierra y busca una fuente seria."
+  },
+  {
+    cat: "media", tema: "Soporte que llama",
+    pregunta: "Te llama «el soporte técnico» diciendo que tu equipo está dando errores en sus paneles y que necesita entrar en remoto. Tú no has abierto ningún ticket. ¿Qué haces?",
+    opciones: [
+      "No dar acceso: si no hay ticket abierto por ti, cuelga y llama tú al número del proveedor que ya conoces",
+      "Darle acceso, qué suerte que lo hayan visto ellos primero",
+      "Darle acceso pero quedarte mirando la pantalla",
+      "Pedirle que te llame en media hora y dárselo entonces"
+    ],
+    correcta: 0,
+    explicacion: "El soporte legítimo trabaja sobre tickets que TÚ abres; las llamadas espontáneas pidiendo acceso remoto son el guion clásico de estafa. La regla de oro: tú inicias, ellos responden. Ante una llamada entrante inesperada, verifica con una llamada saliente al número de siempre."
+  },
+  {
+    cat: "media", tema: "Cracks y activadores",
+    pregunta: "Caduca la licencia de un programa en plena entrega y un compañero sugiere bajar un «activador» (crack) de internet «solo para esta semana». ¿Qué haces?",
+    opciones: [
+      "No usarlo jamás: los cracks son malware casi siempre; pedir la licencia urgente al proveedor (ESKAPE) por el canal oficial",
+      "Usarlo, total, es temporal",
+      "Usarlo solo en un equipo sin cosas importantes",
+      "Usarlo pero pasándole antes el antivirus una vez"
+    ],
+    correcta: 0,
+    explicacion: "Los «activadores» piratas son el envoltorio favorito de troyanos y ladrones de credenciales, piden desactivar el antivirus «para funcionar» y encima exponen al estudio legalmente. Las licencias urgentes existen: una llamada al proveedor resuelve en horas lo que un crack arruina en meses."
+  },
+  {
+    cat: "media", tema: "Cuenta personal",
+    pregunta: "En tu equipo del estudio inicias sesión en Chrome con tu Gmail personal y se sincronizan tus contraseñas y marcadores. ¿Cuál es el problema?",
+    opciones: [
+      "Mezclas mundos: si comprometen tu cuenta personal, llegan a credenciales y datos del trabajo (y al revés); usa el perfil corporativo separado",
+      "Ninguno, así lo tienes todo a mano",
+      "Solo es problema si usas también Firefox",
+      "Que se te llena el equipo de marcadores de recetas"
+    ],
+    correcta: 0,
+    explicacion: "La sincronización sube las contraseñas que guardas en el trabajo a tu cuenta personal, que está fuera del control (y de las protecciones) del estudio. Una filtración doméstica se convierte en brecha corporativa. Perfil personal y perfil de trabajo: separados, como la nevera y el archivo de planos."
+  },
 
-  /* ───── DIFÍCIL (9) ───── */
+  /* ───── DIFÍCIL (13) ───── */
   {
     cat: "dificil", tema: "Cryptojacking",
     pregunta: "Tu workstation va lenta, los ventiladores rugen incluso en reposo y la factura eléctrica del estudio ha subido. El antivirus no detecta nada. ¿Qué sospechas?",
@@ -813,8 +1092,56 @@ const POOL_CIBERGAME3 = [
     correcta: 0,
     explicacion: "Una extensión maliciosa ve TODO lo que haces en el navegador: sesiones, contraseñas, banca. Web legítima ≠ extensión legítima. Catálogo oficial, permisos mínimos y cuantas menos extensiones, mejor."
   },
+  {
+    cat: "dificil", tema: "Malware en CAD",
+    pregunta: "¿Por qué un simple bloque .dwg descargado de internet puede ser peligroso para AutoCAD, aunque «solo sea un dibujo»?",
+    opciones: [
+      "Puede venir acompañado de rutinas AutoLISP (acad.lsp y similares) que se ejecutan solas al abrir el dibujo: malware específico de CAD",
+      "No puede serlo: los .dwg son solo geometría",
+      "Solo es peligroso si pesa más de 50 MB",
+      "Únicamente si lo abres con una versión antigua"
+    ],
+    correcta: 0,
+    explicacion: "Existen virus específicos de AutoCAD desde hace años: scripts AutoLISP que viajan junto al dibujo, se autocargan y se copian a todos tus proyectos. Configura AutoCAD para no cargar automáticamente LSP de carpetas de dibujo, analiza lo descargado y usa fuentes de bloques de confianza."
+  },
+  {
+    cat: "dificil", tema: "Notificación vs sistema",
+    pregunta: "¿Cómo distingues una notificación falsa lanzada por una web desde Chrome de una alerta real de Windows o del antivirus?",
+    opciones: [
+      "La del navegador muestra el icono de Chrome y el dominio de la web que la envía; y se corta revocando el permiso y las cookies de ese sitio",
+      "No se puede distinguir, son idénticas",
+      "Las reales suenan más fuerte",
+      "Las falsas solo aparecen de noche"
+    ],
+    correcta: 0,
+    explicacion: "Toda notificación de navegador delata su origen: icono de Chrome + dominio del sitio. Windows o el antivirus no te piden «hacer clic para limpiar virus». El arreglo es el que aplicó IT en el caso real del estudio: Configuración del sitio → quitar permiso de notificaciones y borrar sus cookies."
+  },
+  {
+    cat: "dificil", tema: "Contraseñas en el navegador",
+    pregunta: "Tras una infección por infostealer, IT insiste: nada de guardar contraseñas del trabajo en el navegador. ¿Por qué tanto empeño?",
+    opciones: [
+      "Un infostealer exporta en segundos todas las contraseñas y cookies guardadas en el navegador; el gestor corporativo con MFA resiste, el navegador no",
+      "Manía de IT: el navegador las cifra y es suficiente",
+      "Porque el navegador solo puede guardar diez contraseñas",
+      "Porque ralentizan el arranque de Chrome"
+    ],
+    correcta: 0,
+    explicacion: "Robar el almacén de contraseñas del navegador es la PRIMERA acción de cualquier infostealer moderno: un archivo, un segundo, todas tus cuentas. Un gestor corporativo serio exige autenticación aparte y MFA. La comodidad del «¿guardar contraseña?» es exactamente lo que explota el atacante."
+  },
+  {
+    cat: "dificil", tema: "Herramientas de soporte",
+    pregunta: "Para una sesión remota que SÍ pediste, el técnico te adjunta por email el ejecutable de conexión. ¿Cuál es la práctica correcta?",
+    opciones: [
+      "Descargar tú la herramienta desde la web oficial (o usar la corporativa de siempre): un .exe adjunto es mal canal aunque el contexto sea legítimo",
+      "Ejecutar el adjunto: la sesión la pediste tú, no hay riesgo",
+      "Ejecutarlo si el email tiene la firma corporativa del técnico",
+      "Reenviárselo a un compañero para que lo pruebe él antes"
+    ],
+    correcta: 0,
+    explicacion: "El contexto legítimo no convierte en seguro el canal: un email puede venir suplantado o el buzón del técnico comprometido justo cuando esperas su adjunto. Las herramientas de soporte se descargan de su fuente oficial o ya están instaladas por IT. Costumbre sana: ejecutables por email, nunca."
+  },
 
-  /* ───── EXTREMA (7) ───── */
+  /* ───── EXTREMA (11) ───── */
   {
     cat: "extrema", tema: "Zero-day",
     pregunta: "¿Por qué una vulnerabilidad «zero-day» es especialmente peligrosa?",
@@ -898,6 +1225,54 @@ const POOL_CIBERGAME3 = [
     ],
     correcta: 0,
     explicacion: "Con tu certificado, el atacante ES el estudio ante la administración: puede firmar ofertas, avales o contratos. Revocación inmediata (FNMT/CA), aviso a las plataformas y, de ahí en adelante, certificado en token físico, no en un archivo .p12 en el escritorio."
+  },
+  {
+    cat: "extrema", tema: "Infostealer y sesiones",
+    pregunta: "Tras unas semanas de falsas alertas de virus, IT encuentra un infostealer que llevaba todo ese tiempo robando contraseñas y cookies del navegador. Limpian el equipo. ¿Por qué NO basta con eso?",
+    opciones: [
+      "Lo robado sigue en manos del atacante: hay que rotar todas las contraseñas, cerrar TODAS las sesiones abiertas (las cookies robadas saltan el MFA) y revisar reglas de buzón",
+      "Sí basta: sin malware ya no hay riesgo",
+      "Basta con cambiar la contraseña de Windows",
+      "Basta con vigilar el equipo unas semanas"
+    ],
+    correcta: 0,
+    explicacion: "Limpiar el equipo cierra la puerta, pero las llaves ya están copiadas: con una cookie de sesión robada se entra en tu correo SIN contraseña y SIN MFA. Respuesta completa: rotar credenciales, invalidar sesiones en todos los servicios, revisar reglas de reenvío y vigilar accesos anómalos."
+  },
+  {
+    cat: "extrema", tema: "Estafa de soporte",
+    pregunta: "Un compañero llamó al teléfono que salía en un popup «de Microsoft», dio control remoto al «técnico» y pagó 300 € por una «limpieza». ¿Cuál es la respuesta correcta del estudio?",
+    opciones: [
+      "Aislar el equipo, cancelar la tarjeta, cambiar credenciales desde un equipo limpio, denunciar… y reportar sin culpabilizar para que el siguiente avise antes",
+      "Descontarle los 300 € de la nómina y caso cerrado",
+      "Cambiar solo la contraseña del correo y seguir trabajando",
+      "Nada: pagó él, es un problema personal"
+    ],
+    correcta: 0,
+    explicacion: "El falso técnico tuvo control TOTAL del equipo: pudo dejar puertas traseras y copiar credenciales — el daño no son los 300 €. Hay que tratar el equipo como comprometido y los accesos como robados. Y cuidar la cultura: si reportar sale caro, el próximo incidente te lo contarán tarde."
+  },
+  {
+    cat: "extrema", tema: "Tercero de confianza",
+    pregunta: "Os llega un archivo infectado a través del CDE oficial de un CLIENTE (su red estaba comprometida). El antivirus lo para de milagro. ¿Qué lección estratégica deja?",
+    opciones: [
+      "La confianza en el origen no exime del análisis: todo lo entrante se analiza (AV/EDR), la red se segmenta y al cliente se le avisa formalmente",
+      "Dejar de trabajar con ese cliente para siempre",
+      "Excluir el CDE del antivirus para que no moleste al flujo",
+      "Nada: fue mala suerte y el antivirus ya lo paró"
+    ],
+    correcta: 0,
+    explicacion: "Los canales «de confianza» (cliente, colaborador, ingeniería) son los favoritos del atacante precisamente porque nadie los mira con lupa. Análisis de todo lo entrante venga de quien venga, segmentación para contener, y aviso formal al cliente: hoy por ti, mañana por mí."
+  },
+  {
+    cat: "extrema", tema: "Anatomía de un incidente",
+    pregunta: "Reconstrucción de un caso real: cliente con prisa → falta un bloque CAD → web dudosa → permiso de notificaciones aceptado → semanas de falsas alertas de virus. ¿Cuál era el corte más barato y temprano de la cadena?",
+    opciones: [
+      "Tener una vía rápida y conocida para conseguir assets (biblioteca interna, fuentes aprobadas, pedir ayuda a IT) para que la prisa no empuje a webs dudosas",
+      "Prohibir descargar nada de internet, sin excepciones",
+      "Que el antivirus bloquee todas las notificaciones",
+      "No aceptar encargos de última hora de los clientes"
+    ],
+    correcta: 0,
+    explicacion: "Los incidentes casi nunca los causa la maldad, sino la prisa sin alternativa segura: el eslabón más barato de cortar es darle a la gente un camino bueno Y rápido (biblioteca de bloques, fuentes aprobadas, un canal ágil con IT/soporte). Las prohibiciones absolutas solo crean atajos peores."
   }
 ];
 
