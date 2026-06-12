@@ -5,53 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Informe Tecnológico — b720 Fermín Vázquez Arquitectos</title>
+  <link rel="stylesheet" href="design-system/tokens.css" />
   <style>
-    :root {
-      /* Paleta corporativa b720 — IN-Formación v1.3 (Colores.pdf)
-         Pantone Neutral Black #4B4846 · Gris Medio #9D9894 · Gris Claro #F2F1F0
-         Blanco #FFFFFF · Naranja #D27533 — el negro puro (#000) está prohibido.
-         Texto sobre fondo plano: siempre Blanco (nunca Gris Claro). */
-      --brand-d:  #4B4846;
-      --brand-l:  #9D9894;
-      --bg:       #4B4846;
-      --bg2:      #514E4B; /* Neutral Black elevado (panel) */
-      --bg3:      #555250;
-      --card:     #555250; /* Neutral Black elevado (tarjeta) */
-      --border:   #6B6764;
-      --text:     #FFFFFF;
-      --muted:    #9D9894; /* Black 0961 — texto secundario */
-      --white:    #FFFFFF;
-    }
+    /* Estética b720.com — tokens en design-system/tokens.css
+       Combinaciones de color según IN-Formación v1.3 (Colores.pdf):
+       Neutral Black sobre Gris Claro/Blanco · Blanco sobre Neutral Black
+       Black 0961 solo sobre Blanco · negro puro prohibido. */
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
+      font-family: var(--b720-font-base);
+      background: var(--b720-bg);
+      color: var(--b720-text);
+      line-height: var(--b720-lh-body);
       font-size: 16px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    a { color: var(--white); text-decoration: none; }
+    a { color: inherit; text-decoration: none; }
 
     /* ─── NAVEGACIÓN FLUIDA ──────────────────── */
     body { animation: pageIn .35s ease; }
     @keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
     body.page-exit { opacity: 0; transition: opacity .22s ease; }
 
-    /* ─── TOPBAR ─────────────────────────────── */
+    /* ─── TOPBAR (Blanco sobre Neutral Black) ── */
     .topbar {
       position: fixed; top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(75,72,70,.96);
+      background: rgba(75,72,70,.97);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      color: var(--b720-text-inverse);
       padding: 0 40px;
       height: 64px;
       display: flex;
@@ -60,7 +49,7 @@
     }
     .topbar-brand { display: flex; align-items: center; }
     .topbar-brand img { height: 30px; width: auto; display: block; }
-    .topbar-meta { font-size: 12px; color: var(--muted); }
+    .topbar-meta { font-size: 12px; color: rgba(255,255,255,.65); }
     @media (max-width: 600px) { .topbar-meta { display: none; } }
     .topbar-left { display: flex; align-items: center; gap: 32px; }
 
@@ -69,21 +58,21 @@
     .nav-toggle {
       font-family: inherit;
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .1em;
+      font-weight: var(--b720-weight-bold);
+      letter-spacing: var(--b720-tracking-label);
       text-transform: uppercase;
-      color: var(--text);
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--border);
-      border-radius: 100px;
+      color: var(--b720-text-inverse);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: var(--b720-radius);
       padding: 8px 18px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: border-color .2s;
+      transition: border-color .2s, color .2s;
     }
-    .nav-toggle:hover { border-color: rgba(255,255,255,.45); }
+    .nav-toggle:hover { border-color: var(--b720-accent); color: var(--b720-accent); }
     .nav-toggle .caret { font-size: 9px; transition: transform .2s; }
     .topbar-nav.open .caret { transform: rotate(180deg); }
     .nav-dropdown {
@@ -91,36 +80,57 @@
       top: calc(100% + 12px);
       left: 0;
       min-width: 340px;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: var(--b720-bg-card);
+      border: 1px solid var(--b720-border);
+      border-radius: var(--b720-radius);
       padding: 8px;
       display: none;
-      box-shadow: 0 16px 48px rgba(45,43,42,.6);
+      box-shadow: 0 12px 32px rgba(75,72,70,.18);
+      color: var(--b720-text);
     }
     .topbar-nav.open .nav-dropdown { display: block; }
     .nav-dropdown a {
       display: block;
       padding: 12px 14px;
-      border-radius: 8px;
+      border-radius: var(--b720-radius);
       font-size: 13px;
       line-height: 1.45;
-      color: var(--text);
+      color: var(--b720-text);
     }
-    .nav-dropdown a:hover { background: rgba(255,255,255,.06); text-decoration: none; }
+    .nav-dropdown a:hover { background: var(--b720-gris-claro); text-decoration: none; }
     .nav-dropdown .nd-date {
       display: block;
       font-size: 10px;
-      letter-spacing: .08em;
+      letter-spacing: var(--b720-tracking-label);
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--b720-text-muted);
       margin-bottom: 3px;
+    }
+    /* Juego retirado: visible pero sin enlace */
+    .nav-dropdown .nd-item-off {
+      display: block;
+      padding: 12px 14px;
+      border-radius: var(--b720-radius);
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--b720-text-muted);
+      opacity: .65;
+      cursor: not-allowed;
+      user-select: none;
+    }
+    .nav-dropdown .nd-item-off .nd-off {
+      display: block;
+      margin-top: 3px;
+      font-size: 10px;
+      letter-spacing: var(--b720-tracking-label);
+      text-transform: uppercase;
+      color: var(--b720-text-muted);
     }
 
     /* ─── HEADER ─────────────────────────────── */
     .hub-header {
       padding: 150px 40px 60px;
-      max-width: 1100px;
+      max-width: var(--b720-container);
       margin: 0 auto;
       width: 100%;
     }
@@ -129,21 +139,21 @@
       align-items: center;
       gap: 8px;
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .14em;
+      font-weight: var(--b720-weight-bold);
+      letter-spacing: var(--b720-tracking-label);
       text-transform: uppercase;
-      color: var(--white);
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.18);
+      color: var(--b720-text);
+      border: 1px solid var(--b720-neutral-black);
       padding: 5px 14px;
-      border-radius: 100px;
+      border-radius: var(--b720-radius);
       margin-bottom: 28px;
+      background: var(--b720-bg-card);
     }
     .eyebrow::before {
       content: '';
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--white);
+      background: var(--b720-naranja);
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
@@ -152,23 +162,26 @@
     }
     .hub-header h1 {
       font-size: clamp(32px, 5vw, 56px);
-      font-weight: 700;
-      line-height: 1.1;
+      font-weight: var(--b720-weight-bold);
+      line-height: var(--b720-lh-heading);
       letter-spacing: -0.01em;
-      color: var(--white);
+      color: var(--b720-text);
       margin-bottom: 18px;
     }
-    .hub-header h1 span { color: var(--brand-l); }
+    /* Resaltado tipo marcador, como los subrayados amarillos de b720.com */
+    .hub-header h1 span {
+      background: linear-gradient(transparent 58%, var(--b720-accent) 58%);
+    }
     .hub-sub {
       font-size: clamp(15px, 2vw, 17px);
-      color: var(--muted);
+      color: var(--b720-text);
       max-width: 620px;
       line-height: 1.65;
     }
 
     /* ─── GRID DE NOTICIAS ───────────────────── */
     .news-grid {
-      max-width: 1100px;
+      max-width: var(--b720-container);
       margin: 0 auto;
       padding: 20px 40px 100px;
       width: 100%;
@@ -180,15 +193,16 @@
     .news-card {
       display: flex;
       flex-direction: column;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      background: var(--b720-bg-card);
+      border: 1px solid var(--b720-surface-2);
+      border-radius: var(--b720-radius);
       overflow: hidden;
-      transition: border-color .2s, transform .2s;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
     }
     .news-card:hover {
-      border-color: rgba(255,255,255,.4);
+      border-color: var(--b720-neutral-black);
       transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(75,72,70,.14);
       text-decoration: none;
     }
     .news-card img {
@@ -196,7 +210,7 @@
       height: 200px;
       object-fit: cover;
       display: block;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--b720-surface-2);
     }
     .news-body { padding: 24px 26px 28px; display: flex; flex-direction: column; flex: 1; }
     .news-meta {
@@ -208,58 +222,174 @@
     }
     .news-date {
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .1em;
+      font-weight: var(--b720-weight-bold);
+      letter-spacing: var(--b720-tracking-label);
       text-transform: uppercase;
-      color: var(--brand-d);
-      background: var(--white);
+      color: var(--b720-neutral-black);
+      background: var(--b720-accent);
       padding: 3px 10px;
-      border-radius: 100px;
+      border-radius: var(--b720-radius);
     }
     .news-tag {
       font-size: 11px;
       letter-spacing: .06em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--b720-text-muted);
     }
     .news-body h2 {
       font-size: 19px;
-      font-weight: 600;
+      font-weight: var(--b720-weight-bold);
       letter-spacing: -0.01em;
       line-height: 1.3;
-      color: var(--white);
+      color: var(--b720-text);
       margin-bottom: 10px;
     }
     .news-body p {
       font-size: 14px;
-      color: var(--muted);
+      color: var(--b720-text-muted);
       line-height: 1.6;
       margin-bottom: 20px;
       flex: 1;
     }
     .news-link {
+      align-self: flex-start;
       font-size: 12px;
-      font-weight: 600;
-      letter-spacing: .08em;
+      font-weight: var(--b720-weight-bold);
+      letter-spacing: var(--b720-tracking-label);
       text-transform: uppercase;
-      color: var(--white);
+      color: var(--b720-text);
+      border-bottom: 2px solid var(--b720-accent);
+      padding-bottom: 2px;
     }
-    .news-card:hover .news-link { text-decoration: underline; }
+    .news-card:hover .news-link { background: var(--b720-accent); }
 
-    /* ─── FOOTER ─────────────────────────────── */
+    /* ─── FOOTER (Blanco sobre Neutral Black) ── */
     footer {
-      background: var(--bg);
-      border-top: 1px solid var(--border);
+      background: var(--b720-bg-inverse);
+      color: rgba(255,255,255,.65);
       padding: 32px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 13px;
-      color: var(--muted);
       flex-wrap: wrap;
       gap: 12px;
     }
-    footer span { color: var(--white); font-weight: 500; }
+    footer span { color: var(--b720-text-inverse); font-weight: 500; }
+
+    /* ─── MENÚ LATERAL (móvil, estilo b720.com) ─ */
+    .menu-btn {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 42px;
+      height: 42px;
+      padding: 9px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .menu-btn span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: var(--b720-blanco);
+      border-radius: 2px;
+    }
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 290;
+      background: rgba(75,72,70,.55);
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .drawer-overlay.show { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      z-index: 295;
+      width: min(82vw, 340px);
+      background: var(--b720-bg-inverse);
+      color: var(--b720-text-inverse);
+      border-left: 1px solid rgba(255,255,255,.16);
+      transform: translateX(100%);
+      transition: transform .3s ease;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.16);
+      flex-shrink: 0;
+    }
+    .drawer-head img { height: 24px; width: auto; display: block; }
+    .drawer-close {
+      font-family: inherit;
+      background: none;
+      border: 1px solid rgba(255,255,255,.35);
+      color: var(--b720-text-inverse);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .drawer-nav { padding: 4px 0 32px; }
+    .drawer-group {
+      font-size: 10px;
+      font-weight: var(--b720-weight-bold);
+      letter-spacing: var(--b720-tracking-label);
+      text-transform: uppercase;
+      color: rgba(255,255,255,.6);
+      padding: 24px 24px 10px;
+    }
+    .drawer-nav a {
+      display: block;
+      padding: 13px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--b720-text-inverse);
+      line-height: 1.4;
+      border-left: 3px solid transparent;
+    }
+    .drawer-nav a:hover { background: rgba(255,255,255,.08); text-decoration: none; }
+    .drawer-nav a.active { border-left-color: var(--b720-accent); background: rgba(255,255,255,.05); }
+    .drawer-nav a span {
+      display: block;
+      font-size: 11px;
+      color: rgba(255,255,255,.6);
+      margin-top: 2px;
+    }
+    /* Juego retirado: visible pero sin enlace */
+    .drawer-nav .drawer-off {
+      display: block;
+      padding: 13px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: rgba(255,255,255,.55);
+      opacity: .7;
+      cursor: not-allowed;
+      user-select: none;
+      border-left: 3px solid transparent;
+    }
+    .drawer-nav .drawer-off span {
+      display: block;
+      font-size: 11px;
+      margin-top: 2px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
 
     /* ─── MÓVIL / TABLET ─────────────────────── */
     html, body { overflow-x: clip; }
@@ -267,13 +397,9 @@
       .topbar { padding: 0 16px; }
       .topbar-left { gap: 14px; }
       .topbar-brand img { height: 24px; }
-      .nav-dropdown {
-        position: fixed;
-        top: 64px;
-        left: 12px;
-        right: 12px;
-        min-width: 0;
-      }
+      .topbar-nav { display: none; }
+      .topbar-meta { display: none; }
+      .menu-btn { display: flex; }
       .hub-header { padding: 120px 20px 36px; }
       .news-grid { padding: 10px 20px 70px; grid-template-columns: 1fr; }
       footer { padding: 24px 20px; }
@@ -305,10 +431,11 @@
         Juegos <span class="caret">▾</span>
       </button>
       <div class="nav-dropdown">
-        <a href="juegos/backs.html">
+        <span class="nd-item-off" aria-disabled="true">
           <span class="nd-date">Cibergame 1</span>
-          El arquitecto atacado — simulador de amenazas
-        </a>
+          El arquitecto atacado
+          <span class="nd-off">No disponible</span>
+        </span>
         <a href="juegos/cibergame2.html">
           <span class="nd-date">Cibergame 2</span>
           Protocolo de seguridad — quiz de ciberseguridad
@@ -324,7 +451,30 @@
          copiar aquí otro bloque <div class="topbar-nav"> con su botón y desplegable -->
   </div>
   <span class="topbar-meta">Informe Tecnológico · b720 Estudio</span>
+  <button class="menu-btn" id="menuBtn" type="button" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- ── MENÚ LATERAL (móvil) ────────────────────────────── -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-label="Menú de navegación">
+  <div class="drawer-head">
+    <img src="NVIDIA_RTX_Spark_assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+    <button class="drawer-close" id="drawerClose" type="button" aria-label="Cerrar menú">✕</button>
+  </div>
+  <nav class="drawer-nav">
+    <div class="drawer-group">Noticias</div>
+    <a href="NVIDIA_RTX_Spark_Informe_Arquitectura.html">NVIDIA RTX Spark: el superchip que reinventa el PC<span>Junio 2026</span></a>
+    <!-- Añadir aquí nuevas noticias (copiar el bloque <a> anterior) -->
+    <a href="index.html" class="active">Ver todas las noticias<span>Inicio</span></a>
+    <div class="drawer-group">Juegos</div>
+    <span class="drawer-off" aria-disabled="true">El arquitecto atacado<span>Cibergame 1 · No disponible</span></span>
+    <a href="juegos/cibergame2.html">Protocolo de seguridad<span>Cibergame 2 · quiz de ciberseguridad</span></a>
+    <a href="juegos/cibergame3.html">La torre ciberresiliente<span>Cibergame 3 · contrarreloj por plantas</span></a>
+    <!-- Añadir aquí nuevos juegos (copiar el bloque <a> anterior) -->
+  </nav>
+</aside>
 
 
 <!-- ── CABECERA ───────────────────────────────────────── -->
@@ -383,7 +533,7 @@
 <!-- ── FOOTER ─────────────────────────────────────────── -->
 <footer>
   <div>
-    <strong style="color:var(--white);">Informe Tecnológico</strong> ·
+    <strong style="color:var(--b720-blanco);">Informe Tecnológico</strong> ·
     Noticias y análisis del estudio
   </div>
   <div>
@@ -418,8 +568,28 @@
     });
   });
 
+  // Menú lateral (móvil)
+  var drawer = document.getElementById('drawer');
+  var drawerOverlay = document.getElementById('drawerOverlay');
+  var menuBtn = document.getElementById('menuBtn');
+  function cerrarDrawer() {
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  menuBtn.addEventListener('click', function () {
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('show');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  });
+  document.getElementById('drawerClose').addEventListener('click', cerrarDrawer);
+  drawerOverlay.addEventListener('click', cerrarDrawer);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrarDrawer(); });
+
   // Navegación fluida: fundido de salida antes de cambiar de página
-  var enlaces = Array.prototype.slice.call(document.querySelectorAll('.nav-dropdown a'));
+  var enlaces = Array.prototype.slice.call(document.querySelectorAll('.nav-dropdown a, .drawer-nav a'));
   enlaces.forEach(function (link) {
     if (link.target === '_blank') return;
     link.addEventListener('click', function (e) {
@@ -431,7 +601,10 @@
   });
   // Si se vuelve con el botón "atrás" (bfcache), restauramos la opacidad
   window.addEventListener('pageshow', function (e) {
-    if (e.persisted) document.body.classList.remove('page-exit');
+    if (e.persisted) {
+      document.body.classList.remove('page-exit');
+      cerrarDrawer();
+    }
   });
 })();
 </script>

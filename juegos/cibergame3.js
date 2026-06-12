@@ -1,10 +1,12 @@
 /* =====================================================
    CIBERGAME 3 — LA TORRE CIBERRESILIENTE
-   Misma base que Cibergame 2 (piscina compartida,
-   8 preguntas, 3 vidas, final 2 difíciles + 1 extrema)
-   con dos mecánicas propias:
-   · cada acierto construye una planta de la torre
+   Misma base que Cibergame 2 (8 preguntas, 3 vidas,
+   final 2 difíciles + 1 extrema) pero con piscina propia
+   (POOL_CIBERGAME3 en preguntas.js) y mecánicas propias:
+   · cada acierto construye una planta (de plano a edificio)
+   · cada fallo deja la planta mal hecha
    · temporizador por pregunta (agotarlo = fallo)
+   · torre perfecta (8/8) → celebración con bolita
    ===================================================== */
 
 const TOTAL_VIDAS = 3;
@@ -33,7 +35,7 @@ function mostrarPantalla(id) {
 
 /* ─── Inicio ─── */
 function empezarPartida() {
-  setPartida = generarSetPartida();
+  setPartida = generarSetPartida(POOL_CIBERGAME3);
   indicePregunta = 0;
   vidas = TOTAL_VIDAS;
   puntos = 0;
@@ -41,6 +43,7 @@ function empezarPartida() {
 
   // Reset de la torre
   document.querySelectorAll(".floor").forEach(f => f.classList.remove("built", "damaged"));
+  $("tower-svg").classList.remove("tower-complete");
   $("tower-crown").classList.remove("show");
   $("floors-built").textContent = "0";
 
@@ -109,7 +112,13 @@ function construirPlanta(indice) {
   const planta = $("floor-" + indice);
   if (planta) planta.classList.add("built");
   $("floors-built").textContent = aciertos;
-  if (aciertos === TOTAL_PLANTAS) $("tower-crown").classList.add("show");
+
+  // Torre perfecta (8/8): coronación + celebración (ventanas encendidas
+  // y la bolita rebotando por los retranqueos hasta el suelo)
+  if (aciertos === TOTAL_PLANTAS) {
+    $("tower-crown").classList.add("show");
+    $("tower-svg").classList.add("tower-complete");
+  }
 }
 
 function dañarPlanta(indice) {

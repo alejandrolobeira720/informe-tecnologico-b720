@@ -17,11 +17,45 @@
 </head>
 <body>
 
-  <!-- ── TOPBAR ──────────────────────────────── -->
+  <!-- ── TOPBAR (la misma del hub, persistente) ── -->
   <nav class="topbar">
-    <a class="topbar-brand" href="../index.html" title="Volver al Informe Tecnológico" aria-label="Volver al Informe Tecnológico b720">
-      <img src="assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
-    </a>
+    <div class="topbar-left">
+      <a class="topbar-brand" href="../index.html" title="Volver al Informe Tecnológico" aria-label="Volver al Informe Tecnológico b720">
+        <img src="assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+      </a>
+      <div class="topbar-nav">
+        <button class="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Noticias <span class="caret">▾</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../NVIDIA_RTX_Spark_Informe_Arquitectura.html">
+            <span class="nd-date">Junio 2026</span>
+            NVIDIA RTX Spark: el superchip que reinventa el PC
+          </a>
+          <a class="nd-all" href="../index.html">← Ver todas las noticias</a>
+        </div>
+      </div>
+      <div class="topbar-nav">
+        <button class="nav-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Juegos <span class="caret">▾</span>
+        </button>
+        <div class="nav-dropdown">
+          <span class="nd-item-off" aria-disabled="true">
+            <span class="nd-date">Cibergame 1</span>
+            El arquitecto atacado
+            <span class="nd-off">No disponible</span>
+          </span>
+          <a href="cibergame2.html" class="active">
+            <span class="nd-date">Cibergame 2</span>
+            Protocolo de seguridad — quiz de ciberseguridad
+          </a>
+          <a href="cibergame3.html">
+            <span class="nd-date">Cibergame 3</span>
+            La torre ciberresiliente — contrarreloj por plantas
+          </a>
+        </div>
+      </div>
+    </div>
     <span class="topbar-meta">Cibergame · Simulación 02</span>
   </nav>
 
@@ -112,16 +146,46 @@
   <script src="preguntas.js"></script>
   <script src="cibergame2.js"></script>
   <script>
-    // Fundido de salida al volver al hub
-    document.querySelector("a.topbar-brand").addEventListener("click", function (e) {
-      e.preventDefault();
-      var href = this.getAttribute("href");
-      document.body.classList.add("page-exit");
-      setTimeout(function () { window.location.href = href; }, 220);
-    });
-    window.addEventListener("pageshow", function (e) {
-      if (e.persisted) document.body.classList.remove("page-exit");
-    });
+    // Topbar del hub: desplegables exclusivos + navegación fluida
+    (function () {
+      var navs = Array.prototype.slice.call(document.querySelectorAll(".topbar-nav"));
+      navs.forEach(function (nav) {
+        var toggle = nav.querySelector(".nav-toggle");
+        toggle.addEventListener("click", function (e) {
+          e.stopPropagation();
+          navs.forEach(function (otro) {
+            if (otro !== nav) {
+              otro.classList.remove("open");
+              otro.querySelector(".nav-toggle").setAttribute("aria-expanded", "false");
+            }
+          });
+          var open = nav.classList.toggle("open");
+          toggle.setAttribute("aria-expanded", open);
+        });
+      });
+      document.addEventListener("click", function (e) {
+        navs.forEach(function (nav) {
+          if (!nav.contains(e.target)) {
+            nav.classList.remove("open");
+            nav.querySelector(".nav-toggle").setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      // Fundido de salida en el logo y en los enlaces de los desplegables
+      var enlaces = Array.prototype.slice.call(document.querySelectorAll(".nav-dropdown a, a.topbar-brand"));
+      enlaces.forEach(function (link) {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          var href = link.getAttribute("href");
+          document.body.classList.add("page-exit");
+          setTimeout(function () { window.location.href = href; }, 220);
+        });
+      });
+      window.addEventListener("pageshow", function (e) {
+        if (e.persisted) document.body.classList.remove("page-exit");
+      });
+    })();
   </script>
 </body>
 </html>

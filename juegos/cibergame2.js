@@ -1,6 +1,6 @@
 /* =====================================================
    CIBERGAME 2 — PROTOCOLO DE SEGURIDAD
-   Quiz con piscina de preguntas (preguntas.js).
+   Quiz con piscina propia (POOL_CIBERGAME2 en preguntas.js).
    8 preguntas por partida · 3 vidas ·
    las 3 últimas: 2 difíciles + 1 extrema.
    ===================================================== */
@@ -24,7 +24,7 @@ function mostrarPantalla(id) {
 
 /* ─── Inicio de partida ─── */
 function empezarPartida() {
-  setPartida = generarSetPartida();
+  setPartida = generarSetPartida(POOL_CIBERGAME2);
   indicePregunta = 0;
   vidas = TOTAL_VIDAS;
   puntos = 0;

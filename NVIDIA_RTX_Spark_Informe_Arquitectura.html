@@ -5,27 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <title>NVIDIA RTX Spark — Impacto en TIC y Estudios de Arquitectura</title>
+  <link rel="stylesheet" href="design-system/tokens.css" />
   <style>
     :root {
-      /* Paleta corporativa b720 — IN-Formación v1.3 (Colores.pdf)
-         Pantone Neutral Black #4B4846 · Gris Medio #9D9894 · Gris Claro #F2F1F0
-         Blanco #FFFFFF · Naranja #D27533 — el negro puro (#000) está prohibido.
-         Texto sobre fondo plano: siempre Blanco (nunca Gris Claro). */
-      --accent:   #FFFFFF;
+      /* Paleta corporativa b720 — IN-Formación v1.3 (Colores.pdf) + b720.com
+         Tema claro como la web del estudio: Gris Claro #F2F1F0 de fondo,
+         Neutral Black #4B4846 para texto, Azul #116188 como acento de informe.
+         El negro puro (#000) está prohibido. Tokens en design-system/tokens.css */
+      --accent:   #4B4846;
       --brand-d:  #4B4846;
       --brand-l:  #9D9894;
-      --green:    #FFFFFF;
-      --green-d:  #4B4846;
-      --green-l:  #FFFFFF;
+      --green:    #116188; /* azul corporativo — acento del informe */
+      --green-d:  #116188;
+      --green-l:  #116188;
       --cyan:     #9D9894;
-      --bg:       #4B4846;
-      --bg2:      #514E4B; /* Neutral Black elevado (panel) */
-      --bg3:      #555250;
-      --card:     #555250; /* Neutral Black elevado (tarjeta) */
-      --border:   #6B6764;
-      --text:     #FFFFFF;
-      --muted:    #9D9894; /* Black 0961 — texto secundario */
+      --bg:       #F2F1F0; /* Gris Claro — fondo de página como b720.com */
+      --bg2:      #FFFFFF; /* secciones alternas */
+      --bg3:      #E3E0DC; /* superficie cálida */
+      --card:     #FFFFFF;
+      --border:   #DBDAD9;
+      --text:     #4B4846; /* Neutral Black sobre Gris Claro/Blanco */
+      --muted:    #9D9894; /* Black 0961 — secundario, sobre Blanco */
+      --ink:      #4B4846; /* énfasis: Neutral Black en claro, Blanco en oscuro */
       --white:    #FFFFFF;
+    }
+
+    /* Zonas oscuras (portada, topbar, drawer, footer):
+       Blanco sobre Neutral Black, como las portadas de informe b720
+       y con el amarillo de b720.com como acento. */
+    .topbar, .drawer, .hero, footer {
+      --bg:     #4B4846;
+      --bg2:    #514E4B;
+      --bg3:    #555250;
+      --card:   #555250;
+      --border: #6B6764;
+      --text:   #FFFFFF;
+      --muted:  rgba(255,255,255,.65);
+      --ink:    #FFFFFF;
+      --accent: #FFFD00;
+      --green:  #FFFD00;
+      --green-l:#F9F8A6;
+      --green-d:#FFFD00;
+    }
+
+    /* Los desplegables de la topbar son tarjetas blancas, como en el hub */
+    .nav-dropdown {
+      --bg2:    #FFFFFF;
+      --text:   #4B4846;
+      --muted:  #9D9894;
+      --border: #DBDAD9;
+      --ink:    #4B4846;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,7 +62,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.7;
@@ -46,9 +75,9 @@
     body.page-exit { opacity: 0; transition: opacity .22s ease; }
 
     h1, h2, h3, h4, h5 {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       letter-spacing: -0.01em;
-      font-weight: 600;
+      font-weight: 700; /* títulos siempre bold, como en b720.com */
     }
 
     a { color: var(--green); text-decoration: none; }
@@ -112,7 +141,7 @@
       border-radius: 12px;
       padding: 8px;
       display: none;
-      box-shadow: 0 16px 48px rgba(45,43,42,.6);
+      box-shadow: 0 12px 32px rgba(75,72,70,.18);
     }
     .topbar-nav.open .nav-dropdown { display: block; }
     .nav-dropdown a {
@@ -123,8 +152,8 @@
       line-height: 1.45;
       color: var(--text);
     }
-    .nav-dropdown a:hover { background: rgba(255,255,255,.06); text-decoration: none; }
-    .nav-dropdown a.active { background: rgba(255,255,255,.04); box-shadow: inset 3px 0 0 var(--white); }
+    .nav-dropdown a:hover { background: #F2F1F0; text-decoration: none; }
+    .nav-dropdown a.active { background: #F2F1F0; box-shadow: inset 3px 0 0 var(--ink); }
     .nav-dropdown .nd-date {
       display: block;
       font-size: 10px;
@@ -138,6 +167,26 @@
       margin-top: 6px;
       color: var(--muted);
       font-size: 12px;
+    }
+    /* Juego retirado: visible pero sin enlace */
+    .nav-dropdown .nd-item-off {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--muted);
+      opacity: .55;
+      cursor: not-allowed;
+      user-select: none;
+    }
+    .nav-dropdown .nd-item-off .nd-off {
+      display: block;
+      margin-top: 3px;
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
     /* ─── HERO ───────────────────────────────── */
@@ -202,10 +251,10 @@
       font-size: clamp(36px, 6vw, 72px);
       font-weight: 700;
       line-height: 1.08;
-      color: var(--white);
+      color: var(--ink);
       margin-bottom: 24px;
     }
-    .hero h1 span { color: var(--brand-l); }
+    .hero h1 span { color: var(--accent); }
 
     .hero-sub {
       font-size: clamp(15px, 2vw, 18px);
@@ -228,7 +277,7 @@
       min-width: 160px;
     }
     .stat-value {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 32px;
       font-weight: 700;
       color: var(--green);
@@ -262,7 +311,7 @@
       display: block;
       font-size: 14px;
       font-weight: 600;
-      color: var(--white);
+      color: var(--ink);
       letter-spacing: .02em;
     }
     .hero-doc-text span { font-size: 12px; color: var(--muted); }
@@ -273,7 +322,7 @@
       letter-spacing: .06em;
       text-transform: uppercase;
       color: var(--brand-d);
-      background: var(--white);
+      background: var(--ink);
       border: none;
       border-radius: 100px;
       padding: 12px 26px;
@@ -323,7 +372,7 @@
       font-weight: 600;
       letter-spacing: .08em;
       text-transform: uppercase;
-      color: var(--white);
+      color: var(--ink);
     }
     .pdf-modal-actions { display: flex; align-items: center; gap: 10px; }
     .pdf-download {
@@ -384,7 +433,7 @@
       z-index: 1;
     }
     .hero-img-overlay span {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 12px;
       font-weight: 600;
       letter-spacing: .1em;
@@ -416,7 +465,7 @@
     h2.section-title {
       font-size: clamp(26px, 4vw, 42px);
       font-weight: 700;
-      color: var(--white);
+      color: var(--ink);
       line-height: 1.15;
       margin-bottom: 20px;
     }
@@ -460,13 +509,14 @@
       border-bottom: 1px solid var(--border);
     }
     .card:hover {
-      border-color: rgba(255,255,255,.4);
+      border-color: var(--ink);
       transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(75,72,70,.12);
     }
     .card-icon {
       width: 40px; height: 40px;
       border-radius: 10px;
-      background: rgba(255,255,255,.12);
+      background: rgba(75,72,70,.08);
       display: flex; align-items: center; justify-content: center;
       margin-bottom: 16px;
       font-size: 20px;
@@ -474,7 +524,7 @@
     .card h3 {
       font-size: 17px;
       font-weight: 600;
-      color: var(--white);
+      color: var(--ink);
       margin-bottom: 10px;
     }
     .card p {
@@ -502,7 +552,7 @@
     .spec-table th {
       background: var(--card);
       color: var(--green);
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-weight: 600;
       letter-spacing: .04em;
       text-align: left;
@@ -515,7 +565,7 @@
       color: var(--text);
       vertical-align: top;
     }
-    .spec-table tr:hover td { background: rgba(255,255,255,.02); }
+    .spec-table tr:hover td { background: rgba(75,72,70,.04); }
     .spec-table td:first-child { color: var(--muted); font-weight: 500; white-space: nowrap; }
 
     /* ─── COMPARISON TABLE ───────────────────── */
@@ -532,7 +582,7 @@
     .compare-table thead tr th {
       padding: 18px 24px;
       text-align: center;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-weight: 700;
       font-size: 15px;
     }
@@ -543,14 +593,14 @@
       border-left: 1px solid var(--border);
     }
     .compare-table thead tr th.col-new {
-      background: rgba(255,255,255,.08);
-      color: var(--green);
-      border-left: 1px solid rgba(255,255,255,.3);
+      background: rgba(255,253,0,.18); /* columna destacada en amarillo b720.com */
+      color: var(--text);
+      border-left: 1px solid rgba(75,72,70,.3);
     }
     .compare-table thead tr th.col-new .badge {
       display: inline-block;
       background: var(--green);
-      color: var(--brand-d);
+      color: #FFFFFF;
       font-size: 10px;
       font-weight: 700;
       letter-spacing: .06em;
@@ -596,7 +646,7 @@
       font-weight: 600;
       letter-spacing: .05em;
       text-transform: uppercase;
-      color: var(--white);
+      color: var(--ink);
       border: 1px solid rgba(255,255,255,.35);
       border-radius: 100px;
       padding: 8px 18px;
@@ -604,7 +654,7 @@
     }
     .buy-link:hover {
       background: rgba(255,255,255,.12);
-      border-color: var(--white);
+      border-color: var(--ink);
       text-decoration: none;
     }
 
@@ -642,7 +692,7 @@
     .blockquote p {
       font-size: 18px;
       font-style: italic;
-      color: var(--white);
+      color: var(--ink);
       position: relative;
       z-index: 1;
       margin-bottom: 10px;
@@ -709,7 +759,7 @@
     }
     figure.fig-card figcaption strong {
       display: block;
-      color: var(--white);
+      color: var(--ink);
       font-size: 14px;
       margin-bottom: 4px;
     }
@@ -736,7 +786,7 @@
     @media (max-width: 800px) { .figure-split { grid-template-columns: 1fr; } }
     .diagram-wrap svg { width: 100%; height: auto; display: block; }
     .diagram-title {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 13px;
       font-weight: 600;
       color: var(--green);
@@ -788,7 +838,7 @@
     .product-badge.new { background: var(--green); color: var(--brand-d); }
     .product-card-header h4 {
       font-size: 20px;
-      color: var(--white);
+      color: var(--ink);
       margin-bottom: 4px;
     }
     .product-card-header p {
@@ -846,7 +896,7 @@
     .timeline-item h4 {
       font-size: 16px;
       font-weight: 600;
-      color: var(--white);
+      color: var(--ink);
       margin-bottom: 6px;
     }
     .timeline-item p { font-size: 14px; color: var(--muted); margin-bottom: 0; }
@@ -863,7 +913,7 @@
       content: counter(item, decimal-leading-zero);
       position: absolute;
       left: 20px; top: 18px;
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-family: 'Circular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 22px;
       font-weight: 700;
       color: rgba(255,255,255,.35);
@@ -872,7 +922,7 @@
     .num-list li strong {
       display: block;
       font-weight: 600;
-      color: var(--white);
+      color: var(--ink);
       margin-bottom: 4px;
     }
     .num-list li span { font-size: 14px; color: var(--muted); }
@@ -899,7 +949,7 @@
 
     /* ─── PILL TABLE ─────────────────────────── */
     .pill-green { background: rgba(255,255,255,.15); color: var(--green-l); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
-    .pill-cyan  { background: rgba(157,152,148,.3); color: var(--white); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
+    .pill-cyan  { background: rgba(157,152,148,.3); color: var(--ink); padding: 2px 10px; border-radius: 100px; font-size: 13px; font-weight: 600; }
     .pill-gray  { background: rgba(157,152,148,.18); color: var(--muted); padding: 2px 10px; border-radius: 100px; font-size: 13px; }
 
     /* ─── SOURCES ────────────────────────────── */
@@ -932,7 +982,7 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-    footer span { color: var(--accent); font-weight: 500; }
+    footer span { color: var(--ink); font-weight: 500; }
     .hero-brand {
       margin-bottom: 28px;
     }
@@ -942,19 +992,128 @@
       opacity: .95;
     }
 
+    /* ─── MENÚ LATERAL (móvil, estilo b720.com) ─ */
+    .menu-btn {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 42px;
+      height: 42px;
+      padding: 9px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .menu-btn span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: var(--ink);
+      border-radius: 2px;
+    }
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 290;
+      background: rgba(45,43,42,.6);
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .drawer-overlay.show { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      z-index: 295;
+      width: min(82vw, 340px);
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      transform: translateX(100%);
+      transition: transform .3s ease;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .drawer-head img { height: 24px; width: auto; display: block; }
+    .drawer-close {
+      font-family: inherit;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .drawer-nav { padding: 4px 0 32px; }
+    .drawer-group {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 24px 24px 10px;
+    }
+    .drawer-nav a {
+      display: block;
+      padding: 13px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+      border-left: 3px solid transparent;
+    }
+    .drawer-nav a:hover { background: rgba(255,255,255,.06); text-decoration: none; }
+    .drawer-nav a.active { border-left-color: var(--ink); background: rgba(255,255,255,.04); }
+    .drawer-nav a span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    /* Juego retirado en el menú lateral */
+    .drawer-nav .drawer-item-off {
+      display: block;
+      padding: 13px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1.4;
+      border-left: 3px solid transparent;
+      opacity: .55;
+      cursor: not-allowed;
+      user-select: none;
+    }
+    .drawer-nav .drawer-item-off span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
     /* ─── MÓVIL / TABLET ─────────────────────── */
     html, body { overflow-x: clip; }
     @media (max-width: 760px) {
       .topbar { padding: 0 16px; }
       .topbar-left { gap: 14px; }
       .topbar-brand img { height: 24px; }
-      .nav-dropdown {
-        position: fixed;
-        top: 64px;
-        left: 12px;
-        right: 12px;
-        min-width: 0;
-      }
+      .topbar-nav { display: none; }
+      .menu-btn { display: flex; }
       .hero { padding: 100px 20px 56px; }
       section { padding: 56px 20px; }
       .section-alt { padding: 56px 0; }
@@ -1017,10 +1176,11 @@
         Juegos <span class="caret">▾</span>
       </button>
       <div class="nav-dropdown">
-        <a href="juegos/backs.html">
+        <span class="nd-item-off" aria-disabled="true">
           <span class="nd-date">Cibergame 1</span>
-          El arquitecto atacado — simulador de amenazas
-        </a>
+          El arquitecto atacado
+          <span class="nd-off">No disponible</span>
+        </span>
         <a href="juegos/cibergame2.html">
           <span class="nd-date">Cibergame 2</span>
           Protocolo de seguridad — quiz de ciberseguridad
@@ -1036,7 +1196,30 @@
          copiar aquí otro bloque <div class="topbar-nav"> con su botón y desplegable -->
   </div>
   <span class="topbar-meta">Informe Tecnológico · NVIDIA RTX Spark · Junio 2026</span>
+  <button class="menu-btn" id="menuBtn" type="button" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- ── MENÚ LATERAL (móvil) ────────────────────────────── -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-label="Menú de navegación">
+  <div class="drawer-head">
+    <img src="NVIDIA_RTX_Spark_assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
+    <button class="drawer-close" id="drawerClose" type="button" aria-label="Cerrar menú">✕</button>
+  </div>
+  <nav class="drawer-nav">
+    <div class="drawer-group">Noticias</div>
+    <a href="NVIDIA_RTX_Spark_Informe_Arquitectura.html" class="active">NVIDIA RTX Spark: el superchip que reinventa el PC<span>Junio 2026</span></a>
+    <!-- Añadir aquí nuevas noticias (copiar el bloque <a> anterior) -->
+    <a href="index.html">Ver todas las noticias<span>Inicio</span></a>
+    <div class="drawer-group">Juegos</div>
+    <span class="drawer-item-off" aria-disabled="true">El arquitecto atacado<span>Cibergame 1 · No disponible</span></span>
+    <a href="juegos/cibergame2.html">Protocolo de seguridad<span>Cibergame 2 · quiz de ciberseguridad</span></a>
+    <a href="juegos/cibergame3.html">La torre ciberresiliente<span>Cibergame 3 · contrarreloj por plantas</span></a>
+    <!-- Añadir aquí nuevos juegos (copiar el bloque <a> anterior) -->
+  </nav>
+</aside>
 
 
 <!-- ── HERO ───────────────────────────────────────────── -->
@@ -1075,7 +1258,7 @@
       <div class="hero-doc-icon">📄</div>
       <div class="hero-doc-text">
         <strong>Evaluación Tecnológica: Sistema NVIDIA RTX Spark</strong>
-        <span>Documento técnico completo del estudio · PDF</span>
+        <span>Documento resumido · Conclusiones y opinión personal al final, para una lectura ligera · PDF</span>
       </div>
       <button class="pdf-btn" id="openPdfBtn" type="button">Ver documento</button>
     </div>
@@ -1497,7 +1680,7 @@
     Información y la Comunicación.
   </p>
 
-  <h3 style="color:var(--white); font-size:20px; margin-bottom:16px;">Ruptura del duopolio Intel/AMD</h3>
+  <h3 style="color:var(--ink); font-size:20px; margin-bottom:16px;">Ruptura del duopolio Intel/AMD</h3>
   <p>
     Durante más de cuatro décadas, el mercado de PCs con Windows se ha definido por la arquitectura
     x86, con Intel y AMD como únicos proveedores de procesadores relevantes. La llegada de los chips
@@ -1570,7 +1753,7 @@
     </div>
   </div>
 
-  <h3 style="color:var(--white); font-size:20px; margin-bottom:16px; margin-top:48px;">Comparativa con el ecosistema actual</h3>
+  <h3 style="color:var(--ink); font-size:20px; margin-bottom:16px; margin-top:48px;">Comparativa con el ecosistema actual</h3>
   <div class="compare-wrap" style="margin-bottom: 32px;">
     <table class="compare-table">
       <thead>
@@ -1635,7 +1818,7 @@
     <cite>— WhattsNew.com, análisis Computex 2026</cite>
   </div>
 
-  <h3 style="color:var(--white); font-size:20px; margin-bottom:16px; margin-top:48px;">Implicaciones para la infraestructura TIC empresarial</h3>
+  <h3 style="color:var(--ink); font-size:20px; margin-bottom:16px; margin-top:48px;">Implicaciones para la infraestructura TIC empresarial</h3>
   <ul class="num-list">
     <li>
       <strong>Reducción de dependencia cloud para inferencia de IA</strong>
@@ -1702,7 +1885,7 @@
     </figure>
   </div>
 
-  <h3 style="color:var(--white); font-size:22px; margin:40px 0 20px;">
+  <h3 style="color:var(--ink); font-size:22px; margin:40px 0 20px;">
     Áreas de impacto directo para nuestro estudio
   </h3>
 
@@ -1776,7 +1959,7 @@
     </div>
   </div>
 
-  <h3 style="color:var(--white); font-size:20px; margin-bottom:20px;">
+  <h3 style="color:var(--ink); font-size:20px; margin-bottom:20px;">
     Tabla de impacto por herramienta AEC
   </h3>
   <div class="table-scroll" style="margin-bottom:40px;">
@@ -1849,7 +2032,7 @@
     <cite>— Análisis propio basado en especificaciones publicadas</cite>
   </div>
 
-  <h3 style="color:var(--white); font-size:20px; margin:40px 0 20px;">Consideraciones de transición</h3>
+  <h3 style="color:var(--ink); font-size:20px; margin:40px 0 20px;">Consideraciones de transición</h3>
   <div class="grid-2">
     <div class="highlight-box">
       <h3>✅ Lo que funcionará bien desde el primer día</h3>
@@ -1860,7 +2043,7 @@
       </p>
     </div>
     <div class="highlight-box" style="border-color: rgba(210,117,51,.4); background: rgba(210,117,51,.08);">
-      <h3 style="color: var(--white);">⚠️ Puntos de atención durante la transición</h3>
+      <h3 style="color: var(--ink);">⚠️ Puntos de atención durante la transición</h3>
       <p>
         Aplicaciones heredadas x86 sin versión ARM64 funcionarán mediante emulación Prism,
         con un impacto en rendimiento del 15-25%. Los títulos con antitrampas pueden tener
@@ -1958,7 +2141,7 @@
 
   <div class="grid-2">
     <div>
-      <h3 style="color:var(--white); font-size:18px; margin-bottom:12px;">Para el sector TIC</h3>
+      <h3 style="color:var(--ink); font-size:18px; margin-bottom:12px;">Para el sector TIC</h3>
       <p>El RTX Spark consolida la tendencia hacia chips altamente integrados que eliminen
         la separación tradicional CPU/GPU/NPU. El ecosistema CUDA en ARM supone la mayor
         disrupción en el mercado de PCs profesionales desde la introducción de los
@@ -1968,7 +2151,7 @@
         a largo plazo. Intel y AMD deberán responder con propuestas de integración similares.</p>
     </div>
     <div>
-      <h3 style="color:var(--white); font-size:18px; margin-bottom:12px;">Para el estudio de arquitectura</h3>
+      <h3 style="color:var(--ink); font-size:18px; margin-bottom:12px;">Para el estudio de arquitectura</h3>
       <p>La llegada del RTX Spark representa una oportunidad de modernizar el parque de
         hardware del estudio con un coste de propiedad reducido, mayor rendimiento y
         la posibilidad de integrar IA local en los flujos de trabajo BIM, renderizado
@@ -1979,7 +2162,7 @@
     </div>
   </div>
 
-  <h3 style="color:var(--white); font-size:20px; margin:48px 0 20px;">Acciones recomendadas</h3>
+  <h3 style="color:var(--ink); font-size:20px; margin:48px 0 20px;">Acciones recomendadas</h3>
   <ul class="num-list">
     <li>
       <strong>Auditoría de software (inmediata)</strong>
@@ -2078,7 +2261,7 @@
 <!-- ── FOOTER ──────────────────────────────────────────── -->
 <footer>
   <div>
-    <strong style="color:var(--white);">Informe Tecnológico</strong> ·
+    <strong style="color:var(--ink);">Informe Tecnológico</strong> ·
     NVIDIA RTX Spark: Impacto en TIC y Estudios de Arquitectura
   </div>
   <div>
@@ -2129,8 +2312,27 @@
     });
   });
 
+  // Menú lateral (móvil)
+  var drawer = document.getElementById('drawer');
+  var drawerOverlay = document.getElementById('drawerOverlay');
+  var menuBtn = document.getElementById('menuBtn');
+  function cerrarDrawer() {
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  menuBtn.addEventListener('click', function () {
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('show');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  });
+  document.getElementById('drawerClose').addEventListener('click', cerrarDrawer);
+  drawerOverlay.addEventListener('click', cerrarDrawer);
+
   // Navegación fluida: fundido de salida antes de cambiar de página
-  var enlacesNav = Array.prototype.slice.call(document.querySelectorAll('.nav-dropdown a'));
+  var enlacesNav = Array.prototype.slice.call(document.querySelectorAll('.nav-dropdown a, .drawer-nav a'));
   enlacesNav.forEach(function (link) {
     if (link.target === '_blank') return;
     link.addEventListener('click', function (e) {
@@ -2142,7 +2344,10 @@
   });
   // Si se vuelve con el botón "atrás" (bfcache), restauramos la opacidad
   window.addEventListener('pageshow', function (e) {
-    if (e.persisted) document.body.classList.remove('page-exit');
+    if (e.persisted) {
+      document.body.classList.remove('page-exit');
+      cerrarDrawer();
+    }
   });
 
   var modal = document.getElementById('pdfModal');
@@ -2158,7 +2363,7 @@
   }
   document.getElementById('closePdfBtn').addEventListener('click', closeModal);
   modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeModal(); cerrarDrawer(); } });
 })();
 </script>
 
