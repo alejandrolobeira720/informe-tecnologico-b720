@@ -40,6 +40,11 @@
 
     a { color: var(--white); text-decoration: none; }
 
+    /* ─── NAVEGACIÓN FLUIDA ──────────────────── */
+    body { animation: pageIn .35s ease; }
+    @keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
+    body.page-exit { opacity: 0; transition: opacity .22s ease; }
+
     /* ─── TOPBAR ─────────────────────────────── */
     .topbar {
       position: fixed; top: 0; left: 0; right: 0;
@@ -300,15 +305,15 @@
         Juegos <span class="caret">▾</span>
       </button>
       <div class="nav-dropdown">
-        <a href="juegos/backs.html" target="_blank" rel="noopener">
+        <a href="juegos/backs.html">
           <span class="nd-date">Cibergame 1</span>
           El arquitecto atacado — simulador de amenazas
         </a>
-        <a href="juegos/cibergame2.html" target="_blank" rel="noopener">
+        <a href="juegos/cibergame2.html">
           <span class="nd-date">Cibergame 2</span>
           Protocolo de seguridad — quiz de ciberseguridad
         </a>
-        <a href="juegos/cibergame3.html" target="_blank" rel="noopener">
+        <a href="juegos/cibergame3.html">
           <span class="nd-date">Cibergame 3</span>
           La torre ciberresiliente — contrarreloj por plantas
         </a>
@@ -411,6 +416,22 @@
         nav.querySelector('.nav-toggle').setAttribute('aria-expanded', 'false');
       }
     });
+  });
+
+  // Navegación fluida: fundido de salida antes de cambiar de página
+  var enlaces = Array.prototype.slice.call(document.querySelectorAll('.nav-dropdown a'));
+  enlaces.forEach(function (link) {
+    if (link.target === '_blank') return;
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var href = link.getAttribute('href');
+      document.body.classList.add('page-exit');
+      setTimeout(function () { window.location.href = href; }, 220);
+    });
+  });
+  // Si se vuelve con el botón "atrás" (bfcache), restauramos la opacidad
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) document.body.classList.remove('page-exit');
   });
 })();
 </script>

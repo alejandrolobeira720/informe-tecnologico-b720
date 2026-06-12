@@ -6,14 +6,22 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Cibergame 3 — La Torre · b720</title>
   <link rel="stylesheet" href="cibergame3.css" />
+  <style>
+    /* Navegación fluida con el hub del Informe Tecnológico */
+    body { animation: pageIn .35s ease; }
+    @keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
+    body.page-exit { opacity: 0; transition: opacity .22s ease; }
+    a.topbar-brand { display: flex; align-items: center; transition: opacity .2s; }
+    a.topbar-brand:hover { opacity: .75; }
+  </style>
 </head>
 <body>
 
   <!-- ── TOPBAR ──────────────────────────────── -->
   <nav class="topbar">
-    <div class="topbar-brand">
+    <a class="topbar-brand" href="../index.html" title="Volver al Informe Tecnológico" aria-label="Volver al Informe Tecnológico b720">
       <img src="assets/b720_logo_horizontal_white.png" alt="b720 Fermín Vázquez Arquitectos" />
-    </div>
+    </a>
     <span class="topbar-meta">Cibergame · Simulación 03</span>
   </nav>
 
@@ -184,5 +192,17 @@
 
   <script src="preguntas.js"></script>
   <script src="cibergame3.js"></script>
+  <script>
+    // Fundido de salida al volver al hub
+    document.querySelector("a.topbar-brand").addEventListener("click", function (e) {
+      e.preventDefault();
+      var href = this.getAttribute("href");
+      document.body.classList.add("page-exit");
+      setTimeout(function () { window.location.href = href; }, 220);
+    });
+    window.addEventListener("pageshow", function (e) {
+      if (e.persisted) document.body.classList.remove("page-exit");
+    });
+  </script>
 </body>
 </html>
