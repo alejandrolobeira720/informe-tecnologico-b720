@@ -2307,6 +2307,7 @@
     <div class="pdf-modal-head">
       <strong id="pdfModalTitle">Evaluación Tecnológica · Sistema NVIDIA RTX Spark</strong>
       <div class="pdf-modal-actions">
+        <a class="pdf-download" id="pdfOpenNew" href="evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612" target="_blank" rel="noopener">Abrir ⇱</a>
         <a class="pdf-download" id="pdfDownload" href="evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612" download>Descargar</a>
         <button class="pdf-close" id="closePdfBtn" type="button" aria-label="Cerrar visor">✕</button>
       </div>
@@ -2388,19 +2389,34 @@
   var modalBox = document.getElementById('pdfModalBox');
   var modalTitle = document.getElementById('pdfModalTitle');
   var modalDownload = document.getElementById('pdfDownload');
+  var modalOpenNew = document.getElementById('pdfOpenNew');
+  var closeBtn = document.getElementById('closePdfBtn');
   var conclScroll = document.getElementById('pdfConcl');
   var PDF_FULL = 'evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612#view=FitH';
   var PDF_FILE = 'evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612';
   var IMG_CONCL = 'NVIDIA_RTX_Spark_assets/conclusiones-pagina8.jpg';
+  var lastFocused = null;
+  // En móvil los navegadores no dejan pasar páginas dentro de un <iframe> de PDF:
+  // se quedan en la primera. Por eso, en pantallas pequeñas el PDF se abre a
+  // pantalla completa en una pestaña nueva (donde sí se navegan las páginas).
+  function esMovil() { return window.matchMedia('(max-width: 760px)').matches; }
+
+  function abrirModal() {
+    lastFocused = document.activeElement;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
   // "Leer Conclusiones" muestra una imagen de la página de conclusiones (no el PDF,
   // que ya está en "PDF Completo"); el visor de Chrome ignoraba a veces el #page=8.
   document.getElementById('openPdfBtn').addEventListener('click', function () {
+    if (esMovil()) { window.open(PDF_FILE, '_blank', 'noopener'); return; }
     modalBox.classList.remove('concl');
     frame.src = PDF_FULL;
     modalTitle.textContent = 'Evaluación Tecnológica: Sistema NVIDIA RTX Spark';
     modalDownload.setAttribute('href', PDF_FILE);
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    modalOpenNew.setAttribute('href', PDF_FILE);
+    abrirModal();
   });
   document.getElementById('openConclBtn').addEventListener('click', function () {
     modalBox.classList.add('concl');
@@ -2408,18 +2424,28 @@
     conclScroll.scrollTop = 0;
     modalTitle.textContent = 'Conclusiones — opinión personal';
     modalDownload.setAttribute('href', IMG_CONCL);
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
+    modalOpenNew.setAttribute('href', IMG_CONCL);
+    abrirModal();
   });
   function closeModal() {
     modal.classList.remove('open');
     frame.src = '';
     modalBox.classList.remove('concl');
     document.body.style.overflow = '';
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
   }
-  document.getElementById('closePdfBtn').addEventListener('click', closeModal);
+  closeBtn.addEventListener('click', closeModal);
   modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeModal(); cerrarDrawer(); } });
+  // Foco atrapado dentro del modal mientras está abierto + cierre con Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { if (modal.classList.contains('open')) closeModal(); cerrarDrawer(); return; }
+    if (e.key !== 'Tab' || !modal.classList.contains('open')) return;
+    var foco = modalBox.querySelectorAll('a[href], button:not([disabled])');
+    if (!foco.length) return;
+    var primero = foco[0], ultimo = foco[foco.length - 1];
+    if (e.shiftKey && document.activeElement === primero) { e.preventDefault(); ultimo.focus(); }
+    else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primero.focus(); }
+  });
 })();
 </script>
 

@@ -78,9 +78,9 @@
       color: var(--b720-text);
       margin-bottom: 18px;
     }
-    /* Resaltado tipo marcador, como los subrayados amarillos de b720.com */
+    /* Resaltado tipo marcador en Azul corporativo (translúcido para no tapar el texto) */
     .hub-header h1 span {
-      background: linear-gradient(transparent 58%, var(--b720-accent) 58%);
+      background: linear-gradient(transparent 58%, rgba(17, 97, 136, 0.22) 58%);
     }
     .hub-sub {
       font-size: clamp(15px, 2vw, 17px);
@@ -135,8 +135,8 @@
       font-weight: var(--b720-weight-bold);
       letter-spacing: var(--b720-tracking-label);
       text-transform: uppercase;
-      color: var(--b720-neutral-black);
-      background: var(--b720-accent);
+      color: var(--b720-blanco);
+      background: var(--b720-azul);
       padding: 3px 10px;
       border-radius: var(--b720-radius);
     }
@@ -168,10 +168,10 @@
       letter-spacing: var(--b720-tracking-label);
       text-transform: uppercase;
       color: var(--b720-text);
-      border-bottom: 2px solid var(--b720-accent);
+      border-bottom: 2px solid var(--b720-azul);
       padding-bottom: 2px;
     }
-    .news-card:hover .news-link { background: var(--b720-accent); }
+    .news-card:hover .news-link { background: var(--b720-azul); color: var(--b720-blanco); border-bottom-color: var(--b720-azul); }
 
     /* ─── FOOTER (Blanco sobre Neutral Black) ── */
     footer {
@@ -381,7 +381,7 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrarDrawer(); });
 
   // Navegación fluida: fundido de salida antes de cambiar de página
-  var enlaces = Array.prototype.slice.call(document.querySelectorAll('.nav-dropdown a, .drawer-nav a'));
+  var enlaces = Array.prototype.slice.call(document.querySelectorAll('.nav-dropdown a, .drawer-nav a, a.news-card'));
   enlaces.forEach(function (link) {
     if (link.target === '_blank') return;
     link.addEventListener('click', function (e) {

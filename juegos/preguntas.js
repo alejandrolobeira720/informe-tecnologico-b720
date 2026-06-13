@@ -4,8 +4,8 @@
    · POOL_CIBERGAME2 → Cibergame 2 (Protocolo de Seguridad)
    · POOL_CIBERGAME3 → Cibergame 3 (La Torre Ciberresiliente)
    Categorías: facil · media · dificil · extrema
-   Cada juego tiene su propia piscina (CG2: 13+14+13+11 = 51,
-   CG3: 14+14+13+11 = 52) para que varias partidas seguidas no
+   Cada juego tiene su propia piscina (CG2: 21+14+13+11 = 59,
+   CG3: 21+14+13+11 = 59) para que varias partidas seguidas no
    repitan las mismas preguntas. Sin preguntas repetidas entre
    los dos juegos: si un escenario aparece en uno, en el otro
    se trata una lección distinta.
@@ -16,7 +16,7 @@
    --------------------------------------------------- */
 const POOL_CIBERGAME2 = [
 
-  /* ───── FÁCIL (13) ───── */
+  /* ───── FÁCIL (21) ───── */
   {
     cat: "facil", tema: "Phishing",
     pregunta: "Recibes un email de «soporte-microsoft365@gmail.com» pidiendo tu contraseña por «mantenimiento del servidor». ¿Qué haces?",
@@ -172,6 +172,102 @@ const POOL_CIBERGAME2 = [
     ],
     correcta: 0,
     explicacion: "El portátil de un invitado puede venir infectado sin que él lo sepa. La red de invitados existe justo para eso: da internet sin tocar servidores ni carpetas del estudio. Confianza con el cliente, sí; su portátil dentro de tu red, no."
+  },
+  {
+    cat: "facil", tema: "Juice jacking",
+    pregunta: "En el aeropuerto, de camino a presentar un proyecto, te queda poca batería y ves un puerto USB público para cargar. ¿Qué haces?",
+    opciones: [
+      "Cargar con tu propio cargador en un enchufe normal, no en el puerto USB desconocido",
+      "Conectar el móvil al puerto USB, para eso está",
+      "Conectar el portátil del trabajo, que aguanta más",
+      "Pedir el cable a un desconocido de al lado"
+    ],
+    correcta: 0,
+    explicacion: "Un puerto USB público puede estar trucado para robar datos o instalar malware mientras cargas («juice jacking»). Lleva tu cargador y usa el enchufe de corriente, o un USB «solo carga»; el dato no viaja por la electricidad."
+  },
+  {
+    cat: "facil", tema: "Contraseñas",
+    pregunta: "Un correo del «departamento de IT» pide tu usuario y contraseña para «migrar tu buzón esta noche». ¿Qué haces?",
+    opciones: [
+      "No enviarla: IT nunca necesita tu contraseña; verificarlo con ellos por el canal de siempre",
+      "Enviarla, es IT y es por mantenimiento",
+      "Enviar solo la contraseña, el usuario ya lo saben",
+      "Cambiarla por una fácil y enviársela"
+    ],
+    correcta: 0,
+    explicacion: "Ni IT, ni el soporte, ni ningún servicio legítimo necesitan tu contraseña: trabajan con sus propios permisos de administración. Una petición así, aunque diga ser interna, es la señal de phishing más clara que hay."
+  },
+  {
+    cat: "facil", tema: "Remitente real",
+    pregunta: "Un correo urgente firma como «Dirección b720», pero al mirar la dirección pone «direccion.b720@gmail-secure.com». ¿En qué te fijas?",
+    opciones: [
+      "En la dirección real del remitente, no en el nombre mostrado: ese dominio no es del estudio",
+      "En el nombre mostrado, que pone Dirección b720",
+      "En que la firma tenga el logo correcto",
+      "En nada, si conoce el nombre del estudio es de fiar"
+    ],
+    correcta: 0,
+    explicacion: "El «nombre que se muestra» lo pone quien envía: es trivial falsearlo. Lo que cuenta es la dirección real, y un dominio tipo «gmail-secure.com» no tiene nada que ver con el del estudio. Mira siempre la dirección completa."
+  },
+  {
+    cat: "facil", tema: "Cuentas personales",
+    pregunta: "Un becario aún no tiene su usuario y te pide entrar con el tuyo «solo por hoy» para avanzar. ¿Qué haces?",
+    opciones: [
+      "No prestar tu cuenta: que IT/soporte le den su acceso; todo lo que haga quedaría a tu nombre",
+      "Prestársela, total es solo un día",
+      "Darle tu contraseña pero pedirle que no toque nada raro",
+      "Dejarle tu sesión abierta y marcharte"
+    ],
+    correcta: 0,
+    explicacion: "Las cuentas son personales: todo lo que se haga con la tuya queda registrado como tuyo, y compartirla rompe la trazabilidad y la seguridad. Que IT le cree su acceso; no es burocracia, es protegerte a ti también."
+  },
+  {
+    cat: "facil", tema: "Estafas web",
+    pregunta: "Navegando salta una ventana enorme: «¡Has ganado un iPhone! Haz clic para reclamarlo». ¿Qué haces?",
+    opciones: [
+      "Cerrarla sin hacer clic: nadie regala premios por navegar, es un cebo",
+      "Hacer clic, por si acaso es verdad",
+      "Rellenar tus datos para que te lo envíen",
+      "Compartirlo con el estudio por si les toca a ellos"
+    ],
+    correcta: 0,
+    explicacion: "El «has ganado un premio» es de los anzuelos más viejos: detrás hay robo de datos, suscripciones o malware. Si no participaste en ningún sorteo, no hay premio. Cierra la ventana (mejor desde la pestaña) y sigue."
+  },
+  {
+    cat: "facil", tema: "Fraude de pagos",
+    pregunta: "Recibes un WhatsApp del «socio director»: «Estoy en una reunión, necesito que compres 500 € en tarjetas regalo y me mandes los códigos. Urgente». ¿Qué haces?",
+    opciones: [
+      "No comprar nada y verificarlo con él por un canal de confianza: es la estafa de las tarjetas regalo",
+      "Comprarlas, es el director y es urgente",
+      "Comprar la mitad para asegurarte",
+      "Responder al WhatsApp pidiendo el número de cuenta"
+    ],
+    correcta: 0,
+    explicacion: "Pedir tarjetas regalo y sus códigos es una estafa clásica de suplantación de jefes: las tarjetas son dinero imposible de rastrear ni recuperar. Urgencia + secreto + método de pago raro = fraude. Verifica por otro canal."
+  },
+  {
+    cat: "facil", tema: "Enlaces",
+    pregunta: "Un correo trae un botón «Ver factura». Antes de hacer clic, ¿cómo compruebas a dónde lleva de verdad?",
+    opciones: [
+      "Paso el ratón por encima (sin hacer clic) y miro la URL real que aparece abajo",
+      "Hago clic y, si es raro, cierro rápido",
+      "Me fío del texto del botón, que pone «factura»",
+      "Reenvío el correo a un compañero para que lo abra él"
+    ],
+    correcta: 0,
+    explicacion: "El texto de un enlace puede decir una cosa y llevar a otra. Pasando el cursor por encima (o manteniendo pulsado en el móvil) ves el destino real antes de entrar. Si la URL no cuadra con quien dice enviarlo, no hagas clic."
+  },
+  {
+    cat: "facil", tema: "Dispositivos personales",
+    pregunta: "Quieres pasar unas fotos de obra desde tu USB/móvil personal a tu equipo del estudio. ¿Cuál es la forma prudente?",
+    opciones: [
+      "Usar el canal aprobado del estudio (carpeta/nube corporativa) y, si dudas, preguntar a IT antes de conectar nada",
+      "Conectar tu USB personal directamente, es solo un momento",
+      "Conectar tu móvil personal por cable al equipo del trabajo",
+      "Pedir el USB a quien tengas más cerca"
+    ],
+    correcta: 0,
+    explicacion: "Los dispositivos personales pueden traer malware sin que lo sepas, y mezclarlos con los equipos del estudio salta los controles. Usa los canales corporativos para mover archivos; si necesitas conectar algo, que IT lo valide."
   },
 
   /* ───── MEDIA (14) ───── */
@@ -643,7 +739,7 @@ const POOL_CIBERGAME2 = [
    --------------------------------------------------- */
 const POOL_CIBERGAME3 = [
 
-  /* ───── FÁCIL (14) ───── */
+  /* ───── FÁCIL (21) ───── */
   {
     cat: "facil", tema: "Contraseñas",
     pregunta: "¿Cuál de estas contraseñas protegería mejor tu cuenta de BIM 360?",
@@ -811,6 +907,90 @@ const POOL_CIBERGAME3 = [
     ],
     correcta: 0,
     explicacion: "Las «actualizaciones de navegador» ofrecidas por webs son una campaña clásica de malware (SocGholish y compañía). Chrome se actualiza automáticamente o desde Ayuda → Información de Google Chrome. Un update.exe de una página cualquiera es un troyano con disfraz."
+  },
+  {
+    cat: "facil", tema: "Shoulder surfing",
+    pregunta: "En el tren, de camino a una obra, vas a entrar en el correo del estudio y notas que el de al lado mira tu pantalla. ¿Qué haces?",
+    opciones: [
+      "Esperar a tener privacidad o tapar la pantalla al teclear la contraseña",
+      "Teclearla rápido, nadie se fija tanto",
+      "Pedirle amablemente que mire para otro lado y seguir",
+      "Apuntar la contraseña en el móvil para no teclearla"
+    ],
+    correcta: 0,
+    explicacion: "El «shoulder surfing» (espiar por encima del hombro) es de baja tecnología pero muy eficaz: una contraseña vista es una contraseña robada. En espacios públicos, protege lo que tecleas o espera a estar a solas; un filtro de privacidad para la pantalla también ayuda."
+  },
+  {
+    cat: "facil", tema: "Phishing de cuota",
+    pregunta: "Correo: «Tu buzón está al 99 % de capacidad. Verifica aquí para no dejar de recibir correos». ¿Qué haces?",
+    opciones: [
+      "Desconfiar y no hacer clic: es un phishing clásico; si dudas, pregunta a IT",
+      "Hacer clic y meter tus datos para ampliar el buzón",
+      "Reenviarlo a IT pidiendo que amplíen la cuota",
+      "Borrar correos rápido y luego hacer clic"
+    ],
+    correcta: 0,
+    explicacion: "El «buzón lleno, verifica aquí» es uno de los señuelos más usados para robar credenciales de correo: la urgencia te empuja a meter tu usuario y contraseña en una web falsa. Las cuotas reales las gestiona IT, no un enlace de un correo."
+  },
+  {
+    cat: "facil", tema: "Plugins falsos",
+    pregunta: "Abres un enlace a un «documento del proyecto» y la web dice: «Para verlo, instala este visor/complemento». ¿Qué haces?",
+    opciones: [
+      "No instalar nada: un documento normal no exige instalar complementos; cerrar la página",
+      "Instalar el complemento, si no, no se ve el documento",
+      "Instalarlo solo si la web tiene candado HTTPS",
+      "Descargarlo y abrirlo más tarde por si acaso"
+    ],
+    correcta: 0,
+    explicacion: "«Instala esto para ver el contenido» es una de las trampas más típicas para colar malware: ese supuesto visor es el programa malicioso. Los documentos de verdad se abren con lo que ya tienes; si una web te obliga a instalar algo, vete."
+  },
+  {
+    cat: "facil", tema: "Señales de phishing",
+    pregunta: "¿Cuál de estas es una señal de alarma típica de un correo de phishing?",
+    opciones: [
+      "Saludo genérico («Estimado usuario»), urgencia y amenaza de cerrar tu cuenta",
+      "Que venga firmado con el nombre de un compañero",
+      "Que tenga el logo de la empresa",
+      "Que llegue en horario de oficina"
+    ],
+    correcta: 0,
+    explicacion: "El phishing masivo no sabe tu nombre (de ahí el «Estimado usuario»), y mete prisa con amenazas para que actúes sin pensar. Logo, firma u horario no garantizan nada: son fáciles de imitar. Ante urgencia + saludo genérico, frena y verifica."
+  },
+  {
+    cat: "facil", tema: "Antivirus",
+    pregunta: "Para instalar un programa, una web te dice que «desactives el antivirus un momento porque da un falso aviso». ¿Qué haces?",
+    opciones: [
+      "No desactivarlo: si algo exige apagar el antivirus para instalarse, es justo lo que el antivirus intenta frenar",
+      "Desactivarlo un momento, será un falso positivo",
+      "Desactivarlo y volver a activarlo justo después",
+      "Bajar el antivirus a la mínima protección"
+    ],
+    correcta: 0,
+    explicacion: "Ningún programa legítimo necesita que apagues tu protección para instalarse. «Desactiva el antivirus» es la frase estrella del malware: el aviso no es un fallo, es el antivirus haciendo su trabajo. Si insisten, no lo instales."
+  },
+  {
+    cat: "facil", tema: "Pérdida de equipo",
+    pregunta: "Te das cuenta de que has perdido (o te han robado) el portátil o el móvil del trabajo. ¿Qué es lo primero?",
+    opciones: [
+      "Avisar a IT/soporte cuanto antes para que bloqueen accesos y el dispositivo en remoto",
+      "Esperar un par de días por si aparece",
+      "No decir nada para no meterte en líos",
+      "Cambiar solo la contraseña del wifi de casa"
+    ],
+    correcta: 0,
+    explicacion: "Cada hora cuenta: avisando rápido, IT puede bloquear el equipo, cerrar sesiones y borrar datos en remoto antes de que alguien acceda al correo y los proyectos. Ocultarlo solo da tiempo al que lo tenga; reportarlo es lo correcto."
+  },
+  {
+    cat: "facil", tema: "Spam",
+    pregunta: "Recibes spam evidente de un remitente desconocido con un enlace «Darse de baja» al final. ¿Qué haces?",
+    opciones: [
+      "No pulsar nada y marcarlo como spam: en correo basura, el «baja» suele confirmar que tu dirección existe",
+      "Pulsar «Darse de baja» para que dejen de escribir",
+      "Responder pidiendo que te quiten de la lista",
+      "Reenviarlo a los compañeros para avisar"
+    ],
+    correcta: 0,
+    explicacion: "En spam claramente fraudulento, el enlace de «baja» a menudo solo sirve para confirmar que tu cuenta está activa (y te llega más, o te lleva a una web maliciosa). Márcalo como spam y no interactúes; en boletines legítimos, en cambio, darse de baja sí funciona."
   },
 
   /* ───── MEDIA (14) ───── */
@@ -1288,23 +1468,10 @@ function barajar(array) {
 }
 
 /*
-  Genera el set de la partida a partir de la piscina indicada: 8 preguntas.
+  Genera el set de cada ronda (8 preguntas) EXCLUYENDO las ya usadas
+  en rondas anteriores de la sesión (Set de textos de pregunta):
   - 5 primeras: mezcla aleatoria de fáciles y medias (3 + 2).
   - 3 últimas SIEMPRE: 2 difíciles + 1 extrema (el jefe final).
-  Cada partida sale distinta porque se baraja la piscina entera.
-*/
-function generarSetPartida(pool) {
-  const faciles   = barajar(pool.filter(q => q.cat === "facil")).slice(0, 3);
-  const medias    = barajar(pool.filter(q => q.cat === "media")).slice(0, 2);
-  const dificiles = barajar(pool.filter(q => q.cat === "dificil")).slice(0, 2);
-  const extrema   = barajar(pool.filter(q => q.cat === "extrema")).slice(0, 1);
-
-  return [...barajar([...faciles, ...medias]), ...dificiles, ...extrema];
-}
-
-/*
-  Variante para sesiones encadenadas: genera el set EXCLUYENDO las
-  preguntas ya usadas en intentos anteriores (Set de textos de pregunta).
   Devuelve null si la piscina restante no da para una ronda completa.
 */
 function generarSetPartidaSinRepetir(pool, usadas) {
