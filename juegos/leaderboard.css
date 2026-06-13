@@ -213,6 +213,18 @@
 /* Plano de ciudad: trazo fino tipo plano */
 .cad-ciudad .cad-draw { stroke-width: 1; }
 
+/* Atribución OpenStreetMap (ODbL) */
+.cad-credit {
+  position: absolute;
+  right: 12px; bottom: 8px;
+  z-index: 1;
+  font-size: 9px;
+  letter-spacing: .05em;
+  color: var(--muted, #9D9894);
+  opacity: .55;
+  pointer-events: none;
+}
+
 /* Zoom: empieza cerca en el centro y se aleja suavemente revelando más */
 .cad-zoom {
   transform-box: fill-box;
