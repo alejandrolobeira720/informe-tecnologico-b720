@@ -218,7 +218,7 @@ function finalizar(superada) {
     resumen += `<div class="sesion-row racha"><span>Ronda perfecta — racha ×${sesion.racha}</span><b>+${bonusRacha} pts de bonus</b></div>`;
     if (quedan) resumen += `<div class="sesion-row"><span>La racha sigue viva: la próxima ronda perfecta vale +${BONUS_RACHA * (sesion.racha + 1)} pts</span></div>`;
   }
-  if (!quedan) resumen += `<div class="sesion-row agotada"><span>¡Has agotado las rondas disponibles del juego!</span></div>`;
+  if (!quedan) resumen += `<div class="sesion-row agotada"><span>¡Has completado TODAS las preguntas del juego!</span></div>`;
   $("end-session").innerHTML = resumen;
 
   // "Seguir jugando" solo si quedan preguntas y NO has perdido la partida:
@@ -242,8 +242,8 @@ function terminarSesion() {
   }
   if (perfecta) {
     msg += sesion.agotada
-      ? ` Y además, todas las rondas disponibles del juego sin un solo fallo. Leyenda de la ciberseguridad.`
-      : ` Sesión PERFECTA: ${sesion.rondas * 8} preguntas sin un solo fallo.`;
+      ? ` Y además, TODAS las preguntas del juego respondidas sin un solo fallo. Leyenda de la ciberseguridad.`
+      : ` Sesión PERFECTA: ${sesion.usadas.size} preguntas sin un solo fallo.`;
   }
   $("lb-congrats").textContent = msg;
 

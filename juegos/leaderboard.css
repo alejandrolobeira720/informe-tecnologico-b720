@@ -6,9 +6,9 @@
 
 /* ─── Campo de nombre (pantalla de inicio) ─── */
 .lb-name-row {
-  margin: 28px auto 0;
+  margin: 32px auto 0;
   max-width: 360px;
-  text-align: left;
+  text-align: center;
 }
 .lb-name-label {
   display: block;
@@ -37,6 +37,14 @@
 .btn-primary:disabled {
   opacity: .4;
   cursor: not-allowed;
+}
+
+/* Botón de inicio: centrado bajo el campo de nombre y separado de él */
+#btn-start {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: 24px auto 0;
 }
 
 /* ─── Resumen de sesión (pantalla final) ─── */

@@ -305,7 +305,7 @@ function finalizar(superada) {
   sesion.rondas++;
 
   $("end-stats").innerHTML = `
-    <div class="end-stat"><b>${aciertos} / ${TOTAL_PLANTAS}</b><span>Plantas</span></div>
+    <div class="end-stat"><b>${aciertos} / ${setPartida.length}</b><span>Plantas</span></div>
     <div class="end-stat"><b>${vidas}</b><span>Vidas restantes</span></div>
     <div class="end-stat"><b>${puntos}</b><span>Puntos ronda</span></div>
   `;
@@ -318,7 +318,7 @@ function finalizar(superada) {
     resumen += `<div class="sesion-row racha"><span>Torre perfecta — racha ×${sesion.racha}</span><b>+${bonusRacha} pts de bonus</b></div>`;
     if (quedan) resumen += `<div class="sesion-row"><span>La racha sigue viva: la próxima torre perfecta vale +${BONUS_RACHA * (sesion.racha + 1)} pts</span></div>`;
   }
-  if (!quedan) resumen += `<div class="sesion-row agotada"><span>¡Has agotado las rondas disponibles del juego!</span></div>`;
+  if (!quedan) resumen += `<div class="sesion-row agotada"><span>¡Has completado TODAS las preguntas del juego!</span></div>`;
   $("end-session").innerHTML = resumen;
 
   // "Seguir construyendo" solo si quedan preguntas y NO has perdido la partida:
@@ -343,8 +343,8 @@ function terminarSesion() {
   }
   if (perfecta) {
     msg += sesion.agotada
-      ? ` Y además, todas las rondas disponibles del juego sin un solo fallo. Leyenda de la ciberseguridad.`
-      : ` Sesión PERFECTA: ${sesion.rondas * TOTAL_PLANTAS} preguntas sin un solo fallo.`;
+      ? ` Y además, TODAS las preguntas del juego respondidas sin un solo fallo. Leyenda de la ciberseguridad.`
+      : ` Sesión PERFECTA: ${sesion.usadas.size} preguntas sin un solo fallo.`;
   }
   $("lb-congrats").textContent = msg;
 

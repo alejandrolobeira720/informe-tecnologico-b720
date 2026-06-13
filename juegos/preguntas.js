@@ -1468,32 +1468,44 @@ function barajar(array) {
 }
 
 /*
-  Genera el set de cada ronda (8 preguntas) EXCLUYENDO las ya usadas
-  en rondas anteriores de la sesión (Set de textos de pregunta):
-  - 5 primeras: mezcla aleatoria de fáciles y medias (3 + 2).
-  - 3 últimas SIEMPRE: 2 difíciles + 1 extrema (el jefe final).
-  Devuelve null si la piscina restante no da para una ronda completa.
+  Genera el set de cada ronda (hasta 8 preguntas) EXCLUYENDO las ya usadas
+  en rondas anteriores de la sesión (Set de textos de pregunta).
+  - Composición ideal: 3 fáciles + 2 medias al inicio · 2 difíciles + 1 extrema al cierre.
+  - Si una categoría se queda corta (piscina casi agotada), la ronda se
+    completa con lo que reste, manteniendo el orden fácil→difícil; la última
+    ronda puede ser más corta. Así se pueden recorrer TODAS las preguntas.
+  - Devuelve null solo cuando ya no queda ninguna pregunta sin usar.
 */
 function generarSetPartidaSinRepetir(pool, usadas) {
   const libres = pool.filter(q => !usadas.has(q.pregunta));
-  const faciles   = barajar(libres.filter(q => q.cat === "facil")).slice(0, 3);
-  const medias    = barajar(libres.filter(q => q.cat === "media")).slice(0, 2);
-  const dificiles = barajar(libres.filter(q => q.cat === "dificil")).slice(0, 2);
-  const extrema   = barajar(libres.filter(q => q.cat === "extrema")).slice(0, 1);
+  if (libres.length === 0) return null;
 
-  if (faciles.length < 3 || medias.length < 2 || dificiles.length < 2 || extrema.length < 1) {
-    return null; // piscina agotada para una ronda más
+  // Pilas barajadas por categoría
+  const pilas = {
+    facil:   barajar(libres.filter(q => q.cat === "facil")),
+    media:   barajar(libres.filter(q => q.cat === "media")),
+    dificil: barajar(libres.filter(q => q.cat === "dificil")),
+    extrema: barajar(libres.filter(q => q.cat === "extrema"))
+  };
+  const sacar = (cat, n) => pilas[cat].splice(0, n);
+
+  let inicio = [...sacar("facil", 3), ...sacar("media", 2)];   // bloque fácil/medio
+  let cierre = [...sacar("dificil", 2), ...sacar("extrema", 1)]; // jefe final
+
+  // Completar hasta 8 con lo que quede: lo más fácil al inicio, lo más duro al cierre
+  const sobranSuaves = [...pilas.facil, ...pilas.media];
+  const sobranDuras  = [...pilas.dificil, ...pilas.extrema];
+  while (inicio.length + cierre.length < 8 && (sobranSuaves.length || sobranDuras.length)) {
+    if (sobranSuaves.length) inicio.push(sobranSuaves.shift());
+    else cierre.push(sobranDuras.shift());
   }
-  return [...barajar([...faciles, ...medias]), ...dificiles, ...extrema];
+
+  return [...barajar(inicio), ...cierre];
 }
 
-/* ¿Da la piscina restante para otra ronda completa? */
+/* ¿Queda alguna pregunta sin usar para otra ronda (aunque sea más corta)? */
 function hayPreguntasRestantes(pool, usadas) {
-  const libres = pool.filter(q => !usadas.has(q.pregunta));
-  return libres.filter(q => q.cat === "facil").length   >= 3 &&
-         libres.filter(q => q.cat === "media").length   >= 2 &&
-         libres.filter(q => q.cat === "dificil").length >= 2 &&
-         libres.filter(q => q.cat === "extrema").length >= 1;
+  return pool.some(q => !usadas.has(q.pregunta));
 }
 
 /* Baraja las opciones de una pregunta manteniendo cuál es la correcta */
