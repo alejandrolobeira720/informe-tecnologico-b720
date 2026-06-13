@@ -168,7 +168,12 @@ function finalizar(superada) {
   const inner = document.querySelector(".end-inner");
   inner.classList.toggle("gameover", !superada);
 
-  $("end-score").textContent = puntos;
+  // Resultado por PORCENTAJE de aciertos de la ronda (no por puntos brutos,
+  // que dependían del tamaño de la ronda y daban rangos engañosos).
+  const pct = setPartida.length ? Math.round((aciertos / setPartida.length) * 100) : 0;
+  $("end-score").textContent = pct;
+  const lblScore = document.querySelector(".end-score-label");
+  if (lblScore) lblScore.textContent = "% de aciertos";
 
   let rango, mensaje;
   if (!superada) {
@@ -177,10 +182,10 @@ function finalizar(superada) {
     mensaje = "Tres fallos críticos: el estudio ha sido comprometido. Los planos del concurso ya circulan por foros rusos con marca de agua ajena. Repite el protocolo: la próxima vez, desconfía antes de hacer clic.";
   } else {
     $("end-eyebrow").textContent = "Simulación finalizada";
-    if (puntos >= 95) {
+    if (pct >= 95) {
       rango = "Hacker de Hormigón";
       mensaje = "Protocolo impecable. Tu red es más sólida que un muro de carga: los atacantes ven tu IP y se van a probar suerte con otro estudio.";
-    } else if (puntos >= 70) {
+    } else if (pct >= 70) {
       rango = "Arquitecto Blindado";
       mensaje = "Buen criterio bajo presión. Algún descuido puntual, pero el estudio sigue en pie y los proyectos, a salvo. Un repaso más y serás impenetrable.";
     } else {

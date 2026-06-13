@@ -268,7 +268,11 @@ function finalizar(superada) {
   contTorre.innerHTML = "";
   contTorre.appendChild($("tower-svg").cloneNode(true));
 
-  $("end-score").textContent = puntos;
+  // Resultado por PORCENTAJE de aciertos de la ronda (no por puntos brutos).
+  const pct = setPartida.length ? Math.round((aciertos / setPartida.length) * 100) : 0;
+  $("end-score").textContent = pct;
+  const lblScore = document.querySelector(".end-score-label");
+  if (lblScore) lblScore.textContent = "% de aciertos";
 
   let rango, mensaje;
   if (!superada) {
@@ -277,10 +281,10 @@ function finalizar(superada) {
     mensaje = "Tres fallos estructurales: la inspección de seguridad ha precintado la obra. El ransomware campa por el servidor y los planos son ahora papel mojado digital. Vuelve a los cimientos y reconstruye con cabeza.";
   } else {
     $("end-eyebrow").textContent = "Obra finalizada";
-    if (puntos >= 95) {
+    if (pct >= 95) {
       rango = "Torre Blindada";
       mensaje = "Certificación de ciberseguridad con honores. Ocho plantas impecables: ni el phishing, ni los USB perdidos, ni los deepfakes han encontrado una sola grieta. Obra maestra.";
-    } else if (puntos >= 70) {
+    } else if (pct >= 70) {
       rango = "Estructura Sólida";
       mensaje = "La torre se sostiene con elegancia. Hay alguna grieta que repasar en la próxima revisión, pero los proyectos del estudio duermen tranquilos.";
     } else {
