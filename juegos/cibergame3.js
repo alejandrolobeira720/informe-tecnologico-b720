@@ -263,10 +263,10 @@ function finalizar(superada) {
   const inner = document.querySelector(".end-inner");
   inner.classList.toggle("gameover", !superada);
 
-  // Clonamos la torre tal y como quedó para la pantalla final
-  const contTorre = $("end-tower");
-  contTorre.innerHTML = "";
-  contTorre.appendChild($("tower-svg").cloneNode(true));
+  // Plano CAD de fondo (alterna Madrid/Barcelona) + tantas torres bocetadas
+  // como rondas hayas jugado (perfectas o no).
+  if (typeof cadCiudad === "function") cadCiudad(document.getElementById("cad-bg"));
+  if (typeof cadTorres === "function") cadTorres($("end-tower"), sesion ? sesion.rondas + 1 : 1);
 
   // Resultado por PORCENTAJE de aciertos de la ronda (no por puntos brutos).
   const pct = setPartida.length ? Math.round((aciertos / setPartida.length) * 100) : 0;

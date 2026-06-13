@@ -168,6 +168,9 @@ function finalizar(superada) {
   const inner = document.querySelector(".end-inner");
   inner.classList.toggle("gameover", !superada);
 
+  // Plano CAD que se autodibuja de fondo (alterna Madrid/Barcelona)
+  if (typeof cadCiudad === "function") cadCiudad(document.getElementById("cad-bg"));
+
   // Resultado por PORCENTAJE de aciertos de la ronda (no por puntos brutos,
   // que dependían del tamaño de la ronda y daban rangos engañosos).
   const pct = setPartida.length ? Math.round((aciertos / setPartida.length) * 100) : 0;
