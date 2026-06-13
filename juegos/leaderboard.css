@@ -210,6 +210,18 @@
 #end-tower .cad-svg { height: 150px; }
 #end-tower .cad-svg .cad-draw { stroke: var(--azul, #116188); stroke-width: 1.8; }
 
+/* Plano de ciudad: trazo fino tipo plano */
+.cad-ciudad .cad-draw { stroke-width: 1; }
+
+/* Zoom: empieza cerca en el centro y se aleja suavemente revelando más */
+.cad-zoom {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cadZoom 4.6s cubic-bezier(.22,.61,.36,1) forwards;
+}
+@keyframes cadZoom { from { transform: scale(2.6); } to { transform: scale(1); } }
+
 @media (prefers-reduced-motion: reduce) {
   .cad-svg .cad-draw { animation: none; stroke-dashoffset: 0; }
+  .cad-zoom { animation: none; transform: none; }
 }
