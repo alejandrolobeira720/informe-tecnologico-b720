@@ -413,6 +413,25 @@
       border: none;
       background: var(--bg3);
     }
+    /* Visor de conclusiones: imagen de la página, con scroll propio */
+    .pdf-concl-scroll {
+      flex: 1;
+      width: 100%;
+      overflow: auto;
+      background: var(--bg3);
+      display: none;
+      text-align: center;
+    }
+    .pdf-concl-scroll img {
+      display: block;
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+      height: auto;
+    }
+    /* En modo conclusiones ocultamos el iframe y mostramos la imagen */
+    .pdf-modal-box.concl #pdfFrame { display: none; }
+    .pdf-modal-box.concl .pdf-concl-scroll { display: block; }
 
     .hero-img-wrap {
       position: absolute;
@@ -2288,11 +2307,14 @@
     <div class="pdf-modal-head">
       <strong id="pdfModalTitle">Evaluación Tecnológica · Sistema NVIDIA RTX Spark</strong>
       <div class="pdf-modal-actions">
-        <a class="pdf-download" href="evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612" download>Descargar</a>
+        <a class="pdf-download" id="pdfDownload" href="evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612" download>Descargar</a>
         <button class="pdf-close" id="closePdfBtn" type="button" aria-label="Cerrar visor">✕</button>
       </div>
     </div>
     <iframe id="pdfFrame" data-src="evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612#view=FitH" title="Visor PDF — Evaluación Tecnológica NVIDIA RTX Spark"></iframe>
+    <div class="pdf-concl-scroll" id="pdfConcl">
+      <img src="NVIDIA_RTX_Spark_assets/conclusiones-pagina8.jpg" alt="Conclusiones y opinión personal — última página del documento" />
+    </div>
   </div>
 </div>
 
@@ -2365,20 +2387,29 @@
   var frame = document.getElementById('pdfFrame');
   var modalBox = document.getElementById('pdfModalBox');
   var modalTitle = document.getElementById('pdfModalTitle');
+  var modalDownload = document.getElementById('pdfDownload');
+  var conclScroll = document.getElementById('pdfConcl');
   var PDF_FULL = 'evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612#view=FitH';
-  var PDF_CONCL = 'evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612#page=8&view=FitH';
-  function openModal(opts) {
-    frame.src = opts.src;
-    modalTitle.textContent = opts.title;
-    modalBox.classList.toggle('concl', !!opts.concl);
+  var PDF_FILE = 'evaluacion-tecnologica-nvidia-rtx-spark.pdf?v=20260612';
+  var IMG_CONCL = 'NVIDIA_RTX_Spark_assets/conclusiones-pagina8.jpg';
+  // "Leer Conclusiones" muestra una imagen de la página de conclusiones (no el PDF,
+  // que ya está en "PDF Completo"); el visor de Chrome ignoraba a veces el #page=8.
+  document.getElementById('openPdfBtn').addEventListener('click', function () {
+    modalBox.classList.remove('concl');
+    frame.src = PDF_FULL;
+    modalTitle.textContent = 'Evaluación Tecnológica: Sistema NVIDIA RTX Spark';
+    modalDownload.setAttribute('href', PDF_FILE);
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
-  }
-  document.getElementById('openPdfBtn').addEventListener('click', function () {
-    openModal({ src: PDF_FULL, title: 'Evaluación Tecnológica: Sistema NVIDIA RTX Spark', concl: false });
   });
   document.getElementById('openConclBtn').addEventListener('click', function () {
-    openModal({ src: PDF_CONCL, title: 'Conclusiones — opinión personal', concl: true });
+    modalBox.classList.add('concl');
+    frame.src = '';                 // no cargamos el PDF en modo conclusiones
+    conclScroll.scrollTop = 0;
+    modalTitle.textContent = 'Conclusiones — opinión personal';
+    modalDownload.setAttribute('href', IMG_CONCL);
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
   });
   function closeModal() {
     modal.classList.remove('open');
