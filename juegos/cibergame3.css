@@ -271,7 +271,13 @@ button { font-family: inherit; cursor: pointer; }
   stroke-width: 1.5;
 }
 .crown.show { opacity: 1; }
-.crown.show circle { animation: pulse 2s infinite; }
+/* El pulso debe escalar sobre el propio centro del círculo; sin transform-box
+   el SVG lo escala desde su origen (0,0) y parecía "caer" de la T en bucle. */
+.crown.show circle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse 2s infinite;
+}
 
 /* ─── CELEBRACIÓN: torre perfecta (8/8) ──── */
 /* Las ventanas se "encienden" planta a planta, de abajo arriba */
