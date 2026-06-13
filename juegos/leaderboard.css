@@ -210,14 +210,25 @@
 #end-tower .cad-svg { height: 150px; }
 #end-tower .cad-svg .cad-draw { stroke: var(--azul, #116188); stroke-width: 1.8; }
 
-/* Plano de ciudad: trazo fino tipo plano */
-.cad-ciudad .cad-draw { stroke-width: 1; }
+/* Plano de ciudad (callejero real): trazo fino y grosor constante bajo el zoom */
+.cad-ciudad path {
+  stroke: var(--text, #fff);
+  stroke-width: .8;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+/* Revelado radial del centro hacia fuera */
+.cad-bg.cad-revealing { animation: cadReveal 3.2s ease forwards; }
+@keyframes cadReveal {
+  from { clip-path: circle(0% at 50% 50%); }
+  to   { clip-path: circle(150% at 50% 50%); }
+}
 
-/* Atribución OpenStreetMap (ODbL) */
+/* Atribución OpenStreetMap (ODbL) — esquina superior derecha, sin solapar */
 .cad-credit {
   position: absolute;
-  right: 12px; bottom: 8px;
-  z-index: 1;
+  right: 14px; top: 12px;
+  z-index: 2;
   font-size: 9px;
   letter-spacing: .05em;
   color: var(--muted, #9D9894);
@@ -236,4 +247,5 @@
 @media (prefers-reduced-motion: reduce) {
   .cad-svg .cad-draw { animation: none; stroke-dashoffset: 0; }
   .cad-zoom { animation: none; transform: none; }
+  .cad-bg.cad-revealing { animation: none; clip-path: none; }
 }

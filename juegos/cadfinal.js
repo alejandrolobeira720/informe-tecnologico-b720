@@ -24,6 +24,7 @@ function cadCiudad(cont) {
   if (!cont) return;
   const ciudad = cadSiguienteCiudad();
   cont.setAttribute("data-ciudad", ciudad);
+  cont.classList.remove("cad-revealing");
   cont.innerHTML = "";
   // Atribución OpenStreetMap (ODbL), legible (fuera del fondo atenuado)
   const host = cont.parentNode;
@@ -33,9 +34,13 @@ function cadCiudad(cont) {
     c.textContent = "Plano: © OpenStreetMap";
     host.appendChild(c);
   }
-  fetch(ciudad + ".svg", { cache: "force-cache" })
+  fetch(ciudad + ".svg", { cache: "default" })
     .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error("no svg")); })
-    .then(function (svg) { cont.innerHTML = svg; })
+    .then(function (svg) {
+      cont.innerHTML = svg;
+      void cont.offsetWidth;          // reinicia la animación
+      cont.classList.add("cad-revealing"); // revelado radial centro→afuera
+    })
     .catch(function () { /* sin plano: fondo limpio */ });
 }
 
