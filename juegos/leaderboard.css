@@ -52,7 +52,8 @@
   margin: 24px auto 0;
   max-width: 420px;
   border: 1px solid var(--border);
-  background: rgba(255,255,255,.04);
+  background: var(--bg3, #555250);
+  border-radius: 0;
   padding: 14px 20px;
   text-align: left;
 }
@@ -182,21 +183,31 @@
   .lb-row { padding: 12px 14px; gap: 10px; }
 }
 
-/* ─── Animación final CAD (plano que se autodibuja) ─── */
-.end-inner { position: relative; }
-.end-inner > * { position: relative; z-index: 1; }
+/* ─── Plano CAD del callejero a PANTALLA COMPLETA (pantalla final) ─── */
+#end-screen { position: relative; }
+.end-inner { position: relative; z-index: 1; }
 .cad-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
-  opacity: .2;
+  opacity: .28;
   pointer-events: none;
   overflow: hidden;
 }
 .cad-svg { width: 100%; height: 100%; display: block; }
-.cad-svg .cad-draw {
+/* Plano de ciudad (callejero real OSM): trazo fino y grosor constante al hacer zoom.
+   El zoom (desde Sol/Catalunya) y el revelado radial los gestiona cadfinal.js. */
+.cad-ciudad path {
   stroke: var(--text, #fff);
-  stroke-width: 1.4;
+  stroke-width: .8;
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Torres del CG3 (alzado): trazo que se dibuja, azul corporativo */
+.cad-svg .cad-draw {
+  stroke: var(--azul, #116188);
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
@@ -205,24 +216,7 @@
   animation: cadDraw .7s ease forwards;
 }
 @keyframes cadDraw { to { stroke-dashoffset: 0; } }
-
-/* Torres del CG3: en primer plano, trazo azul corporativo y algo más marcadas */
 #end-tower .cad-svg { height: 150px; }
-#end-tower .cad-svg .cad-draw { stroke: var(--azul, #116188); stroke-width: 1.8; }
-
-/* Plano de ciudad (callejero real): trazo fino y grosor constante bajo el zoom */
-.cad-ciudad path {
-  stroke: var(--text, #fff);
-  stroke-width: .8;
-  fill: none;
-  vector-effect: non-scaling-stroke;
-}
-/* Revelado radial del centro hacia fuera */
-.cad-bg.cad-revealing { animation: cadReveal 3.2s ease forwards; }
-@keyframes cadReveal {
-  from { clip-path: circle(0% at 50% 50%); }
-  to   { clip-path: circle(150% at 50% 50%); }
-}
 
 /* Atribución OpenStreetMap (ODbL) — esquina superior derecha, sin solapar */
 .cad-credit {
@@ -236,16 +230,6 @@
   pointer-events: none;
 }
 
-/* Zoom: empieza cerca en el centro y se aleja suavemente revelando más */
-.cad-zoom {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: cadZoom 4.6s cubic-bezier(.22,.61,.36,1) forwards;
-}
-@keyframes cadZoom { from { transform: scale(2.6); } to { transform: scale(1); } }
-
 @media (prefers-reduced-motion: reduce) {
   .cad-svg .cad-draw { animation: none; stroke-dashoffset: 0; }
-  .cad-zoom { animation: none; transform: none; }
-  .cad-bg.cad-revealing { animation: none; clip-path: none; }
 }

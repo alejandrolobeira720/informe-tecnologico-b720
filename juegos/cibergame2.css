@@ -370,6 +370,10 @@ button { font-family: inherit; cursor: pointer; }
 .end-inner {
   max-width: 640px;
   text-align: center;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  padding: 44px 48px;
   animation: riseIn .6s ease both;
 }
 .end-score {
@@ -409,7 +413,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .end-stat {
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 0;
   background: var(--card);
   padding: 14px 22px;
   min-width: 120px;

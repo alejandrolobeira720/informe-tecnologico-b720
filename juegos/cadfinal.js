@@ -20,13 +20,20 @@ function cadSiguienteCiudad() {
 
 /* Carga el plano real de la ciudad (alternando) y lo inyecta de fondo.
    El SVG ya está preparado para animarse (cad-draw + cad-zoom). */
+/* Punto de partida del zoom (en coords del viewBox de cada plano):
+   Madrid → Puerta del Sol; Barcelona → Plaça de Catalunya. */
+var CAD_LANDMARK = {
+  madrid:    { cx: 200, cy: 202 },
+  barcelona: { cx: 171, cy: 179 }
+};
+
 function cadCiudad(cont) {
   if (!cont) return;
   const ciudad = cadSiguienteCiudad();
   cont.setAttribute("data-ciudad", ciudad);
-  cont.classList.remove("cad-revealing");
+  cont.style.clipPath = "";
   cont.innerHTML = "";
-  // Atribución OpenStreetMap (ODbL), legible (fuera del fondo atenuado)
+  // Atribución OpenStreetMap (ODbL)
   const host = cont.parentNode;
   if (host && !host.querySelector(".cad-credit")) {
     const c = document.createElement("span");
@@ -38,10 +45,40 @@ function cadCiudad(cont) {
     .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error("no svg")); })
     .then(function (svg) {
       cont.innerHTML = svg;
-      void cont.offsetWidth;          // reinicia la animación
-      cont.classList.add("cad-revealing"); // revelado radial centro→afuera
+      cadAnimar(cont, ciudad);
     })
     .catch(function () { /* sin plano: fondo limpio */ });
+}
+
+/* Zoom desde el landmark que se aleja + revelado radial sincronizado:
+   arranca cerca de Sol/Catalunya y, mientras se dibuja hacia los lados,
+   la vista se aleja hasta que el plano cubre toda la pantalla. */
+function cadAnimar(cont, ciudad) {
+  const svg = cont.querySelector("svg");
+  if (!svg) return;
+  const lm = CAD_LANDMARK[ciudad] || { cx: 200, cy: 200 };
+  const vb = (svg.getAttribute("viewBox") || "0 0 400 400").split(/\s+/).map(Number);
+  const VW = vb[2] || 400, VH = vb[3] || 400;
+  const W = cont.clientWidth || 1000, H = cont.clientHeight || 700;
+  const scale = Math.max(W / VW, H / VH); // preserveAspectRatio slice
+  const sx = (W - VW * scale) / 2 + lm.cx * scale;
+  const sy = (H - VH * scale) / 2 + lm.cy * scale;
+  const R = Math.max(Math.hypot(sx, sy), Math.hypot(W - sx, sy),
+                     Math.hypot(sx, H - sy), Math.hypot(W - sx, H - sy)) + 24;
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return; // plano completo, sin animar
+  // Zoom del SVG (capa única, fluido) anclado al landmark
+  svg.style.transformOrigin = sx + "px " + sy + "px";
+  svg.animate(
+    [{ transform: "scale(4)" }, { transform: "scale(1)" }],
+    { duration: 5200, easing: "cubic-bezier(.22,.61,.36,1)", fill: "forwards" }
+  );
+  // Dibujo: círculo que crece desde el landmark hacia los bordes
+  cont.animate(
+    [{ clipPath: "circle(0px at " + sx + "px " + sy + "px)" },
+     { clipPath: "circle(" + R + "px at " + sx + "px " + sy + "px)" }],
+    { duration: 4800, easing: "ease", fill: "forwards" }
+  );
 }
 
 /* —— Torres del Cibergame 3 (alzado): una por ronda jugada —— */
